@@ -1,0 +1,834 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "sonataFlowOperator",
+        "serverlessOperator",
+        "rhdhOperator",
+        "postgres",
+        "orchestrator"
+    ],
+    "properties": {
+        "sonataFlowOperator": {
+            "type": "object",
+            "default": {},
+            "title": "The sonataFlowOperator Schema",
+            "required": [
+                "enabled",
+                "subscription"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        true
+                    ]
+                },
+                "subscription": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The subscription Schema",
+                    "required": [
+                        "namespace",
+                        "channel",
+                        "installPlanApproval",
+                        "pkgName",
+                        "sourceImage",
+                        "sourceNamespace",
+                        "source"
+                    ],
+                    "properties": {
+                        "namespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The namespace Schema",
+                            "examples": [
+                                "openshift-operators"
+                            ]
+                        },
+                        "channel": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The channel Schema",
+                            "examples": [
+                                "alpha"
+                            ]
+                        },
+                        "installPlanApproval": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The installPlanApproval Schema",
+                            "examples": [
+                                "Automatic"
+                            ]
+                        },
+                        "pkgName": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The pkgName Schema",
+                            "examples": [
+                                "sonataflow-operator"
+                            ]
+                        },
+                        "sourceImage": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The sourceImage Schema",
+                            "examples": [
+                                "quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot"
+                            ]
+                        },
+                        "sourceNamespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The sourceNamespace Schema",
+                            "examples": [
+                                "openshift-marketplace"
+                            ]
+                        },
+                        "source": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The source Schema",
+                            "examples": [
+                                "sonataflow-operator"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "namespace": "openshift-operators",
+                        "channel": "alpha",
+                        "installPlanApproval": "Automatic",
+                        "pkgName": "sonataflow-operator",
+                        "sourceImage": "quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot",
+                        "sourceNamespace": "openshift-marketplace",
+                        "source": "sonataflow-operator"
+                    }]
+                }
+            },
+            "examples": [{
+                "enabled": true,
+                "subscription": {
+                    "namespace": "openshift-operators",
+                    "channel": "alpha",
+                    "installPlanApproval": "Automatic",
+                    "pkgName": "sonataflow-operator",
+                    "sourceImage": "quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot",
+                    "sourceNamespace": "openshift-marketplace",
+                    "source": "sonataflow-operator"
+                }
+            }]
+        },
+        "serverlessOperator": {
+            "type": "object",
+            "default": {},
+            "title": "The serverlessOperator Schema",
+            "required": [
+                "enabled",
+                "subscription"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        true
+                    ]
+                },
+                "subscription": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The subscription Schema",
+                    "required": [
+                        "namespace",
+                        "channel",
+                        "installPlanApproval",
+                        "pkgName",
+                        "sourceNamespace"
+                    ],
+                    "properties": {
+                        "namespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The namespace Schema",
+                            "examples": [
+                                "openshift-serverless"
+                            ]
+                        },
+                        "channel": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The channel Schema",
+                            "examples": [
+                                "stable"
+                            ]
+                        },
+                        "installPlanApproval": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The installPlanApproval Schema",
+                            "examples": [
+                                "Automatic"
+                            ]
+                        },
+                        "pkgName": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The pkgName Schema",
+                            "examples": [
+                                "serverless-operator"
+                            ]
+                        },
+                        "sourceNamespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The sourceNamespace Schema",
+                            "examples": [
+                                "openshift-marketplace"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "namespace": "openshift-serverless",
+                        "channel": "stable",
+                        "installPlanApproval": "Automatic",
+                        "pkgName": "serverless-operator",
+                        "sourceNamespace": "openshift-marketplace"
+                    }]
+                }
+            },
+            "examples": [{
+                "enabled": true,
+                "subscription": {
+                    "namespace": "openshift-serverless",
+                    "channel": "stable",
+                    "installPlanApproval": "Automatic",
+                    "pkgName": "serverless-operator",
+                    "sourceNamespace": "openshift-marketplace"
+                }
+            }]
+        },
+        "rhdhOperator": {
+            "type": "object",
+            "default": {},
+            "title": "The rhdhOperator Schema",
+            "required": [
+                "enabled",
+                "github",
+                "k8s",
+                "subscription"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        true
+                    ]
+                },
+                "github": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The github Schema",
+                    "required": [
+                        "token",
+                        "clientId",
+                        "clientSecret"
+                    ],
+                    "properties": {
+                        "token": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The token Schema",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "clientId": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The clientId Schema",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "clientSecret": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The clientSecret Schema",
+                            "examples": [
+                                ""
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "token": "",
+                        "clientId": "",
+                        "clientSecret": ""
+                    }]
+                },
+                "k8s": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The k8s Schema",
+                    "required": [
+                        "clusterToken",
+                        "clusterUrl"
+                    ],
+                    "properties": {
+                        "clusterToken": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The clusterToken Schema",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "clusterUrl": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The clusterUrl Schema",
+                            "examples": [
+                                ""
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "clusterToken": "",
+                        "clusterUrl": ""
+                    }]
+                },
+                "subscription": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The subscription Schema",
+                    "required": [
+                        "namespace",
+                        "channel",
+                        "installPlanApproval",
+                        "pkgName",
+                        "sourceImage",
+                        "sourceNamespace",
+                        "source"
+                    ],
+                    "properties": {
+                        "namespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The namespace Schema",
+                            "examples": [
+                                "backstage-system"
+                            ]
+                        },
+                        "channel": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The channel Schema",
+                            "examples": [
+                                "alpha"
+                            ]
+                        },
+                        "installPlanApproval": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The installPlanApproval Schema",
+                            "examples": [
+                                "Automatic"
+                            ]
+                        },
+                        "pkgName": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The pkgName Schema",
+                            "examples": [
+                                "backstage-operator"
+                            ]
+                        },
+                        "sourceImage": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The sourceImage Schema",
+                            "examples": [
+                                "quay.io/janus-idp/operator-catalog:0.1.0"
+                            ]
+                        },
+                        "sourceNamespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The sourceNamespace Schema",
+                            "examples": [
+                                "openshift-marketplace"
+                            ]
+                        },
+                        "source": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The source Schema",
+                            "examples": [
+                                "rhdh-operator"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "namespace": "backstage-system",
+                        "channel": "alpha",
+                        "installPlanApproval": "Automatic",
+                        "pkgName": "backstage-operator",
+                        "sourceImage": "quay.io/janus-idp/operator-catalog:0.1.0",
+                        "sourceNamespace": "openshift-marketplace",
+                        "source": "rhdh-operator"
+                    }]
+                }
+            },
+            "examples": [{
+                "enabled": true,
+                "github": {
+                    "token": "",
+                    "clientId": "",
+                    "clientSecret": ""
+                },
+                "k8s": {
+                    "clusterToken": "",
+                    "clusterUrl": ""
+                },
+                "subscription": {
+                    "namespace": "backstage-system",
+                    "channel": "alpha",
+                    "installPlanApproval": "Automatic",
+                    "pkgName": "backstage-operator",
+                    "sourceImage": "quay.io/janus-idp/operator-catalog:0.1.0",
+                    "sourceNamespace": "openshift-marketplace",
+                    "source": "rhdh-operator"
+                }
+            }]
+        },
+        "postgres": {
+            "type": "object",
+            "default": {},
+            "title": "The postgres Schema",
+            "required": [
+                "serviceName",
+                "serviceNamespace",
+                "authSecret",
+                "database"
+            ],
+            "properties": {
+                "serviceName": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The serviceName Schema",
+                    "examples": [
+                        "sonataflow-psql-postgresql"
+                    ]
+                },
+                "serviceNamespace": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The serviceNamespace Schema",
+                    "examples": [
+                        "sonataflow-infra"
+                    ]
+                },
+                "authSecret": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The authSecret Schema",
+                    "required": [
+                        "name",
+                        "userKey",
+                        "passwordKey"
+                    ],
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The name Schema",
+                            "examples": [
+                                "sonataflow-psql-postgresql"
+                            ]
+                        },
+                        "userKey": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The userKey Schema",
+                            "examples": [
+                                "postgres-username"
+                            ]
+                        },
+                        "passwordKey": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The passwordKey Schema",
+                            "examples": [
+                                "postgres-password"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "name": "sonataflow-psql-postgresql",
+                        "userKey": "postgres-username",
+                        "passwordKey": "postgres-password"
+                    }]
+                },
+                "database": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The database Schema",
+                    "examples": [
+                        "sonataflow"
+                    ]
+                }
+            },
+            "examples": [{
+                "serviceName": "sonataflow-psql-postgresql",
+                "serviceNamespace": "sonataflow-infra",
+                "authSecret": {
+                    "name": "sonataflow-psql-postgresql",
+                    "userKey": "postgres-username",
+                    "passwordKey": "postgres-password"
+                },
+                "database": "sonataflow"
+            }]
+        },
+        "orchestrator": {
+            "type": "object",
+            "default": {},
+            "title": "The orchestrator Schema",
+            "required": [
+                "devmode",
+                "namespace",
+                "sonataPlatform",
+                "sonataflows"
+            ],
+            "properties": {
+                "devmode": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The devmode Schema",
+                    "examples": [
+                        false
+                    ]
+                },
+                "namespace": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The namespace Schema",
+                    "examples": [
+                        "sonataflow-infra"
+                    ]
+                },
+                "sonataPlatform": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The sonataPlatform Schema",
+                    "required": [
+                        "resources",
+                        "dataIndex",
+                        "jobService"
+                    ],
+                    "properties": {
+                        "resources": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The resources Schema",
+                            "required": [
+                                "requests",
+                                "limits"
+                            ],
+                            "properties": {
+                                "requests": {
+                                    "type": "object",
+                                    "default": {},
+                                    "title": "The requests Schema",
+                                    "required": [
+                                        "memory",
+                                        "cpu"
+                                    ],
+                                    "properties": {
+                                        "memory": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The memory Schema",
+                                            "examples": [
+                                                "64Mi"
+                                            ]
+                                        },
+                                        "cpu": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The cpu Schema",
+                                            "examples": [
+                                                "250m"
+                                            ]
+                                        }
+                                    },
+                                    "examples": [{
+                                        "memory": "64Mi",
+                                        "cpu": "250m"
+                                    }]
+                                },
+                                "limits": {
+                                    "type": "object",
+                                    "default": {},
+                                    "title": "The limits Schema",
+                                    "required": [
+                                        "memory",
+                                        "cpu"
+                                    ],
+                                    "properties": {
+                                        "memory": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The memory Schema",
+                                            "examples": [
+                                                "1Gi"
+                                            ]
+                                        },
+                                        "cpu": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The cpu Schema",
+                                            "examples": [
+                                                "500m"
+                                            ]
+                                        }
+                                    },
+                                    "examples": [{
+                                        "memory": "1Gi",
+                                        "cpu": "500m"
+                                    }]
+                                }
+                            },
+                            "examples": [{
+                                "requests": {
+                                    "memory": "64Mi",
+                                    "cpu": "250m"
+                                },
+                                "limits": {
+                                    "memory": "1Gi",
+                                    "cpu": "500m"
+                                }
+                            }]
+                        },
+                        "dataIndex": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The dataIndex Schema",
+                            "required": [
+                                "image"
+                            ],
+                            "properties": {
+                                "image": {
+                                    "type": "string",
+                                    "default": "",
+                                    "title": "The image Schema",
+                                    "examples": [
+                                        "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
+                                    ]
+                                }
+                            },
+                            "examples": [{
+                                "image": "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
+                            }]
+                        },
+                        "jobService": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The jobService Schema",
+                            "required": [
+                                "image"
+                            ],
+                            "properties": {
+                                "image": {
+                                    "type": "string",
+                                    "default": "",
+                                    "title": "The image Schema",
+                                    "examples": [
+                                        "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
+                                    ]
+                                }
+                            },
+                            "examples": [{
+                                "image": "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
+                            }]
+                        }
+                    },
+                    "examples": [{
+                        "resources": {
+                            "requests": {
+                                "memory": "64Mi",
+                                "cpu": "250m"
+                            },
+                            "limits": {
+                                "memory": "1Gi",
+                                "cpu": "500m"
+                            }
+                        },
+                        "dataIndex": {
+                            "image": "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
+                        },
+                        "jobService": {
+                            "image": "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
+                        }
+                    }]
+                },
+                "sonataflows": {
+                    "type": "array",
+                    "default": [],
+                    "title": "The sonataflows Schema",
+                    "items": {
+                        "type": "object",
+                        "default": {},
+                        "title": "A Schema",
+                        "required": [
+                            "name",
+                            "image"
+                        ],
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The name Schema",
+                                "examples": [
+                                    "greeting"
+                                ]
+                            },
+                            "image": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The image Schema",
+                                "examples": [
+                                    "quay.io/orchestrator/serverless-workflow-greeting:latest"
+                                ]
+                            }
+                        },
+                        "examples": [{
+                            "name": "greeting",
+                            "image": "quay.io/orchestrator/serverless-workflow-greeting:latest"
+                        }]
+                    },
+                    "examples": [
+                        [{
+                            "name": "greeting",
+                            "image": "quay.io/orchestrator/serverless-workflow-greeting:latest"
+                        }]
+                    ]
+                }
+            },
+            "examples": [{
+                "devmode": false,
+                "namespace": "sonataflow-infra",
+                "sonataPlatform": {
+                    "resources": {
+                        "requests": {
+                            "memory": "64Mi",
+                            "cpu": "250m"
+                        },
+                        "limits": {
+                            "memory": "1Gi",
+                            "cpu": "500m"
+                        }
+                    },
+                    "dataIndex": {
+                        "image": "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
+                    },
+                    "jobService": {
+                        "image": "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
+                    }
+                },
+                "sonataflows": [{
+                    "name": "greeting",
+                    "image": "quay.io/orchestrator/serverless-workflow-greeting:latest"
+                }]
+            }]
+        }
+    },
+    "examples": [{
+        "sonataFlowOperator": {
+            "enabled": true,
+            "subscription": {
+                "namespace": "openshift-operators",
+                "channel": "alpha",
+                "installPlanApproval": "Automatic",
+                "pkgName": "sonataflow-operator",
+                "sourceImage": "quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot",
+                "sourceNamespace": "openshift-marketplace",
+                "source": "sonataflow-operator"
+            }
+        },
+        "serverlessOperator": {
+            "enabled": true,
+            "subscription": {
+                "namespace": "openshift-serverless",
+                "channel": "stable",
+                "installPlanApproval": "Automatic",
+                "pkgName": "serverless-operator",
+                "sourceNamespace": "openshift-marketplace"
+            }
+        },
+        "rhdhOperator": {
+            "enabled": true,
+            "github": {
+                "token": "",
+                "clientId": "",
+                "clientSecret": ""
+            },
+            "k8s": {
+                "clusterToken": "",
+                "clusterUrl": ""
+            },
+            "subscription": {
+                "namespace": "backstage-system",
+                "channel": "alpha",
+                "installPlanApproval": "Automatic",
+                "pkgName": "backstage-operator",
+                "sourceImage": "quay.io/janus-idp/operator-catalog:0.1.0",
+                "sourceNamespace": "openshift-marketplace",
+                "source": "rhdh-operator"
+            }
+        },
+        "postgres": {
+            "serviceName": "sonataflow-psql-postgresql",
+            "serviceNamespace": "sonataflow-infra",
+            "authSecret": {
+                "name": "sonataflow-psql-postgresql",
+                "userKey": "postgres-username",
+                "passwordKey": "postgres-password"
+            },
+            "database": "sonataflow"
+        },
+        "orchestrator": {
+            "devmode": false,
+            "namespace": "sonataflow-infra",
+            "sonataPlatform": {
+                "resources": {
+                    "requests": {
+                        "memory": "64Mi",
+                        "cpu": "250m"
+                    },
+                    "limits": {
+                        "memory": "1Gi",
+                        "cpu": "500m"
+                    }
+                },
+                "dataIndex": {
+                    "image": "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
+                },
+                "jobService": {
+                    "image": "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
+                }
+            },
+            "sonataflows": [{
+                "name": "greeting",
+                "image": "quay.io/orchestrator/serverless-workflow-greeting:latest"
+            }]
+        }
+    }]
+}

@@ -1,0 +1,67 @@
+sonataFlowOperator:
+  enabled: true # whether the operator should be deployed by the chart
+  subscription:
+    namespace: openshift-operators # namespace where the operator should be deployed
+    channel: alpha # channel of an operator package to subscribe to
+    installPlanApproval: Automatic # whether the update should be installed automatically
+    pkgName: sonataflow-operator # name of the operator package
+    sourceImage: quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot # catalog image of the development build. Unset it for the release build.
+    sourceNamespace: openshift-marketplace # namespace of the catalog source
+    source: sonataflow-operator # name of the catalog source for the operator
+
+serverlessOperator:
+  enabled: true # whether the operator should be deployed by the chart
+  subscription:
+    namespace: openshift-serverless # namespace where the operator should be deployed
+    channel: stable # channel of an operator package to subscribe to
+    installPlanApproval: Automatic # whether the update should be installed automatically
+    pkgName: serverless-operator # name of the operator package
+    sourceNamespace: openshift-marketplace # namespace of the catalog source
+
+rhdhOperator:
+  enabled: true # whether the operator should be deployed by the chart
+  github:
+    token: ""
+    clientId: ""
+    clientSecret: ""
+  k8s:
+    clusterToken: ""
+    clusterUrl: ""
+  subscription:
+    namespace: backstage-system # namespace where the operator should be deployed
+    channel: alpha # channel of an operator package to subscribe to
+    installPlanApproval: Automatic # whether the update should be installed automatically
+    pkgName: backstage-operator # name of the operator package
+    # sourceImage: quay.io/rhdh/iib:latest-v4.{minorVersion}-x86_64 # catalog image of the development build. Unset it for the release build. Valid for 14 days.
+    # ehdh image requires rhdh-operator namespace instead of backstage-system
+    sourceImage: quay.io/janus-idp/operator-catalog:0.1.0
+    sourceNamespace: openshift-marketplace # namespace of the catalog source
+    source: rhdh-operator # name of the catalog source for the operator
+
+postgres:
+  serviceName: "sonataflow-psql-postgresql" # The name of the Postgres DB service to be used by dataindex and job service. Cannot be empty.
+  serviceNamespace: "sonataflow-infra" # The namespace of the Postgres DB service to be used by dataindex and job service.
+  authSecret:
+    name: "sonataflow-psql-postgresql" # name of existing secret to use for PostgreSQL credentials.
+    userKey: postgres-username # name of key in existing secret to use for PostgreSQL credentials.
+    passwordKey: postgres-password # name of key in existing secret to use for PostgreSQL credentials.
+  database: sonataflow # existing database instance used by data index and job service
+
+orchestrator:
+  devmode: false # devmode runs sonataflow services in ephemeral mode (for a non-production use)
+  namespace: sonataflow-infra # namespace where the data index, job service and workflows are deployed
+  sonataPlatform:
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+    dataIndex:
+      image: "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest" # To be removed when stable version is released
+    jobService:
+      image: "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest" # To be removed when stable version is released
+  sonataflows: # workflows to get deployed - this option will be removed once the plugin will interact directly with the data-index
+    - name: greeting
+      image: quay.io/orchestrator/serverless-workflow-greeting:latest

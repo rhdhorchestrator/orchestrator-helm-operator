@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- orchestrator_v1alpha1_orchestrator.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples

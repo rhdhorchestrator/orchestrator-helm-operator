@@ -1,0 +1,95 @@
+{{/* Empty line */}}
+Helm Release {{ .Release.Name }} installed in namespace {{ .Release.Namespace }}.
+{{- $yes := "YES" }}
+{{- $no := "NO " }}
+{{- $backstageInstalled := $yes }} 
+{{- $postgresBackstageInstalled := $no }}
+{{- $serverlessOperatorInstalled := $no }}
+{{- $knativeServingInstalled := $no }}
+{{- $knativeEventingInstalled := $no }}
+{{- $sonataFlowOperatorInstalled := $no }} 
+{{- $sonataFlowPlatformInstalled := $no }}
+{{- $timeout := "--timeout=5m" }}
+
+{{- if .Values.serverlessOperator.enabled }}
+{{- $unmanagedSubscriptionExists := include "unmanaged-resource-exists" (list "operators.coreos.com/v1alpha1" "Subscription" .Values.serverlessOperator.subscription.namespace "serverless-operator" .Release.Name) }}
+{{- if eq $unmanagedSubscriptionExists "false" }}
+{{- $serverlessOperatorInstalled = $yes }}
+{{- end }}
+{{- end }}
+
+{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name) }}
+{{- $unmanagedKnativeEventingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeEventing" "knative-eventing" "knative-eventing" .Release.Name) }}
+{{- if eq $unmanagedKnativeEventingExists "false" }}
+{{- $knativeEventingInstalled = $yes }}
+{{- end }}
+{{- $unmanagedKnativeServingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeServing" "knative-serving" "knative-serving" .Release.Name) }}
+{{- if eq $unmanagedKnativeServingExists "false" }}
+{{- $knativeServingInstalled = $yes }}
+{{- end }}
+
+{{- if .Values.sonataFlowOperator.enabled }}
+{{- $sonataFlowOperatorInstalled = $yes }}
+{{- $sonataFlowPlatformInstalled = $yes }}
+{{- end }}
+
+Components                   Installed   Namespace
+====================================================================
+Backstage                    {{ $backstageInstalled }}        {{ .Values.rhdhOperator.subscription.namespace }}
+Postgres DB - Backstage      {{ $postgresBackstageInstalled }}        {{ .Values.rhdhOperator.subscription.namespace }}
+Red Hat Serverless Operator  {{ $serverlessOperatorInstalled }}        {{ .Values.serverlessOperator.subscription.namespace }}     
+KnativeServing               {{ $knativeServingInstalled }}        knative-serving
+KnativeEventing              {{ $knativeEventingInstalled }}        knative-eventing
+SonataFlow Operator          {{ $sonataFlowOperatorInstalled }}        {{ .Values.sonataFlowOperator.subscription.namespace }}
+SonataFlowPlatform           {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
+Data Index Service           {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
+Job Service                  {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
+{{/* Empty line */}}
+
+{{- if gt (len .Values.orchestrator.sonataflows) 0 }}
+Workflows deployed on namespace {{ .Values.orchestrator.namespace }}:
+{{- range $v := .Values.orchestrator.sonataflows }}
+{{ $v.name }}
+{{- end }}
+{{- else }}
+No workflows deployed.
+{{- end }}
+
+Run the following commands to wait until the services are ready:
+{{- if eq $serverlessOperatorInstalled $yes }}
+  oc wait -n {{ .Values.serverlessOperator.subscription.namespace }} deploy/knative-openshift --for=condition=Available {{ $timeout }}
+{{- end }}
+{{- if eq $knativeEventingInstalled $yes }}
+  oc wait -n knative-eventing knativeeventing/knative-eventing --for=condition=Ready {{ $timeout }}
+{{- end }}
+{{- if eq $knativeServingInstalled $yes }}
+  oc wait -n knative-serving knativeserving/knative-serving --for=condition=Ready {{ $timeout }}
+{{- end }}
+{{- if eq $sonataFlowOperatorInstalled $yes }}
+  oc wait -n {{ .Values.sonataFlowOperator.subscription.namespace }} deploy/sonataflow-operator-controller-manager --for=condition=Available {{ $timeout }}
+{{- end }}
+{{- if eq $sonataFlowPlatformInstalled $yes }}
+  oc wait -n {{ .Values.orchestrator.namespace }} sonataflowplatform/sonataflow-platform --for=condition=Succeed {{ $timeout }}
+{{- end }}
+{{- if eq $sonataFlowPlatformInstalled $yes }}
+  oc wait -n {{ .Values.orchestrator.namespace }} deploy/sonataflow-platform-data-index-service --for=condition=Available {{ $timeout }}
+{{- end }}
+{{- if eq $sonataFlowPlatformInstalled $yes }}
+  oc wait -n {{ .Values.orchestrator.namespace }} deploy/sonataflow-platform-jobs-service --for=condition=Available {{ $timeout }}
+{{- end }}
+{{- if eq $postgresBackstageInstalled $yes }}
+  oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} pod/backstage-psql-backstage-0 --for=condition=Ready {{ $timeout }}
+{{- end }}
+{{- if eq $backstageInstalled $yes }}
+  oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} backstage backstage --for=condition=Deployed=True
+  oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} deploy/backstage-backstage --for=condition=Available {{ $timeout }}
+{{- end }}
+
+{{- $ns := .Values.orchestrator.namespace }}
+{{- if (gt (len .Values.orchestrator.sonataflows) 0) }}
+{{/* Empty line */}}
+Run the following commands to wait until the workflow builds are done and workflows are running on namespace {{ .Values.orchestrator.namespace }}:
+{{- range $v := .Values.orchestrator.sonataflows }}
+  oc wait -n {{ $ns }} sonataflow/{{ $v.name }} --for=condition=Running {{ $timeout }}
+{{- end }}
+{{- end }}
