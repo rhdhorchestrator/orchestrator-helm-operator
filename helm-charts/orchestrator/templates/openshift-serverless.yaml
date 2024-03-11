@@ -58,7 +58,8 @@ apiVersion: operator.knative.dev/v1beta1
 metadata:
   name: knative-eventing
   namespace: knative-eventing
-spec: {}
+spec:
+  Registry:
 ---
 {{- end }}
 {{- $unmanagedKnativeServingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeServing" "knative-serving" "knative-serving" .Release.Name) }}
@@ -68,6 +69,10 @@ kind: KnativeServing
 metadata:
   name: knative-serving
   namespace: knative-serving
-spec: {}
+spec:
+  controller-custom-certs:
+    name: ""
+    type: ""
+  registry: {}
 {{- end }}
 {{- end }}
