@@ -58,7 +58,7 @@ stringData:
   GITHUB_CLIENT_ID: {{ .Values.rhdhOperator.github.clientId }}
   GITHUB_CLIENT_SECRET: {{ .Values.rhdhOperator.github.clientSecret }}
   {{- end }}
-{{ else }}
+{{- else }}
 {{ $old_secret | toPrettyJson }}
 {{- end }}
 ---
@@ -281,8 +281,10 @@ spec:
         - name: app-config-rhdh
         - name: app-config-rhdh-auth
         - name: app-config-rhdh-catalog
+      mountPath: /opt/app-root/src
     dynamicPluginsConfigMapName: dynamic-plugins-rhdh
     extraEnvs:
       secrets:
         - name: backstage-backend-auth-secret
+    replicas: 1
 {{- end }}
