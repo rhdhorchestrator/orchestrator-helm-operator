@@ -3,7 +3,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.9.2
-  creationTimestamp: null
   name: sonataflowbuilds.sonataflow.org
 spec:
   group: sonataflow.org
@@ -284,7 +283,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.9.2
-  creationTimestamp: null
   name: sonataflowclusterplatforms.sonataflow.org
 spec:
   group: sonataflow.org
@@ -388,7 +386,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.9.2
-  creationTimestamp: null
   name: sonataflowplatforms.sonataflow.org
 spec:
   group: sonataflow.org
@@ -9415,7 +9412,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.9.2
-  creationTimestamp: null
   name: sonataflows.sonataflow.org
 spec:
   group: sonataflow.org

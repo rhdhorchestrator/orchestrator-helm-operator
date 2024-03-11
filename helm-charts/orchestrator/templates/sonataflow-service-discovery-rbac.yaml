@@ -27,7 +27,6 @@ rules:
     verbs:
       - get
       - list
-  # Knative
   - apiGroups:
       - serving.knative.dev
     resources:
@@ -35,7 +34,6 @@ rules:
     verbs:
       - get
       - list
-## Specific to Openshift
 {{- if eq (include "is-openshift" .) "true" }}
   - apiGroups:
       - route.openshift.io

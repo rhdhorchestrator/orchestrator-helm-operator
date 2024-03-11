@@ -30,6 +30,6 @@ spec:
   channel: {{ .Values.sonataFlowOperator.subscription.channel }}
   installPlanApproval: Automatic
   name: {{ .Values.sonataFlowOperator.subscription.pkgName }}
-  source: {{ .Values.sonataFlowOperator.subscription.source | default (include "get-default-catalogsource-name" .) | quote }}
-  sourceNamespace: {{ .Values.sonataFlowOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
+  source: {{ .Values.sonataFlowOperator.subscription.source | default (include "get-default-catalogsource-name" .) }}
+  sourceNamespace: {{ .Values.sonataFlowOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) }}
 {{- end }}
