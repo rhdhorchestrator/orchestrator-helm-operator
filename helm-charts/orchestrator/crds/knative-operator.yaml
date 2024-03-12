@@ -1553,8 +1553,8 @@ spec:
       conversionReviewVersions: ["v1beta1"]
       clientConfig:
         service:
-          name: operator-webhook
-          namespace: default
+          name: knative-operator-webhook-service
+          namespace: openshift-serverless
           path: /resource-conversion
 
 ---
