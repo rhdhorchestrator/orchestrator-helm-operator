@@ -10,6 +10,10 @@ kind: SonataFlowPlatform
 metadata:
   name: sonataflow-platform
   namespace: {{ $ns }}
+  annotations:
+  "helm.sh/hook": post-install
+  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+  "helm.sh/hook-weight": "0"  
 spec:
   build:
     template:
@@ -32,6 +36,10 @@ kind: SonataFlowPlatform
 metadata:
   name: sonataflow-platform
   namespace: {{ $ns }}
+  annotations:
+  "helm.sh/hook": post-install
+  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+  "helm.sh/hook-weight": "0"  
 spec:
   build:
     template:
@@ -77,6 +85,10 @@ apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowClusterPlatform
 metadata:
   name: cluster-platform
+  annotations:
+  "helm.sh/hook": post-install
+  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+  "helm.sh/hook-weight": "0"   
 spec:
   platformRef:
     name: sonataflow-platform
@@ -161,6 +173,9 @@ metadata:
     sonataflow.org/expressionLang: jsonpath
     sonataflow.org/profile: prod
     sonataflow.org/version: "1.0"
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"     
   labels:
     app: greeting
     sonataflow.org/workflow-app: greeting
