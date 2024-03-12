@@ -6,9 +6,9 @@ kind: Namespace
 metadata:
   name: {{ .Values.rhdhOperator.subscription.namespace }}
   annotations:
-  "helm.sh/hook": pre-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "-10"    
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "-10"    
 ---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
@@ -16,9 +16,9 @@ metadata:
   name: rhdh-operator-group
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
   annotations:
-  "helm.sh/hook": pre-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "-9"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "-9"
 spec: {}
 ---
 {{- end }}
@@ -29,9 +29,9 @@ metadata:
   name: {{ .Values.rhdhOperator.subscription.source }}
   namespace: openshift-marketplace
   annotations:
-  "helm.sh/hook": pre-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "-9"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "-9"
 spec:
   displayName: RHDH Operator (Development)
   image: {{ .Values.rhdhOperator.subscription.sourceImage }}
@@ -44,9 +44,9 @@ metadata:
   name: rhdh-operator
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
   annotations:
-  "helm.sh/hook": pre-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "-9"  
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "-9"  
 spec:
   channel: {{ .Values.rhdhOperator.subscription.channel }}
   installPlanApproval: Automatic
@@ -288,9 +288,9 @@ metadata:
   name: backstage
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
   annotations:
-  "helm.sh/hook": post-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "0"      
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"      
 spec:
   application:
     appConfig:

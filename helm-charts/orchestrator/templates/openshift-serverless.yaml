@@ -6,9 +6,9 @@ kind: Namespace
 metadata:
   name: {{ .Values.serverlessOperator.subscription.namespace }}
   annotations:
-  "helm.sh/hook": pre-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "-10"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "-10"
 ---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
@@ -16,9 +16,9 @@ metadata:
   name: serverless-operator-group
   namespace: {{ .Values.serverlessOperator.subscription.namespace }}
   annotations:
-  "helm.sh/hook": pre-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "-9"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "-9"
 spec: {}
 ---
 {{- end }}
@@ -30,9 +30,9 @@ metadata:
   name: serverless-operator
   namespace: {{ .Values.serverlessOperator.subscription.namespace }}
   annotations:
-  "helm.sh/hook": pre-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "-9"  
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "-9"  
 spec:
   channel: {{ .Values.serverlessOperator.subscription.channel }}
   installPlanApproval: Automatic
@@ -71,9 +71,9 @@ metadata:
   name: knative-eventing
   namespace: knative-eventing
   annotations:
-  "helm.sh/hook": post-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "0"    
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
 spec:
   Registry:
 ---
@@ -86,9 +86,9 @@ metadata:
   name: knative-serving
   namespace: knative-serving
   annotations:
-  "helm.sh/hook": post-install
-  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-  "helm.sh/hook-weight": "0"   
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"   
 spec:
   controller-custom-certs:
     name: ""
