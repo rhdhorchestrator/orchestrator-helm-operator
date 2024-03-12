@@ -17,8 +17,7 @@ kind: CustomResourceDefinition
 metadata:
   name: knativeeventings.operator.knative.dev
   labels:
-    app.kubernetes.io/version: "1.11.12"
-    app.kubernetes.io/name: knative-operator
+    app.kubernetes.io/version: "devel"
 spec:
   group: operator.knative.dev
   versions:
