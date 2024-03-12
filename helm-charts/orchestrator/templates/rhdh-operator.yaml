@@ -38,15 +38,15 @@ spec:
   source: {{ .Values.rhdhOperator.subscription.source }}
   sourceNamespace: {{ .Values.rhdhOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
 ---
-{{- $old_secret := lookup "v1" "Secret" .Values.rhdhOperator.subscription.namespace "backstage-backend-auth-secret" }}
-{{- if or (not $old_secret) (not $old_secret.data) (not $old_secret.data.BACKEND_SECRET)}}
 apiVersion: v1
 kind: Secret
 metadata:
   name: backstage-backend-auth-secret
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
 stringData:
-  BACKEND_SECRET: {{ randAlphaNum 24 | nospace | b64enc }}
+{{- $old_secret := lookup "v1" "Secret" .Values.rhdhOperator.subscription.namespace "backstage-backend-auth-secret" }}
+{{- $generated_secret := randAlphaNum 24 | nospace | b64enc }}
+  BACKEND_SECRET: {{ $old_secret | dig "data" "BACKEND_SECRET" $generated_secret }}
   {{- if ne .Values.rhdhOperator.k8s.clusterToken "" }}
   K8S_CLUSTER_URL: {{ .Values.rhdhOperator.k8s.clusterUrl }}enc
   K8S_CLUSTER_TOKEN: {{ .Values.rhdhOperator.k8s.clusterToken }}
@@ -58,9 +58,6 @@ stringData:
   GITHUB_CLIENT_ID: {{ .Values.rhdhOperator.github.clientId }}
   GITHUB_CLIENT_SECRET: {{ .Values.rhdhOperator.github.clientSecret }}
   {{- end }}
-{{- else }}
-{{ $old_secret | toPrettyJson }}
-{{- end }}
 ---
 kind: ConfigMap
 apiVersion: v1
