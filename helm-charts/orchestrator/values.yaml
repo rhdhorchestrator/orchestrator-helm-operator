@@ -34,7 +34,7 @@ rhdhOperator:
     pkgName: backstage-operator # name of the operator package
     # sourceImage: quay.io/rhdh/iib:latest-v4.{minorVersion}-x86_64 # catalog image of the development build. Unset it for the release build. Valid for 14 days.
     # ehdh image requires rhdh-operator namespace instead of backstage-system
-    sourceImage: quay.io/janus-idp/operator-catalog:0.1.0
+    sourceImage: quay.io/janus-idp/operator-catalog:0.2.0
     sourceNamespace: openshift-marketplace # namespace of the catalog source
     source: rhdh-operator # name of the catalog source for the operator
 
