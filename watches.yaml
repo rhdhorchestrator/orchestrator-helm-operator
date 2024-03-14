@@ -3,4 +3,5 @@
   version: v1alpha1
   kind: Orchestrator
   chart: helm-charts/orchestrator
+  dryrunOption: server
 #+kubebuilder:scaffold:watch
