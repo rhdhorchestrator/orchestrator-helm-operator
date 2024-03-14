@@ -74,5 +74,39 @@
 {{- end -}}
 
 {{- define "cluster.domain" -}}
-    {{ printf "apps.cluster-cqlxr.dynamic.redhatworkshops.io"}}
+    {{- if .Capabilities.APIVersions.Has "config.openshift.io/v1/Ingress" -}}  
+        {{- $cluster := (lookup "config.openshift.io/v1" "Ingress" "" "cluster") -}}
+        {{- if and (hasKey $cluster "spec") (hasKey $cluster.spec "domain") -}}
+            {{- printf "%s" $cluster.spec.domain -}}
+        {{- else -}}
+            {{ "cluster.domain" }}
+        {{- end }}
+    {{- else -}}
+        {{ fail "Unable to obtain cluster domain, config.openshift.io/v1/Ingress is missing" }}
+    {{- end -}}
+{{- end -}}
+
+
+{{- define "install-tekton-task" -}}
+  {{- if and (or .Values.orchestrator.devmode .Values.tekton.enabled) (ne .Values.rhdhOperator.k8s.clusterToken "") (.Capabilities.APIVersions.Has "tekton.dev/v1beta1/Task") }}
+        {{- "true" -}}
+    {{- else }}
+        {{- "false" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "install-tekton-pipeline" -}}
+  {{- if and (or .Values.orchestrator.devmode .Values.tekton.enabled) (ne .Values.rhdhOperator.k8s.clusterToken "") (.Capabilities.APIVersions.Has "tekton.dev/v1/Pipeline") }}
+        {{- "true" -}}
+    {{- else }}
+        {{- "false" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "install-argocd-project" -}}
+    {{- if and (or .Values.orchestrator.devmode .Values.argocd.enabled) (.Capabilities.APIVersions.Has "argoproj.io/v1alpha1/AppProject") }}
+        {{- "true" -}}
+    {{- else }}
+        {{- "false" -}}
+    {{- end -}}
 {{- end -}}
