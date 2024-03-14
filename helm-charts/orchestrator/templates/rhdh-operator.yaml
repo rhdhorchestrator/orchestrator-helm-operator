@@ -5,48 +5,32 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: {{ .Values.rhdhOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-10"    
 ---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: rhdh-operator-group
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-9"
 spec: {}
----
 {{- end }}
 {{- if ne .Values.rhdhOperator.subscription.sourceImage "" }}
+---
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
   name: {{ .Values.rhdhOperator.subscription.source }}
   namespace: openshift-marketplace
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-9"
 spec:
   displayName: RHDH Operator (Development)
   image: {{ .Values.rhdhOperator.subscription.sourceImage }}
   sourceType: grpc
----
 {{- end }}
+---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   name: rhdh-operator
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-9"  
 spec:
   channel: {{ .Values.rhdhOperator.subscription.channel }}
   installPlanApproval: Automatic
@@ -59,12 +43,12 @@ kind: Secret
 metadata:
   name: backstage-backend-auth-secret
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
-stringData:
+data:
 {{- $old_secret := lookup "v1" "Secret" .Values.rhdhOperator.subscription.namespace "backstage-backend-auth-secret" }}
 {{- $generated_secret := randAlphaNum 24 | nospace | b64enc }}
   BACKEND_SECRET: {{ $old_secret | dig "data" "BACKEND_SECRET" $generated_secret }}
   {{- if ne .Values.rhdhOperator.k8s.clusterToken "" }}
-  K8S_CLUSTER_URL: {{ .Values.rhdhOperator.k8s.clusterUrl }}enc
+  K8S_CLUSTER_URL: {{ .Values.rhdhOperator.k8s.clusterUrl }}
   K8S_CLUSTER_TOKEN: {{ .Values.rhdhOperator.k8s.clusterToken }}
   {{- end }}
   {{- if ne .Values.rhdhOperator.github.token "" }}
@@ -281,27 +265,4 @@ data:
           target: https://github.com/parodos-dev/workflow-software-templates/blob/tekton-demo/scaffolder-templates/basic-workflow/template.yaml
         - type: url
           target: https://github.com/parodos-dev/workflow-software-templates/blob/tekton-demo/scaffolder-templates/complex-assessment-workflow/template.yaml
----
-apiVersion: rhdh.redhat.com/v1alpha1
-kind: Backstage
-metadata:
-  name: backstage
-  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"      
-spec:
-  application:
-    appConfig:
-      configMaps:
-        - name: app-config-rhdh
-        - name: app-config-rhdh-auth
-        - name: app-config-rhdh-catalog
-      mountPath: /opt/app-root/src
-    dynamicPluginsConfigMapName: dynamic-plugins-rhdh
-    extraEnvs:
-      secrets:
-        - name: backstage-backend-auth-secret
-    replicas: 1
 {{- end }}

@@ -1,0 +1,151 @@
+{{- if .Values.rhdhOperator.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-cr-backstage
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"  
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-cr-backstage
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+rules:
+  - apiGroups: 
+      - "rhdh.redhat.com"
+    resources:
+      - backstages
+    verbs:
+      - get
+      - create
+      - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-cr-backstage
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-cr-backstage
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ .Release.Name }}-cr-backstage
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-cr-configmap
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-cr-configmap
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-cr-backstage
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ .Release.Name }}-cr-configmap
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: backstage-manifest
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+data:
+  "backstage.yaml": |
+    apiVersion: rhdh.redhat.com/v1alpha1
+    kind: Backstage
+    metadata:
+      name: backstage
+      namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+    spec:
+      application:
+        appConfig:
+          configMaps:
+            - name: app-config-rhdh
+            - name: app-config-rhdh-auth
+            - name: app-config-rhdh-catalog
+          mountPath: /opt/app-root/src
+        dynamicPluginsConfigMapName: dynamic-plugins-rhdh
+        extraEnvs:
+          secrets:
+            - name: backstage-backend-auth-secret
+        replicas: 1
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-cr-backstage
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-failed,hook-succeeded # add ,hook-failed once verified
+    "helm.sh/hook-weight": "1"    
+spec:
+  template:
+    metadata:
+      name: {{ .Release.Name }}-cr-backstage
+    spec:
+      serviceAccountName: {{ .Release.Name }}-cr-backstage
+      containers:
+        - name: deploy-backstage
+          image: registry.redhat.io/openshift4/ose-cli:latest
+          command:
+            - "bin/bash"
+            - "-c"
+          args:
+            - |
+              echo "Deploy Backstage CR with retries"
+              manifest=$(kubectl get cm -n {{ .Release.Namespace }} backstage-manifest -ojsonpath="{.data['backstage\.yaml']}")
+              if [[ $? -ne 0 ]]; then
+                echo "Failed to retrieve backstage manifest" && exit 1;
+              fi
+              count=10
+              while [[ count -ne 0 ]]
+              do
+                kubectl apply -f - <<<$manifest
+                if [[ $? -eq 0 ]]; then
+                  exit 0
+                fi
+                ((count++))
+              done
+              echo "Job finished"
+      restartPolicy: Never
+{{- end }}
