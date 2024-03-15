@@ -9,42 +9,80 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/hook-weight": "-1"  
 ---
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ .Release.Name }}-knative-cleanup
+  name: {{ .Release.Name }}-knative-eventing
+  namespace: knative-eventing
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-1"    
+    "helm.sh/hook-weight": "0"    
 rules:
-  - apiGroups: 
-      - "operator.knative.dev"
+  - apiGroups:
+    - operator.knative.dev
     resources:
-      - knativeservings
-      - knativeeventings
+    - knativeeventings
     verbs:
-      - get
-      - list
-      - delete
-      - patch
+    - get
+    - list
+    - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ .Release.Name }}-knative-cleanup
-  namespace: {{ .Values.serverlessOperator.subscription.namespace }}
+  name: {{ .Release.Name }}-knative-eventing
+  namespace: knative-eventing
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-1"    
+    "helm.sh/hook-weight": "0"    
 subjects:
   - kind: ServiceAccount
     name: {{ .Release.Name }}-knative-cleanup
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
-  name: {{ .Release.Name }}-knative-cleanup
+  name: {{ .Release.Name }}-knative-eventing
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-knative-serving
+  namespace: knative-serving
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+rules:
+  - apiGroups:
+    - operator.knative.dev
+    resources:
+    - knativeservings
+    verbs:
+    - get
+    - list
+    - create
+    - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-knative-serving
+  namespace: knative-serving
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-knative-cleanup
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ .Release.Name }}-knative-serving
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: batch/v1
@@ -55,7 +93,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded # add ,hook-failed once verified
-    "helm.sh/hook-weight": "-1"    
+    "helm.sh/hook-weight": "1"    
 spec:
   template:
     metadata:
