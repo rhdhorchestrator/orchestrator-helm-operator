@@ -20,13 +20,13 @@ metadata:
     "helm.sh/hook-weight": "0"    
 rules:
   - apiGroups: 
-      - "rhdh.redhat.com"
+    - rhdh.redhat.com
     resources:
-      - backstages
+    - backstages
     verbs:
-      - get
-      - create
-      - patch
+    - get 
+    - create
+    - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -46,39 +46,6 @@ roleRef:
   name: {{ .Release.Name }}-cr-backstage
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: {{ .Release.Name }}-cr-configmap
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"    
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - configmaps
-    verbs:
-      - get
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: {{ .Release.Name }}-cr-configmap
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"    
-subjects:
-  - kind: ServiceAccount
-    name: {{ .Release.Name }}-cr-backstage
-    namespace: {{ .Release.Namespace }}
-roleRef:
-  kind: Role
-  name: {{ .Release.Name }}-cr-configmap
-  apiGroup: rbac.authorization.k8s.io
----
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -89,7 +56,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/hook-weight": "0"    
 data:
-  "backstage.yaml": |
+  "manifest.yaml": |
     apiVersion: rhdh.redhat.com/v1alpha1
     kind: Backstage
     metadata:
@@ -116,7 +83,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-failed,hook-succeeded # add ,hook-failed once verified
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded # add ,hook-failed once verified
     "helm.sh/hook-weight": "1"    
 spec:
   template:
@@ -125,27 +92,35 @@ spec:
     spec:
       serviceAccountName: {{ .Release.Name }}-cr-backstage
       containers:
-        - name: deploy-backstage
-          image: registry.redhat.io/openshift4/ose-cli:latest
-          command:
-            - "bin/bash"
-            - "-c"
-          args:
-            - |
-              echo "Deploy Backstage CR with retries"
-              manifest=$(kubectl get cm -n {{ .Release.Namespace }} backstage-manifest -ojsonpath="{.data['backstage\.yaml']}")
-              if [[ $? -ne 0 ]]; then
-                echo "Failed to retrieve backstage manifest" && exit 1;
+      - name: deploy-manifest
+        image: registry.redhat.io/openshift4/ose-cli:latest
+        command:
+          - "bin/bash"
+          - "-c"
+        args:
+          - |
+            echo "Deploy Knative Serving CR with retries"
+            count=10
+            while [[ count -ne 0 ]]
+            do
+              kubectl apply -f /tmp/manifest/manifest.yaml
+              if [[ $? -eq 0 ]]; then
+                exit 0
               fi
-              count=10
-              while [[ count -ne 0 ]]
-              do
-                kubectl apply -f - <<<$manifest
-                if [[ $? -eq 0 ]]; then
-                  exit 0
-                fi
-                ((count++))
-              done
-              echo "Job finished"
-      restartPolicy: Never
+              ((count++))
+              sleep 1
+            done
+            echo "Job finished"
+        volumeMounts:
+        - name: manifest
+          mountPath: /tmp/manifest/
+          readOnly: true
+      volumes:
+      - name: manifest
+        configMap:
+          name: backstage-manifest
+          items:
+          - key: manifest.yaml
+            path: manifest.yaml
+      restartPolicy: Never 
 {{- end }}

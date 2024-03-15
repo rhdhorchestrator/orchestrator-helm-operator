@@ -1,98 +1,53 @@
 {{- if .Values.serverlessOperator.enabled }}
-{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.serverlessOperator.subscription.namespace .Release.Name) }}
-{{- if and (eq $unmanagedNamespaceExists "false") .Values.serverlessOperator.enabled }}
+  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.serverlessOperator.subscription.namespace .Release.Name) }}
+  {{- if and (eq $unmanagedNamespaceExists "false") .Values.serverlessOperator.enabled }}
 apiVersion: v1
 kind: Namespace
 metadata:
   name: {{ .Values.serverlessOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-10"
 ---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: serverless-operator-group
   namespace: {{ .Values.serverlessOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-9"
 spec: {}
+  {{- end }}
+  {{- $unmanagedSubscriptionExists := include "unmanaged-resource-exists" (list "operators.coreos.com/v1alpha1" "Subscription" .Values.serverlessOperator.subscription.namespace "serverless-operator" .Release.Name) }}
+  {{- if eq $unmanagedSubscriptionExists "false" }}
 ---
-{{- end }}
-{{- $unmanagedSubscriptionExists := include "unmanaged-resource-exists" (list "operators.coreos.com/v1alpha1" "Subscription" .Values.serverlessOperator.subscription.namespace "serverless-operator" .Release.Name) }}
-{{- if eq $unmanagedSubscriptionExists "false" }}
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   name: serverless-operator
   namespace: {{ .Values.serverlessOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-9"  
 spec:
   channel: {{ .Values.serverlessOperator.subscription.channel }}
   installPlanApproval: Automatic
-  {{- if eq (include "is-openshift" .) "true" }}
+    {{- if eq (include "is-openshift" .) "true" }}
   name: serverless-operator
   source: redhat-operators
-  {{- else }}
+    {{- else }}
   name: knative-operator
   source: {{ .Values.serverlessOperator.subscription.source | default (include "get-default-catalogsource-name" .) | quote }}
-  {{- end }}
+    {{- end }}
   sourceNamespace: {{ .Values.serverlessOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
+  {{- end }}
+  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name) }}
+  {{- if eq $unmanagedNamespaceExists "false" }}
 ---
-{{- end }}
-{{- end }}
-
-{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name) }}
-{{- if eq $unmanagedNamespaceExists "false" }}
 apiVersion: v1
 kind: Namespace
 metadata:
   name: knative-serving
+  {{- end }}  
+  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-eventing" .Release.Name) }}
+  {{- if eq $unmanagedNamespaceExists "false" }}
 ---
-{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-eventing" .Release.Name) }}
-{{- if eq $unmanagedNamespaceExists "false" }}
 apiVersion: v1
 kind: Namespace
 metadata:
   name: knative-eventing
 ---
-{{- end }}
-{{- $unmanagedKnativeEventingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeEventing" "knative-eventing" "knative-eventing" .Release.Name) }}
-{{- if eq $unmanagedKnativeEventingExists "false" }}
-kind: KnativeEventing
-apiVersion: operator.knative.dev/v1beta1
-metadata:
-  name: knative-eventing
-  namespace: knative-eventing
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"    
-spec:
-  Registry:
----
-{{- end }}
-{{- $unmanagedKnativeServingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeServing" "knative-serving" "knative-serving" .Release.Name) }}
-{{- if eq $unmanagedKnativeEventingExists "false" }}
-apiVersion: operator.knative.dev/v1beta1
-kind: KnativeServing
-metadata:
-  name: knative-serving
-  namespace: knative-serving
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"   
-spec:
-  controller-custom-certs:
-    name: ""
-    type: ""
-  registry: {}
-{{- end }}
+  {{- end }}
 {{- end }}

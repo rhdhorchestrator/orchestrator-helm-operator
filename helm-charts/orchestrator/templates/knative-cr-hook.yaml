@@ -1,0 +1,240 @@
+{{- if .Values.serverlessOperator.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-cr-knative
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"  
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-cr-knative-eventing
+  namespace: knative-eventing
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+rules:
+  - apiGroups:
+    - operator.knative.dev
+    resources:
+    - knativeeventing
+    verbs:
+    - get
+    - create
+    - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-cr-knative-eventing
+  namespace: knative-eventing
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-cr-knative
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ .Release.Name }}-cr-knative-eventing
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-cr-knative
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"  
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-cr-knative-serving
+  namespace: knative-serving
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+rules:
+  - apiGroups:
+    - operator.knative.dev
+    resources:
+    - knativeservings
+    verbs:
+    - get
+    - create
+    - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-cr-knative-serving
+  namespace: knative-serving
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"    
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-cr-knative
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: {{ .Release.Name }}-cr-knative-serving
+  apiGroup: rbac.authorization.k8s.io
+
+  {{- $unmanagedKnativeEventingExists := "false" -}}
+  {{- if .Capabilities.APIVersions.Has "operator.knative.dev/v1beta1/KnativeEventing" }}
+    {{- $unmanagedKnativeEventingExists = include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeEventing" "knative-eventing" "knative-eventing" .Release.Name) }}
+  {{- end -}}
+  {{- if eq $unmanagedKnativeEventingExists "false" }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: knative-eventing-manifest
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "0"    
+data:
+  "manifest.yaml": |
+    apiVersion: operator.knative.dev/v1beta1
+    kind: KnativeEventing
+    metadata:
+      name: knative-eventing
+      namespace: knative-eventing
+    spec:
+      Registry:
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-cr-knative-serving
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"    
+spec:
+  template:
+    metadata:
+      name: {{ .Release.Name }}-cr-knative-serving
+    spec:
+      serviceAccountName: {{ .Release.Name }}-cr-knative
+      containers:
+      - name: deploy-manifest
+        image: registry.redhat.io/openshift4/ose-cli:latest
+        command:
+          - "bin/bash"
+          - "-c"
+        args:
+          - |
+            echo "Deploy Knative Serving CR with retries"
+            count=10
+            while [[ count -ne 0 ]]
+            do
+              kubectl apply -f /tmp/manifest/manifest.yaml
+              if [[ $? -eq 0 ]]; then
+                exit 0
+              fi
+              ((count++))
+              sleep 1
+            done
+            echo "Job finished"
+        volumeMounts:
+        - name: manifest
+          mountPath: /tmp/manifest/
+          readOnly: true
+      volumes:
+      - name: manifest
+        configMap:
+          name: knative-serving-manifest
+      restartPolicy: Never 
+  {{- end }}
+
+  {{- $unmanagedKnativeServingExists := "false" -}}
+  {{- if .Capabilities.APIVersions.Has "operator.knative.dev/v1beta1/KnativeServing" }}
+    {{- $unmanagedKnativeServingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeServing" "knative-serving" "knative-serving" .Release.Name) }}
+  {{- end }}
+  {{- if eq $unmanagedKnativeServingExists "false" }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: knative-serving-manifest
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "0"    
+data:
+  "manifest.yaml": |
+    apiVersion: operator.knative.dev/v1beta1
+    kind: KnativeServing
+    metadata:
+      name: knative-serving
+      namespace: knative-serving
+    spec:
+      controller-custom-certs:
+        name: ""
+        type: ""
+      registry: {}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-cr-knative-eventing
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "1"    
+spec:
+  template:
+    metadata:
+      name: {{ .Release.Name }}-cr-knative-eventing
+    spec:
+      serviceAccountName: {{ .Release.Name }}-cr-knative
+      containers:
+      - name: deploy-manifest
+        image: registry.redhat.io/openshift4/ose-cli:latest
+        command:
+          - "bin/bash"
+          - "-c"
+        args:
+          - |
+            echo "Deploy Knative Eventing CR with retries"
+            count=10
+            while [[ count -ne 0 ]]
+            do
+              kubectl apply -f /tmp/manifest/manifest.yaml
+              if [[ $? -eq 0 ]]; then
+                exit 0
+              fi
+              ((count++))
+              sleep 1
+            done
+            echo "Job finished"
+        volumeMounts:
+        - name: manifest
+          mountPath: /tmp/manifest/
+          readOnly: true
+      volumes:
+      - name: manifest
+        configMap:
+          name: knative-serving-manifest
+      restartPolicy: Never
+  {{- end }}  
+{{- end }}
