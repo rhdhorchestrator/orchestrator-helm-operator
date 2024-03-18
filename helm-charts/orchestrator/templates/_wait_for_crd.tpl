@@ -20,9 +20,9 @@ metadata:
     "helm.sh/hook-weight": "0"
 rules:
   - apiGroups: 
-    - {{ .apiGroup }}
+    - apiextensions.k8s.io
     resources:
-    - {{ .resourceName }}
+    - customresourcedefinitions
     verbs:
     - get 
 ---
@@ -71,13 +71,14 @@ spec:
             count=60
             while [[ count -ne 0 ]]
             do
-              kubectl get {{ printf "%s.%s" .resourceName .apiGroup }} 1>&2 2>/dev/null
+              kubectl get crd {{ printf "%s.%s" .resourceName .apiGroup }} -oname
               if [[ $? -eq 0 ]]; then
+                echo "Job finished"
                 exit 0
               fi
               ((count--))
               sleep 5
             done
-            echo "Job finished"
+            echo "Could not find CRD {{ printf "%s.%s" .resourceName .apiGroup }} deployed"
 ---
 {{- end -}}
