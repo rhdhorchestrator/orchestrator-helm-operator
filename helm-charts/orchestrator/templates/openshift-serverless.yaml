@@ -1,5 +1,5 @@
 {{- if .Values.serverlessOperator.enabled }}
-  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.serverlessOperator.subscription.namespace .Release.Name) }}
+  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.serverlessOperator.subscription.namespace .Release.Name .Capabilities.APIVersions) }}
   {{- if and (eq $unmanagedNamespaceExists "false") .Values.serverlessOperator.enabled }}
 apiVersion: v1
 kind: Namespace
@@ -13,7 +13,7 @@ metadata:
   namespace: {{ .Values.serverlessOperator.subscription.namespace }}
 spec: {}
   {{- end }}
-  {{- $unmanagedSubscriptionExists := include "unmanaged-resource-exists" (list "operators.coreos.com/v1alpha1" "Subscription" .Values.serverlessOperator.subscription.namespace "serverless-operator" .Release.Name) }}
+  {{- $unmanagedSubscriptionExists := include "unmanaged-resource-exists" (list "operators.coreos.com/v1alpha1" "Subscription" .Values.serverlessOperator.subscription.namespace "serverless-operator" .Release.Name .Capabilities.APIVersions ) }}
   {{- if eq $unmanagedSubscriptionExists "false" }}
 ---
 apiVersion: operators.coreos.com/v1alpha1
@@ -33,7 +33,7 @@ spec:
     {{- end }}
   sourceNamespace: {{ .Values.serverlessOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
   {{- end }}
-  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name) }}
+  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name .Capabilities.APIVersions) }}
   {{- if eq $unmanagedNamespaceExists "false" }}
 ---
 apiVersion: v1
@@ -41,7 +41,7 @@ kind: Namespace
 metadata:
   name: knative-serving
   {{- end }}  
-  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-eventing" .Release.Name) }}
+  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-eventing" .Release.Name .Capabilities.APIVersions) }}
   {{- if eq $unmanagedNamespaceExists "false" }}
 ---
 apiVersion: v1

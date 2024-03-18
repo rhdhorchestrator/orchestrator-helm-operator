@@ -1,5 +1,5 @@
 {{- if .Values.rhdhOperator.enabled }}
-{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.rhdhOperator.subscription.namespace .Release.Name) }}
+{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.rhdhOperator.subscription.namespace .Release.Name .Capabilities.APIVersions ) }}
 {{- if and (eq $unmanagedNamespaceExists "false") .Values.rhdhOperator.enabled }}
 apiVersion: v1
 kind: Namespace
