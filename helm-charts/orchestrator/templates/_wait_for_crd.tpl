@@ -17,14 +17,14 @@ metadata:
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"    
-  rules:
-    - apiGroups: 
-      - {{ .apiGroup }}
-      resources:
-      - {{ .resourceName }}
-      verbs:
-      - get 
+    "helm.sh/hook-weight": "0"
+rules:
+  - apiGroups: 
+    - {{ .apiGroup }}
+    resources:
+    - {{ .resourceName }}
+    verbs:
+    - get 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -34,14 +34,14 @@ metadata:
     "helm.sh/hook": post-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
     "helm.sh/hook-weight": "0"
-  subjects:
-    - kind: ServiceAccount
-      name: {{ printf "%s-crd-%s" .releaseName .resourceName }}
-      namespace: {{ .releaseNamespace }}
-  roleRef:
-    kind: ClusterRole
+subjects:
+  - kind: ServiceAccount
     name: {{ printf "%s-crd-%s" .releaseName .resourceName }}
-    apiGroup: rbac.authorization.k8s.io
+    namespace: {{ .releaseNamespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ printf "%s-crd-%s" .releaseName .resourceName }}
+  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: batch/v1
 kind: Job
