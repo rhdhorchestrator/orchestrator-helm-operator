@@ -60,7 +60,6 @@ metadata:
 spec:
   Registry:
 {{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeeventings") }}
----
 apiVersion: operator.knative.dev/v1beta1
 kind: KnativeServing
 metadata:

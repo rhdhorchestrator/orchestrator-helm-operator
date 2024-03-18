@@ -77,7 +77,7 @@ spec:
             name: {{ .Values.postgres.serviceName }}
             namespace: {{ .Values.postgres.serviceNamespace }}
 {{- end }}
-{{- include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowplatforms") }}
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowplatforms") }}
 apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowClusterPlatform
 metadata:
@@ -90,4 +90,4 @@ spec:
   platformRef:
     name: sonataflow-platform
     namespace: {{ $ns }}
-{{- include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowclusterplatforms") }}
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowclusterplatforms") }}
