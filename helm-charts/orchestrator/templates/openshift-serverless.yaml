@@ -29,7 +29,6 @@ spec:
   source: redhat-operators
   sourceNamespace: {{ .Values.serverlessOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
   {{- end }}
-
   {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name .Capabilities.APIVersions) }}
   {{- if eq $unmanagedNamespaceExists "false" }}
 ---
@@ -45,10 +44,10 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: knative-eventing
----
   {{- end }}
   {{- $unmanagedKnativeEventingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeEventing" "knative-eventing" "knative-eventing" .Release.Name .Capabilities.APIVersions) }}
   {{- if eq $unmanagedKnativeEventingExists "false" }}
+---
 apiVersion: operator.knative.dev/v1beta1
 kind: KnativeEventing
 metadata:
@@ -60,8 +59,7 @@ metadata:
     "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available
 spec:
   Registry:
----
-  {{- include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeeventings") }}
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeeventings") }}
 ---
 apiVersion: operator.knative.dev/v1beta1
 kind: KnativeServing
@@ -77,7 +75,6 @@ spec:
     name: ""
     type: ""
   registry: {}
----
-  {{- include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeservings") }}
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeservings") }}
   {{- end }}
 {{- end }}

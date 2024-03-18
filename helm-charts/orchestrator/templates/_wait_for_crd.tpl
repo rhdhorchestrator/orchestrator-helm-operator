@@ -79,5 +79,4 @@ spec:
               sleep 5
             done
             echo "Job finished"
----
 {{- end -}}

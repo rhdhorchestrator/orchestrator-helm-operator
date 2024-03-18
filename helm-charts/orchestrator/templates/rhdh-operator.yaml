@@ -336,6 +336,5 @@ spec:
       secrets:
         - name: backstage-backend-auth-secret
     replicas: 1
----
 {{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "rhdh.redhat.com" "resourceName" "backstages") }}
 {{- end }}
