@@ -265,4 +265,29 @@ data:
           target: https://github.com/parodos-dev/workflow-software-templates/blob/tekton-demo/scaffolder-templates/basic-workflow/template.yaml
         - type: url
           target: https://github.com/parodos-dev/workflow-software-templates/blob/tekton-demo/scaffolder-templates/complex-assessment-workflow/template.yaml
+---
+apiVersion: rhdh.redhat.com/v1alpha1
+kind: Backstage
+metadata:
+  name: backstage
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-fail
+    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available    
+spec:
+  application:
+    appConfig:
+      configMaps:
+        - name: app-config-rhdh
+        - name: app-config-rhdh-auth
+        - name: app-config-rhdh-catalog
+      mountPath: /opt/app-root/src
+    dynamicPluginsConfigMapName: dynamic-plugins-rhdh
+    extraEnvs:
+      secrets:
+        - name: backstage-backend-auth-secret
+    replicas: 1
+---
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "rhdh.redhat.com" "resourceName" "backstages") }}
 {{- end }}

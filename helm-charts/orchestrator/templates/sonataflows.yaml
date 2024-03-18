@@ -12,8 +12,8 @@ metadata:
   namespace: {{ $ns }}
   annotations:
     "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"  
+    "helm.sh/hook-delete-policy": hook-fail
+    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available  
 spec:
   build:
     template:
@@ -36,10 +36,10 @@ kind: SonataFlowPlatform
 metadata:
   name: sonataflow-platform
   namespace: {{ $ns }}
-  annotations:
+   annotations:
     "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"  
+    "helm.sh/hook-delete-policy": hook-fail
+    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available  
 spec:
   build:
     template:
@@ -79,20 +79,24 @@ spec:
           serviceRef:
             name: {{ .Values.postgres.serviceName }}
             namespace: {{ .Values.postgres.serviceNamespace }}
----
 {{- end }}
+---
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowplatforms") }}
+---
 apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowClusterPlatform
 metadata:
   name: cluster-platform
   annotations:
     "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"   
+    "helm.sh/hook-delete-policy": hook-fail
+    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available 
 spec:
   platformRef:
     name: sonataflow-platform
     namespace: {{ $ns }}
+---
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowclusterplatforms") }}
 ---
 {{- if or .Values.orchestrator.deployWorkflow .Values.orchestrator.devmode }}
 apiVersion: v1
@@ -172,14 +176,15 @@ metadata:
     sonataflow.org/description: YAML based greeting workflow
     sonataflow.org/expressionLang: jsonpath
     sonataflow.org/profile: prod
-    sonataflow.org/version: "1.0"
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "0"     
+    sonataflow.org/version: "1.0" 
   labels:
     app: greeting
     sonataflow.org/workflow-app: greeting
     backstage.io/kubernetes-id: greeting
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-fail
+    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available      
   name: greeting
   namespace: {{ $ns }}
 spec:
@@ -243,4 +248,6 @@ spec:
       - configMap:
           name: 01-greeting-resources
         workflowPath: specs
+---
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflows") }}
 {{- end }}
