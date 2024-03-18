@@ -6,10 +6,6 @@ kind: OperatorGroup
 metadata:
   name: sonataflow-operator-group
   namespace: {{ .Values.sonataFlowOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-9"   
 spec: {}
 ---
 {{- end }}
@@ -19,10 +15,6 @@ kind: CatalogSource
 metadata:
   name: {{ .Values.sonataFlowOperator.subscription.source }}
   namespace: openshift-marketplace
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-9"  
 spec:
   displayName: SonataFlow Operator (Development)
   image: {{ .Values.sonataFlowOperator.subscription.sourceImage }}
@@ -34,14 +26,10 @@ kind: Subscription
 metadata:
   name: sonataflow-operator
   namespace: {{ .Values.sonataFlowOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
-    "helm.sh/hook-weight": "-9"  
 spec:
   channel: {{ .Values.sonataFlowOperator.subscription.channel }}
   installPlanApproval: Automatic
   name: {{ .Values.sonataFlowOperator.subscription.pkgName }}
-  source: {{ .Values.sonataFlowOperator.subscription.source | default (include "get-default-catalogsource-name" .) }}
-  sourceNamespace: {{ .Values.sonataFlowOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) }}
+  source: {{ .Values.sonataFlowOperator.subscription.source | default (include "get-default-catalogsource-name" .) | quote }}
+  sourceNamespace: {{ .Values.sonataFlowOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
 {{- end }}

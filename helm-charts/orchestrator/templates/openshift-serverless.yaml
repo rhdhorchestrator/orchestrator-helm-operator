@@ -1,6 +1,7 @@
 {{- if .Values.serverlessOperator.enabled }}
   {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.serverlessOperator.subscription.namespace .Release.Name .Capabilities.APIVersions) }}
   {{- if and (eq $unmanagedNamespaceExists "false") .Values.serverlessOperator.enabled }}
+---
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -24,15 +25,11 @@ metadata:
 spec:
   channel: {{ .Values.serverlessOperator.subscription.channel }}
   installPlanApproval: Automatic
-    {{- if eq (include "is-openshift" .) "true" }}
   name: serverless-operator
   source: redhat-operators
-    {{- else }}
-  name: knative-operator
-  source: {{ .Values.serverlessOperator.subscription.source | default (include "get-default-catalogsource-name" .) | quote }}
-    {{- end }}
   sourceNamespace: {{ .Values.serverlessOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
   {{- end }}
+
   {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name .Capabilities.APIVersions) }}
   {{- if eq $unmanagedNamespaceExists "false" }}
 ---
@@ -40,7 +37,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: knative-serving
-  {{- end }}  
+  {{- end }}
   {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-eventing" .Release.Name .Capabilities.APIVersions) }}
   {{- if eq $unmanagedNamespaceExists "false" }}
 ---
@@ -48,8 +45,10 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: knative-eventing
-  {{- end }}
 ---
+  {{- end }}
+  {{- $unmanagedKnativeEventingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeEventing" "knative-eventing" "knative-eventing" .Release.Name .Capabilities.APIVersions) }}
+  {{- if eq $unmanagedKnativeEventingExists "false" }}
 apiVersion: operator.knative.dev/v1beta1
 kind: KnativeEventing
 metadata:
@@ -62,7 +61,7 @@ metadata:
 spec:
   Registry:
 ---
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeeventings") }}
+  {{- include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeeventings") }}
 ---
 apiVersion: operator.knative.dev/v1beta1
 kind: KnativeServing
@@ -79,5 +78,6 @@ spec:
     type: ""
   registry: {}
 ---
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeservings") }}
+  {{- include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeservings") }}
+  {{- end }}
 {{- end }}

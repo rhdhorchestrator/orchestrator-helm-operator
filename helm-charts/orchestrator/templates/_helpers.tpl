@@ -1,4 +1,4 @@
-{{/* Helper functions */}}
+{{/* Helepr functions */}}
 
 {{- define "unmanaged-resource-exists" -}}
     {{- $api := index . 0 -}}
@@ -30,14 +30,6 @@
     {{- $releaseName := index . 1 -}}
     {{- $resourceReleaseName := dig "metadata" "annotations" (dict "meta.helm.sh/release-name" "NA") $resource -}}
     {{- if eq (get $resourceReleaseName "meta.helm.sh/release-name") $releaseName -}}
-        {{- "true" -}}
-    {{- else -}}
-        {{- "false" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "is-openshift" -}}
-    {{- if .Capabilities.APIVersions.Has "route.openshift.io/v1" -}}
         {{- "true" -}}
     {{- else -}}
         {{- "false" -}}
@@ -84,7 +76,7 @@
         {{- if and (hasKey $cluster "spec") (hasKey $cluster.spec "domain") -}}
             {{- printf "%s" $cluster.spec.domain -}}
         {{- else -}}
-            {{ "cluster.domain" }}
+            {{ fail "Unable to obtain cluster domain, OCP Ingress Resource is missing the `spec.domain` field." }}
         {{- end }}
     {{- else -}}
         {{ fail "Unable to obtain cluster domain, config.openshift.io/v1/Ingress is missing" }}

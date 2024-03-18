@@ -12,9 +12,9 @@ metadata:
   name: rhdh-operator-group
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
 spec: {}
+---
 {{- end }}
 {{- if ne .Values.rhdhOperator.subscription.sourceImage "" }}
----
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
@@ -24,8 +24,8 @@ spec:
   displayName: RHDH Operator (Development)
   image: {{ .Values.rhdhOperator.subscription.sourceImage }}
   sourceType: grpc
-{{- end }}
 ---
+{{- end }}
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
@@ -157,10 +157,59 @@ data:
                         allOf:
                           - isTektonCIAvailable
 {{- end }}
+{{- if .Values.argocd.enabled }}
       - disabled: false
-        package: "@janus-idp/backstage-plugin-orchestrator-backend-dynamic@1.4.11"
+        package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic
+        pluginConfig:
+          argocd:
+            appLocatorMethods:
+            - instances:
+              - name: main
+                url: ${ARGOCD_URL}
+                username: ${ARGOCD_USERNAME}
+                password: ${ARGOCD_PASSWORD}
+              type: config
+      - disabled: false
+        package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd
+        pluginConfig:
+          dynamicPlugins:
+            frontend:
+              roadiehq.backstage-plugin-argo-cd:
+                mountPoints:
+                  - mountPoint: entity.page.overview/cards
+                    importName: EntityArgoCDOverviewCard
+                    config:
+                      layout:
+                        gridColumnEnd:
+                          lg: "span 8"
+                          xs: "span 12"
+                      if:
+                        allOf:
+                          - isArgocdAvailable
+                  - mountPoint: entity.page.cd/cards
+                    importName: EntityArgoCDHistoryCard
+                    config:
+                      layout:
+                        gridColumn: "1 / -1"
+                      if:
+                        allOf:
+                          - isArgocdAvailable
+      - disabled: false
+        package: ./dynamic-plugins/dist/roadiehq-scaffolder-backend-argocd-dynamic
+        pluginConfig:
+          argocd:
+            appLocatorMethods:
+            - instances:
+              - name: main
+                url: ${ARGOCD_URL}
+                username: ${ARGOCD_USERNAME}
+                password: ${ARGOCD_PASSWORD}
+              type: config
+{{- end }}
+      - disabled: false
+        package: "@janus-idp/backstage-plugin-orchestrator-backend-dynamic@1.6.0"
         integrity: >-
-          sha512-hxB0hyPelyzWkNEUWFNslNbXH1seQ+5mddSyqp+lILFNmTgOZfn+JqDk6mxHGPDqBYOiNuM67P1+FKVjvr5DHw==
+          sha512-mrRbeNtmaztyDWV3wRiYTykIBwRyF7+RuXN5YbOXLgZ6GoUsfWMu4PHu6Fl4+/CLm2aGyOrGO32RNWU/txY3Wg==
         pluginConfig:
           orchestrator:
             dataIndexService:
@@ -168,9 +217,9 @@ data:
             editor:
               path: "https://sandbox.kie.org/swf-chrome-extension/0.32.0"
       - disabled: false
-        package: "@janus-idp/backstage-plugin-orchestrator@1.7.1"
+        package: "@janus-idp/backstage-plugin-orchestrator@1.8.2"
         integrity: >-
-          sha512-Fr1YsANW2zGIqt/s2QKUHJaC+gqZOVoIF2TLAKNgVojdJg34C24jsl9RaoTtQHA56b5gxkF9xcYGP1zGb1iQqw==
+          sha512-KmpDjaOJUrfvulC2MYkvLze8tojE4wpROUK0Bb+ICdj43ZbJtrrnFMl0YrM2zr3Lha2fTfUiHRSslpBrtS3QWA==
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -187,9 +236,9 @@ data:
                     module: OrchestratorPlugin
                     path: /orchestrator
       - disabled: false
-        package: "@janus-idp/plugin-notifications@1.1.11"
+        package: "@janus-idp/plugin-notifications@1.1.12"
         integrity: >-
-          sha512-42gGC6e9Ws4kjQz1AdOxu2pAHyOnpdkSi/UodSvzywo1TW9mut71rXAnOCu6hkvgVfTuMHuzm5tC/x1UruQ18A==
+          sha512-GCdEuHRQek3ay428C8C4wWgxjNpNwCXgIdFbUUFGCLLkBFSaOEw+XaBvWaBGtQ5BLgE3jQEUxa+422uzSYC5oQ==
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -208,9 +257,9 @@ data:
                     config:
                       pollingIntervalMs: 5000
       - disabled: false
-        package: "@janus-idp/plugin-notifications-backend-dynamic@1.3.3"
+        package: "@janus-idp/plugin-notifications-backend-dynamic@1.3.6"
         integrity: >-
-          sha512-Ow4mzndQysOXXfZIdtl2vMZZeNZ9SLN1U/AXBLXPehmXHMfI3O3kroSXsSzkKbQ/4yXj7yl6wnZhM7nRIk8CIg==
+          sha512-Qd8pniy1yRx+x7LnwjzQ6k9zP+C1yex24MaCcx7dGDPT/XbTokwoSZr4baSSn8jUA6P45NUUevu1d629mG4JGQ==
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -262,9 +311,9 @@ data:
         - type: url
           target: https://github.com/parodos-dev/workflow-software-templates/blob/main/entities/workflow-resources.yaml
         - type: url
-          target: https://github.com/parodos-dev/workflow-software-templates/blob/tekton-demo/scaffolder-templates/basic-workflow/template.yaml
+          target: https://github.com/parodos-dev/workflow-software-templates/blob/main/scaffolder-templates/basic-workflow/template.yaml
         - type: url
-          target: https://github.com/parodos-dev/workflow-software-templates/blob/tekton-demo/scaffolder-templates/complex-assessment-workflow/template.yaml
+          target: https://github.com/parodos-dev/workflow-software-templates/blob/main/scaffolder-templates/complex-assessment-workflow/template.yaml
 ---
 apiVersion: rhdh.redhat.com/v1alpha1
 kind: Backstage
@@ -282,7 +331,6 @@ spec:
         - name: app-config-rhdh
         - name: app-config-rhdh-auth
         - name: app-config-rhdh-catalog
-      mountPath: /opt/app-root/src
     dynamicPluginsConfigMapName: dynamic-plugins-rhdh
     extraEnvs:
       secrets:

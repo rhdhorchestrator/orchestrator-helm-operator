@@ -9,6 +9,9 @@ Helm Release {{ .Release.Name }} installed in namespace {{ .Release.Namespace }}
 {{- $knativeEventingInstalled := $no }}
 {{- $sonataFlowOperatorInstalled := $no }} 
 {{- $sonataFlowPlatformInstalled := $no }}
+{{- $tektonPipelineInstalled := $no }}
+{{- $tektonTaskInstalled := $no }}
+{{- $argocdInstalled := $no }}
 {{- $timeout := "--timeout=5m" }}
 
 {{- if .Values.serverlessOperator.enabled }}
@@ -33,6 +36,18 @@ Helm Release {{ .Release.Name }} installed in namespace {{ .Release.Namespace }}
 {{- $sonataFlowPlatformInstalled = $yes }}
 {{- end }}
 
+{{- if eq "true" (include "install-tekton-pipeline" .) }}
+{{- $tektonPipelineInstalled = $yes }}
+{{- end }}
+
+{{- if eq "true" (include "install-tekton-task" .) }}
+{{- $tektonTaskInstalled = $yes }}
+{{- end }}
+
+{{- if eq "true" (include "install-argocd-project" .) }}
+{{- $argocdInstalled = $yes }}
+{{- end }}
+
 Components                   Installed   Namespace
 ====================================================================
 Backstage                    {{ $backstageInstalled }}        {{ .Values.rhdhOperator.subscription.namespace }}
@@ -44,16 +59,29 @@ SonataFlow Operator          {{ $sonataFlowOperatorInstalled }}        {{ .Value
 SonataFlowPlatform           {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
 Data Index Service           {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
 Job Service                  {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
+Tekton pipeline              {{ $tektonPipelineInstalled }}        {{ .Values.orchestrator.namespace }}
+Tekton task                  {{ $tektonTaskInstalled }}        {{ .Values.orchestrator.namespace }}
+ArgoCD project               {{ $argocdInstalled }}        {{ .Values.argocd.namespace }}
 {{/* Empty line */}}
-
-{{- if gt (len .Values.orchestrator.sonataflows) 0 }}
-Workflows deployed on namespace {{ .Values.orchestrator.namespace }}:
-{{- range $v := .Values.orchestrator.sonataflows }}
-{{ $v.name }}
-{{- end }}
+====================================================================
+Prerequisites check:
+{{- if not (.Capabilities.APIVersions.Has "tekton.dev/v1beta1/Task") }}
+WARN: CRD for tekton.dev/v1beta1/Task is not installed
 {{- else }}
-No workflows deployed.
+The required CRD tekton.dev/v1beta1/Task is already installed.
 {{- end }}
+{{- if not (.Capabilities.APIVersions.Has "tekton.dev/v1/Pipeline") }}
+WARN: CRD for tekton.dev/v1/Pipeline is not installed
+{{- else }}
+The required CRD tekton.dev/v1/Pipeline is already installed.
+{{- end }}
+{{- if not (.Capabilities.APIVersions.Has "argoproj.io/v1alpha1/AppProject") }}
+WARN: CRD for argoproj.io/v1alpha1/AppProject is not installed
+{{- else }}
+The required CRD argoproj.io/v1alpha1/AppProject is already installed.
+{{- end }}
+====================================================================
+{{/* Empty line */}}
 
 Run the following commands to wait until the services are ready:
 {{- if eq $serverlessOperatorInstalled $yes }}
@@ -83,13 +111,4 @@ Run the following commands to wait until the services are ready:
 {{- if eq $backstageInstalled $yes }}
   oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} backstage backstage --for=condition=Deployed=True
   oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} deploy/backstage-backstage --for=condition=Available {{ $timeout }}
-{{- end }}
-
-{{- $ns := .Values.orchestrator.namespace }}
-{{- if (gt (len .Values.orchestrator.sonataflows) 0) }}
-{{/* Empty line */}}
-Run the following commands to wait until the workflow builds are done and workflows are running on namespace {{ .Values.orchestrator.namespace }}:
-{{- range $v := .Values.orchestrator.sonataflows }}
-  oc wait -n {{ $ns }} sonataflow/{{ $v.name }} --for=condition=Running {{ $timeout }}
-{{- end }}
 {{- end }}

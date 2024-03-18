@@ -9,7 +9,9 @@
         "serverlessOperator",
         "rhdhOperator",
         "postgres",
-        "orchestrator"
+        "orchestrator",
+        "tekton",
+        "argocd"
     ],
     "properties": {
         "sonataFlowOperator": {
@@ -356,7 +358,7 @@
                             "default": "",
                             "title": "The sourceImage Schema",
                             "examples": [
-                                "quay.io/janus-idp/operator-catalog:0.1.0"
+                                "quay.io/janus-idp/operator-catalog:0.2.0"
                             ]
                         },
                         "sourceNamespace": {
@@ -381,7 +383,7 @@
                         "channel": "alpha",
                         "installPlanApproval": "Automatic",
                         "pkgName": "backstage-operator",
-                        "sourceImage": "quay.io/janus-idp/operator-catalog:0.1.0",
+                        "sourceImage": "quay.io/janus-idp/operator-catalog:0.2.0",
                         "sourceNamespace": "openshift-marketplace",
                         "source": "rhdh-operator"
                     }]
@@ -403,7 +405,7 @@
                     "channel": "alpha",
                     "installPlanApproval": "Automatic",
                     "pkgName": "backstage-operator",
-                    "sourceImage": "quay.io/janus-idp/operator-catalog:0.1.0",
+                    "sourceImage": "quay.io/janus-idp/operator-catalog:0.2.0",
                     "sourceNamespace": "openshift-marketplace",
                     "source": "rhdh-operator"
                 }
@@ -504,8 +506,7 @@
             "required": [
                 "devmode",
                 "namespace",
-                "sonataPlatform",
-                "sonataflows"
+                "sonataPlatform"
             ],
             "properties": {
                 "devmode": {
@@ -529,9 +530,7 @@
                     "default": {},
                     "title": "The sonataPlatform Schema",
                     "required": [
-                        "resources",
-                        "dataIndex",
-                        "jobService"
+                        "resources"
                     ],
                     "properties": {
                         "resources": {
@@ -616,48 +615,6 @@
                                     "cpu": "500m"
                                 }
                             }]
-                        },
-                        "dataIndex": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The dataIndex Schema",
-                            "required": [
-                                "image"
-                            ],
-                            "properties": {
-                                "image": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The image Schema",
-                                    "examples": [
-                                        "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
-                                    ]
-                                }
-                            },
-                            "examples": [{
-                                "image": "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
-                            }]
-                        },
-                        "jobService": {
-                            "type": "object",
-                            "default": {},
-                            "title": "The jobService Schema",
-                            "required": [
-                                "image"
-                            ],
-                            "properties": {
-                                "image": {
-                                    "type": "string",
-                                    "default": "",
-                                    "title": "The image Schema",
-                                    "examples": [
-                                        "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
-                                    ]
-                                }
-                            },
-                            "examples": [{
-                                "image": "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
-                            }]
                         }
                     },
                     "examples": [{
@@ -670,56 +627,8 @@
                                 "memory": "1Gi",
                                 "cpu": "500m"
                             }
-                        },
-                        "dataIndex": {
-                            "image": "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
-                        },
-                        "jobService": {
-                            "image": "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
                         }
                     }]
-                },
-                "sonataflows": {
-                    "type": "array",
-                    "default": [],
-                    "title": "The sonataflows Schema",
-                    "items": {
-                        "type": "object",
-                        "default": {},
-                        "title": "A Schema",
-                        "required": [
-                            "name",
-                            "image"
-                        ],
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "default": "",
-                                "title": "The name Schema",
-                                "examples": [
-                                    "greeting"
-                                ]
-                            },
-                            "image": {
-                                "type": "string",
-                                "default": "",
-                                "title": "The image Schema",
-                                "examples": [
-                                    "quay.io/orchestrator/serverless-workflow-greeting:latest"
-                                ]
-                            }
-                        },
-                        "examples": [{
-                            "name": "greeting",
-                            "image": "quay.io/orchestrator/serverless-workflow-greeting:latest"
-                        }]
-                    },
-                    "examples": [
-                        [{
-                            "name": "greeting",
-                            "image": "quay.io/orchestrator/serverless-workflow-greeting:latest"
-                        }]
-                    ]
                 }
             },
             "examples": [{
@@ -735,18 +644,90 @@
                             "memory": "1Gi",
                             "cpu": "500m"
                         }
-                    },
-                    "dataIndex": {
-                        "image": "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
-                    },
-                    "jobService": {
-                        "image": "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
                     }
+                }
+            }]
+        },
+        "tekton": {
+            "type": "object",
+            "default": {},
+            "title": "The tekton Schema",
+            "required": [
+                "enabled"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        false
+                    ]
+                }
+            },
+            "examples": [{
+                "enabled": false
+            }]
+        },
+        "argocd": {
+            "type": "object",
+            "default": {},
+            "title": "The argocd Schema",
+            "required": [
+                "enabled",
+                "url",
+                "namespace",
+                "username",
+                "password"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        false
+                    ]
                 },
-                "sonataflows": [{
-                    "name": "greeting",
-                    "image": "quay.io/orchestrator/serverless-workflow-greeting:latest"
-                }]
+                "url": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The url Schema",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "namespace": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The namespace Schema",
+                    "examples": [
+                        "argocd"
+                    ]
+                },
+                "username": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The username Schema",
+                    "examples": [
+                        "admin"
+                    ]
+                },
+                "password": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The password Schema",
+                    "examples": [
+                        ""
+                    ]
+                }
+            },
+            "examples": [{
+                "enabled": false,
+                "url": "",
+                "namespace": "argocd",
+                "username": "admin",
+                "password": ""
             }]
         }
     },
@@ -789,7 +770,7 @@
                 "channel": "alpha",
                 "installPlanApproval": "Automatic",
                 "pkgName": "backstage-operator",
-                "sourceImage": "quay.io/janus-idp/operator-catalog:0.1.0",
+                "sourceImage": "quay.io/janus-idp/operator-catalog:0.2.0",
                 "sourceNamespace": "openshift-marketplace",
                 "source": "rhdh-operator"
             }
@@ -817,18 +798,18 @@
                         "memory": "1Gi",
                         "cpu": "500m"
                     }
-                },
-                "dataIndex": {
-                    "image": "quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest"
-                },
-                "jobService": {
-                    "image": "quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest"
                 }
-            },
-            "sonataflows": [{
-                "name": "greeting",
-                "image": "quay.io/orchestrator/serverless-workflow-greeting:latest"
-            }]
+            }
+        },
+        "tekton": {
+            "enabled": false
+        },
+        "argocd": {
+            "enabled": false,
+            "url": "",
+            "namespace": "argocd",
+            "username": "admin",
+            "password": ""
         }
     }]
 }

@@ -1,9 +1,12 @@
 {{- $ns := .Values.orchestrator.namespace }}
 {{- if .Values.orchestrator.devmode }}
+---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: {{ $ns }}
+  labels:
+    argocd.argoproj.io/managed-by: {{ .Values.argocd.namespace }}
 ---
 apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowPlatform
@@ -29,17 +32,17 @@ spec:
       enabled: true
     jobService:
       enabled: true
----      
 {{- else }}
+---
 apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowPlatform
 metadata:
   name: sonataflow-platform
   namespace: {{ $ns }}
-   annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": hook-fail
-    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available  
+  annotations:
+  "helm.sh/hook": post-install
+  "helm.sh/hook-delete-policy": hook-fail
+  "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available  
 spec:
   build:
     template:
@@ -53,9 +56,6 @@ spec:
   services:
     dataIndex:
       enabled: true
-      podTemplate:
-        container:
-          image: {{ .Values.orchestrator.sonataPlatform.dataIndex.image }} 
       persistence:
         postgresql:
           secretRef:
@@ -67,9 +67,6 @@ spec:
             namespace: {{ .Values.postgres.serviceNamespace }}
     jobService:
       enabled: true
-      podTemplate:
-        container:
-          image: {{ .Values.orchestrator.sonataPlatform.jobService.image }} 
       persistence:
         postgresql:
           secretRef:
@@ -81,7 +78,7 @@ spec:
             namespace: {{ .Values.postgres.serviceNamespace }}
 {{- end }}
 ---
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowplatforms") }}
+{{- include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowplatforms") }}
 ---
 apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowClusterPlatform
@@ -96,158 +93,4 @@ spec:
     name: sonataflow-platform
     namespace: {{ $ns }}
 ---
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowclusterplatforms") }}
----
-{{- if or .Values.orchestrator.deployWorkflow .Values.orchestrator.devmode }}
-apiVersion: v1
-data:
-  greeting.sw.input-schema.json: |
-    {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "type": "object",
-      "properties": {
-        "language": {
-          "title": "Language",
-          "description": "Language to greet",
-          "type": "string",
-          "enum": ["English", "Spanish"],
-          "default": "English"
-        }
-      }
-    }
-  greeting.sw.yaml: |
-    id: greeting
-    version: '1.0'
-    specVersion: '1.0'
-    name: Greeting workflow
-    description: YAML based greeting workflow
-    expressionLang: jsonpath
-    dataInputSchema: "greeting.sw.input-schema.json"
-    start: ChooseOnLanguage
-    functions:
-      - name: greetFunction
-        type: custom
-        operation: sysout
-    states:
-      - name: ChooseOnLanguage
-        type: switch
-        dataConditions:
-          - condition: "${$.[?(@.language  == 'English')]}"
-            transition: GreetInEnglish
-          - condition: "${$.[?(@.language  == 'Spanish')]}"
-            transition: GreetInSpanish
-        defaultCondition:
-          transition: GreetInEnglish
-      - name: GreetInEnglish
-        type: inject
-        data:
-          greeting: 'Hello from YAML Workflow, '
-        transition: GreetPerson
-      - name: GreetInSpanish
-        type: inject
-        data:
-          greeting: 'Saludos desde YAML Workflow, '
-        transition: GreetPerson
-      - name: GreetPerson
-        type: operation
-        actions:
-          - name: greetAction
-            functionRef:
-              refName: greetFunction
-              arguments:
-                message: "$.greeting $.name"
-        end:
-          terminate: true
-kind: ConfigMap
-metadata:
-  name: 01-greeting-resources
-  namespace: {{ $ns }}
----
-{{- $greetingImage := "" }}
-  {{- range .Values.orchestrator.sonataflows }}
-    {{- if eq .name "greeting" }}
-      {{- $greetingImage = .image }}
-    {{- end }}
-  {{- end }}
-apiVersion: sonataflow.org/v1alpha08
-kind: SonataFlow
-metadata:
-  annotations:
-    sonataflow.org/description: YAML based greeting workflow
-    sonataflow.org/expressionLang: jsonpath
-    sonataflow.org/profile: prod
-    sonataflow.org/version: "1.0" 
-  labels:
-    app: greeting
-    sonataflow.org/workflow-app: greeting
-    backstage.io/kubernetes-id: greeting
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": hook-fail
-    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available      
-  name: greeting
-  namespace: {{ $ns }}
-spec:
-  flow:
-    annotations:
-      - workflow-type/infrastructure
-    dataInputSchema:
-      failOnValidationErrors: true
-      schema: greeting.sw.input-schema.json
-    functions:
-      - name: greetFunction
-        operation: sysout
-        type: custom
-    start:
-      stateName: ChooseOnLanguage
-    states:
-      - dataConditions:
-          - condition: ${$.[?(@.language  == 'English')]}
-            transition:
-              nextState: GreetInEnglish
-          - condition: ${$.[?(@.language  == 'Spanish')]}
-            transition:
-              nextState: GreetInSpanish
-        defaultCondition:
-          transition:
-            nextState: GreetInEnglish
-        name: ChooseOnLanguage
-        type: switch
-      - data:
-          greeting: 'Hello from YAML Workflow, '
-        name: GreetInEnglish
-        transition:
-          nextState: GreetPerson
-        type: inject
-      - data:
-          greeting: 'Saludos desde YAML Workflow, '
-        name: GreetInSpanish
-        transition:
-          nextState: GreetPerson
-        type: inject
-      - actionMode: sequential
-        actions:
-          - actionDataFilter:
-              useResults: true
-            functionRef:
-              arguments:
-                message: $.greeting $.name
-              invoke: sync
-              refName: greetFunction
-            name: greetAction
-        end:
-          terminate: true
-        name: GreetPerson
-        type: operation
-  podTemplate:
-    container:
-      resources: {}
-      image: {{ $greetingImage }}
-  resources:
-    configMaps:
-      - configMap:
-          name: 01-greeting-resources
-        workflowPath: specs
----
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflows") }}
-{{- end }}
+{{- include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowclusterplatforms") }}

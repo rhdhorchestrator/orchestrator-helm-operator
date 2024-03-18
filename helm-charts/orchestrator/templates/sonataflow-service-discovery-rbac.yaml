@@ -1,3 +1,4 @@
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -5,21 +6,14 @@ metadata:
   namespace: {{ .Values.orchestrator.namespace }}
 rules:
   - apiGroups:
-      - ""
-    resources:
-      - pods
-      - services
-    verbs:
-      - get
-      - list
-  - apiGroups:
       - apps
     resources:
-      - deployments
+      - statefulset
       - statefulsets
     verbs:
       - get
       - list
+      - watch
   - apiGroups:
       - networking.k8s.io
     resources:
@@ -27,6 +21,7 @@ rules:
     verbs:
       - get
       - list
+      - watch
   - apiGroups:
       - serving.knative.dev
     resources:
@@ -34,14 +29,15 @@ rules:
     verbs:
       - get
       - list
-{{- if eq (include "is-openshift" .) "true" }}
+      - watch
   - apiGroups:
-      - route.openshift.io
+      - eventing.knative.dev
     resources:
-      - routes
+      - brokers
     verbs:
       - get
       - list
+      - watch
   - apiGroups:
       - apps.openshift.io
     resources:
@@ -49,7 +45,15 @@ rules:
     verbs:
       - get
       - list
-{{- end }}
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
+    verbs:
+      - get
+      - list
+      - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
