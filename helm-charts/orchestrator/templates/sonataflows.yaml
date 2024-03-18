@@ -40,9 +40,9 @@ metadata:
   name: sonataflow-platform
   namespace: {{ $ns }}
   annotations:
-  "helm.sh/hook": post-install
-  "helm.sh/hook-delete-policy": hook-fail
-  "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available  
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-fail
+    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available  
 spec:
   build:
     template:
