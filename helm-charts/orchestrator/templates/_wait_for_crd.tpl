@@ -57,7 +57,7 @@ spec:
     metadata:
       name: {{ printf "%s-crd-%s" .releaseName .resourceName }}
     spec:
-      serviceAccountname: {{ printf "%s-crd-%s" .releaseName .resourceName }}
+      serviceAccountName: {{ printf "%s-crd-%s" .releaseName .resourceName }}
       restartPolicy: Never
       containers:
       - name: deploy-manifest
