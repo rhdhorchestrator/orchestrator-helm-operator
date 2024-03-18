@@ -68,7 +68,7 @@ spec:
         args:
           - |
             echo "Wait for condition"
-            count=10
+            count=60
             while [[ count -ne 0 ]]
             do
               kubectl get {{ printf "%s.%s" .resourceName .apiGroup }} 1>&2 2>/dev/null
