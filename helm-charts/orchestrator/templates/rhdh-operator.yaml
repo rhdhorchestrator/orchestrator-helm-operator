@@ -43,9 +43,9 @@ kind: Secret
 metadata:
   name: backstage-backend-auth-secret
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
-data:
+stringData:
 {{- $old_secret := lookup "v1" "Secret" .Values.rhdhOperator.subscription.namespace "backstage-backend-auth-secret" }}
-{{- $generated_secret := randAlphaNum 24 | nospace | b64enc }}
+{{- $generated_secret := randAlphaNum 24 | nospace }}
   BACKEND_SECRET: {{ $old_secret | dig "data" "BACKEND_SECRET" $generated_secret }}
   {{- if ne .Values.rhdhOperator.k8s.clusterToken "" }}
   K8S_CLUSTER_URL: {{ .Values.rhdhOperator.k8s.clusterUrl }}
