@@ -29,7 +29,14 @@ rules:
     resources:
     - sonataflowclusterplatforms
     verbs:
-    - delete    
+    - delete
+  - apiGroups:
+    - operators.coreos.com
+    resources:
+    - clusterserviceversion
+    verbs:
+    - delete
+    - list 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -114,18 +121,25 @@ spec:
             - "-c"
           args:
             - |
-              set -e
-              result=$(kubectl get crd sonataflowplatforms.sonataflow.org)
+              kubectl get crd sonataflowplatforms.sonataflow.org
               if [ $? -eq 0 ]; then
                 kubectl delete -n {{ .Values.orchestrator.namespace }} sonataflowplatforms.sonataflow.org sonataflow-platform
               fi
-              result=$(kubectl get crd sonataflowclusterplatforms.sonataflow.org)
+              kubectl get crd sonataflowclusterplatforms.sonataflow.org
               if [ $? -eq 0 ]; then
                 kubectl delete sonataflowclusterplatforms.sonataflow.org cluster-platform
               fi              
   {{- if .Values.orchestrator.devmode }}
               kubectl delete namespace {{ .Values.orchestrator.namespace }}
   {{- end }}
+              kubectl get csv -oname |grep sonataflow-operator
+              if [ $? -eq 0 ]; then
+                kubectl delete $results
+              fi
+              result=$(kubectl get csv -oname |grep sonataflow-operator)
+              if [ $? -eq 0 ]; then
+                kubectl delete $results | tr '\n' ' '
+              fi                   
               echo "Job finished"
-      restartPolicy: Never
+      restartPolicy: Never    
 {{- end }}

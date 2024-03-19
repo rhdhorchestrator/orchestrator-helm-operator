@@ -10,6 +10,39 @@ metadata:
     "helm.sh/hook-weight": "-1"  
 ---
 apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Name }}-knative-cleanup
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"
+rules:
+  - apiGroups: 
+    - apiextensions.k8s.io
+    resources:
+    - customresourcedefinitions
+    verbs:
+    - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Release.Name }}-knative-cleanup
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-knative-cleanup
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ .Release.Name }}-knative-cleanup
+  apiGroup: rbac.authorization.k8s.io 
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ .Release.Name }}-knative-eventing
@@ -26,6 +59,7 @@ rules:
     verbs:
     - get
     - list
+    - delete
     - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -63,7 +97,7 @@ rules:
     verbs:
     - get
     - list
-    - create
+    - delete
     - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -101,24 +135,28 @@ spec:
       serviceAccountName: {{ .Release.Name }}-knative-cleanup
       containers:
         - name: cleanup
-          image: bitnami/kubectl # replace with registry.redhat.io/openshift4/ose-cli:latest
+          image: registry.redhat.io/openshift4/ose-cli:latest
           command:
             - "bin/bash"
             - "-c"
           args:
             - |
-              set -e
               echo "Cleanup Job started"
-              result=$(kubectl get -n knative-eventing knativeeventings.operator.knative.dev -l app.kubernetes.io/managed-by=Helm)
+              kubectl get crd knativeeventings.operator.knative.dev
               if [ $? -eq 0 ]; then
-                kubectl patch knativeeventings.operator.knative.dev -n knative-eventing knative-eventing --type='json' -p '[{"op": "replace", "path": "/metadata/finalizers", "value": null}]'
-                kubectl delete -n knative-eventing knativeeventings.operator.knative.dev -l app.kubernetes.io/managed-by=Helm
+                kubectl get -n knative-eventing knativeeventings.operator.knative.dev knative-eventing
+                if [ $? -eq 0 ]; then
+                  kubectl patch knativeeventings.operator.knative.dev -n knative-eventing knative-eventing --type='json' -p '[{"op": "replace", "path": "/metadata/finalizers", "value": null}]'
+                  kubectl delete -n knative-eventing knativeeventings.operator.knative.dev knative-eventing
+                fi
               fi
-
-              result=$(kubectl get -n knative-serving knativeservings.operator.knative.dev -l app.kubernetes.io/managed-by=Helm)
+              kubectl get crd knativeservings.operator.knative.dev
               if [ $? -eq 0 ]; then
-                kubectl patch knativeservings.operator.knative.dev -n knative-serving knative-serving --type='json' -p '[{"op": "replace", "path": "/metadata/finalizers", "value": null}]'
-                kubectl delete -n knative-serving knativeservings.operator.knative.dev -l app.kubernetes.io/managed-by=Helm
+                kubectl get -n knative-serving knativeservings.operator.knative.dev knative-serving
+                if [ $? -eq 0 ]; then
+                  kubectl patch knativeservings.operator.knative.dev -n knative-serving knative-serving --type='json' -p '[{"op": "replace", "path": "/metadata/finalizers", "value": null}]'
+                  kubectl delete -n knative-serving knativeservings.operator.knative.dev knative-serving
+                fi
               fi
               echo "Cleanup Job finished"
       restartPolicy: Never
