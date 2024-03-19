@@ -85,7 +85,7 @@
 
 
 {{- define "install-tekton-task" -}}
-  {{- if and (or .Values.orchestrator.devmode .Values.tekton.enabled) (ne .Values.rhdhOperator.k8s.clusterToken "") (.Capabilities.APIVersions.Has "tekton.dev/v1beta1/Task") }}
+  {{- if and (or .Values.orchestrator.devmode .Values.tekton.enabled) (ne .Values.rhdhOperator.k8s.clusterToken "") (.Capabilities.APIVersions.Has "tekton.dev/v1/Task") }}
         {{- "true" -}}
     {{- else }}
         {{- "false" -}}

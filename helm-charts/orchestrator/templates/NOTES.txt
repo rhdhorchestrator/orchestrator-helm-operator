@@ -65,8 +65,8 @@ ArgoCD project               {{ $argocdInstalled }}        {{ .Values.argocd.nam
 {{/* Empty line */}}
 ====================================================================
 Prerequisites check:
-{{- if not (.Capabilities.APIVersions.Has "tekton.dev/v1beta1/Task") }}
-WARN: CRD for tekton.dev/v1beta1/Task is not installed
+{{- if not (.Capabilities.APIVersions.Has "tekton.dev/v1/Task") }}
+WARN: CRD for tekton.dev/v1/Task is not installed
 {{- else }}
 The required CRD tekton.dev/v1beta1/Task is already installed.
 {{- end }}

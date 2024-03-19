@@ -1,6 +1,6 @@
 {{- if eq "true" (include "install-tekton-task" .) }}
 # From https://raw.githubusercontent.com/tektoncd/catalog/main/task/git-cli/0.4/git-cli.yaml
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   name: git-cli
