@@ -4,7 +4,7 @@ apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   name: git-cli
-  namespace: {{ .Values.orchestrator.namespace }}
+  namespace: {{ .Values.argocd.namespace }}
   labels:
     app.kubernetes.io/version: "0.4"
   annotations:
@@ -158,7 +158,7 @@ apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   name: flattener
-  namespace: {{ .Values.orchestrator.namespace }}
+  namespace: {{ .Values.argocd.namespace }}
 spec:
   workspaces:
     - name: workflow-source
@@ -194,7 +194,7 @@ apiVersion: tekton.dev/v1
 kind: Task
 metadata:
   name: build-manifests
-  namespace: {{ .Values.orchestrator.namespace }}
+  namespace: {{ .Values.argocd.namespace }}
 spec:
   workspaces:
     - name: workflow-source
@@ -214,12 +214,12 @@ spec:
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
-  name: build-config
-  namespace: {{ .Values.orchestrator.namespace }}
+  name: build-gitops
+  namespace: {{ .Values.argocd.namespace }}
 spec:
   workspaces:
     - name: workflow-source
-    - name: workflow-config
+    - name: workflow-gitops
   params:
     - name: workflowId
       description: The workflow ID from the repository
@@ -227,11 +227,12 @@ spec:
     - name: imageTag
       type: string
   steps:
-    - name: build-config
+    - name: build-gitops
       image: registry.access.redhat.com/ubi9-minimal
-      workingDir: $(workspaces.workflow-config.path)/workflow-config
+      workingDir: $(workspaces.workflow-gitops.path)/workflow-gitops
       script: |
         cp $(workspaces.workflow-source.path)/flat/$(params.workflowId)/manifests/* kustomize/base
         microdnf install -y findutils && microdnf clean all
+        cd kustomize
         ./updater.sh $(params.workflowId) $(params.imageTag)
 {{- end }}

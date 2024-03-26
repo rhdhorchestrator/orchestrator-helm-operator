@@ -36,39 +36,6 @@
     {{- end -}}
 {{- end -}}
 
-{{- define "get-default-catalogsource-name" -}}
-    {{- if .Capabilities.APIVersions.Has "route.openshift.io/v1" -}}
-        {{- "community-operators" -}}
-    {{- else -}}
-        {{- "operatorhubio-catalog" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "get-default-catalogsource-namespace" -}}
-    {{- if .Capabilities.APIVersions.Has "route.openshift.io/v1" -}}
-        {{- "openshift-marketplace" -}}
-    {{- else -}}
-        {{- "olm" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "get-default-operator-namespace" -}}
-    {{- if .Capabilities.APIVersions.Has "route.openshift.io/v1" -}}
-        {{- "openshift-operators" -}}
-    {{- else -}}
-        {{- "operators" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "operator-group-exists" -}}
-    {{- $namespace := index . 0 -}}
-    {{- $existingOperatorGroup := lookup "operators.coreos.com/v1" "OperatorGroup" $namespace "" -}}
-    {{- if empty $existingOperatorGroup -}}
-        {{- "false" -}}
-    {{- else }}
-        {{- "true" -}}
-    {{- end -}}
-{{- end -}}
 
 {{- define "cluster.domain" -}}
     {{- if .Capabilities.APIVersions.Has "config.openshift.io/v1/Ingress" -}}  

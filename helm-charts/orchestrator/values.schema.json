@@ -39,10 +39,7 @@
                         "namespace",
                         "channel",
                         "installPlanApproval",
-                        "pkgName",
-                        "sourceImage",
-                        "sourceNamespace",
-                        "source"
+                        "name"
                     ],
                     "properties": {
                         "namespace": {
@@ -50,7 +47,7 @@
                             "default": "",
                             "title": "The namespace Schema",
                             "examples": [
-                                "openshift-operators"
+                                "openshift-serverless-logic"
                             ]
                         },
                         "channel": {
@@ -69,60 +66,30 @@
                                 "Automatic"
                             ]
                         },
-                        "pkgName": {
+                        "name": {
                             "type": "string",
                             "default": "",
-                            "title": "The pkgName Schema",
+                            "title": "The name Schema",
                             "examples": [
-                                "sonataflow-operator"
-                            ]
-                        },
-                        "sourceImage": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The sourceImage Schema",
-                            "examples": [
-                                "quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot"
-                            ]
-                        },
-                        "sourceNamespace": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The sourceNamespace Schema",
-                            "examples": [
-                                "openshift-marketplace"
-                            ]
-                        },
-                        "source": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The source Schema",
-                            "examples": [
-                                "sonataflow-operator"
+                                "logic-operator-rhel8"
                             ]
                         }
                     },
                     "examples": [{
-                        "namespace": "openshift-operators",
+                        "namespace": "openshift-serverless-logic",
                         "channel": "alpha",
                         "installPlanApproval": "Automatic",
-                        "pkgName": "sonataflow-operator",
-                        "sourceImage": "quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot",
-                        "sourceNamespace": "openshift-marketplace",
-                        "source": "sonataflow-operator"
+                        "name": "logic-operator-rhel8"
                     }]
                 }
             },
             "examples": [{
                 "enabled": true,
                 "subscription": {
-                    "namespace": "openshift-operators",
+                    "namespace": "openshift-serverless-logic",
                     "channel": "alpha",
                     "installPlanApproval": "Automatic",
-                    "pkgName": "sonataflow-operator",
-                    "sourceImage": "quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot",
-                    "sourceNamespace": "openshift-marketplace",
-                    "source": "sonataflow-operator"
+                    "name": "logic-operator-rhel8"
                 }
             }]
         },
@@ -151,8 +118,7 @@
                         "namespace",
                         "channel",
                         "installPlanApproval",
-                        "pkgName",
-                        "sourceNamespace"
+                        "name"
                     ],
                     "properties": {
                         "namespace": {
@@ -179,20 +145,12 @@
                                 "Automatic"
                             ]
                         },
-                        "pkgName": {
+                        "name": {
                             "type": "string",
                             "default": "",
-                            "title": "The pkgName Schema",
+                            "title": "The name Schema",
                             "examples": [
                                 "serverless-operator"
-                            ]
-                        },
-                        "sourceNamespace": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The sourceNamespace Schema",
-                            "examples": [
-                                "openshift-marketplace"
                             ]
                         }
                     },
@@ -200,8 +158,7 @@
                         "namespace": "openshift-serverless",
                         "channel": "stable",
                         "installPlanApproval": "Automatic",
-                        "pkgName": "serverless-operator",
-                        "sourceNamespace": "openshift-marketplace"
+                        "name": "serverless-operator"
                     }]
                 }
             },
@@ -211,8 +168,7 @@
                     "namespace": "openshift-serverless",
                     "channel": "stable",
                     "installPlanApproval": "Automatic",
-                    "pkgName": "serverless-operator",
-                    "sourceNamespace": "openshift-marketplace"
+                    "name": "serverless-operator"
                 }
             }]
         },
@@ -315,10 +271,7 @@
                         "namespace",
                         "channel",
                         "installPlanApproval",
-                        "pkgName",
-                        "sourceImage",
-                        "sourceNamespace",
-                        "source"
+                        "name"
                     ],
                     "properties": {
                         "namespace": {
@@ -326,7 +279,7 @@
                             "default": "",
                             "title": "The namespace Schema",
                             "examples": [
-                                "backstage-system"
+                                "rhdh-operator"
                             ]
                         },
                         "channel": {
@@ -334,7 +287,7 @@
                             "default": "",
                             "title": "The channel Schema",
                             "examples": [
-                                "alpha"
+                                "fast"
                             ]
                         },
                         "installPlanApproval": {
@@ -345,47 +298,20 @@
                                 "Automatic"
                             ]
                         },
-                        "pkgName": {
+                        "name": {
                             "type": "string",
                             "default": "",
-                            "title": "The pkgName Schema",
+                            "title": "The name Schema",
                             "examples": [
-                                "backstage-operator"
-                            ]
-                        },
-                        "sourceImage": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The sourceImage Schema",
-                            "examples": [
-                                "quay.io/janus-idp/operator-catalog:0.2.0"
-                            ]
-                        },
-                        "sourceNamespace": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The sourceNamespace Schema",
-                            "examples": [
-                                "openshift-marketplace"
-                            ]
-                        },
-                        "source": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The source Schema",
-                            "examples": [
-                                "rhdh-operator"
+                                "rhdh"
                             ]
                         }
                     },
                     "examples": [{
-                        "namespace": "backstage-system",
-                        "channel": "alpha",
+                        "namespace": "rhdh-operator",
+                        "channel": "fast",
                         "installPlanApproval": "Automatic",
-                        "pkgName": "backstage-operator",
-                        "sourceImage": "quay.io/janus-idp/operator-catalog:0.2.0",
-                        "sourceNamespace": "openshift-marketplace",
-                        "source": "rhdh-operator"
+                        "name": "rhdh"
                     }]
                 }
             },
@@ -401,13 +327,10 @@
                     "clusterUrl": ""
                 },
                 "subscription": {
-                    "namespace": "backstage-system",
-                    "channel": "alpha",
+                    "namespace": "rhdh-operator",
+                    "channel": "fast",
                     "installPlanApproval": "Automatic",
-                    "pkgName": "backstage-operator",
-                    "sourceImage": "quay.io/janus-idp/operator-catalog:0.2.0",
-                    "sourceNamespace": "openshift-marketplace",
-                    "source": "rhdh-operator"
+                    "name": "rhdh"
                 }
             }]
         },
@@ -735,13 +658,10 @@
         "sonataFlowOperator": {
             "enabled": true,
             "subscription": {
-                "namespace": "openshift-operators",
+                "namespace": "openshift-serverless-logic",
                 "channel": "alpha",
                 "installPlanApproval": "Automatic",
-                "pkgName": "sonataflow-operator",
-                "sourceImage": "quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot",
-                "sourceNamespace": "openshift-marketplace",
-                "source": "sonataflow-operator"
+                "name": "logic-operator-rhel8"
             }
         },
         "serverlessOperator": {
@@ -750,8 +670,7 @@
                 "namespace": "openshift-serverless",
                 "channel": "stable",
                 "installPlanApproval": "Automatic",
-                "pkgName": "serverless-operator",
-                "sourceNamespace": "openshift-marketplace"
+                "name": "serverless-operator"
             }
         },
         "rhdhOperator": {
@@ -766,13 +685,10 @@
                 "clusterUrl": ""
             },
             "subscription": {
-                "namespace": "backstage-system",
-                "channel": "alpha",
+                "namespace": "rhdh-operator",
+                "channel": "fast",
                 "installPlanApproval": "Automatic",
-                "pkgName": "backstage-operator",
-                "sourceImage": "quay.io/janus-idp/operator-catalog:0.2.0",
-                "sourceNamespace": "openshift-marketplace",
-                "source": "rhdh-operator"
+                "name": "rhdh"
             }
         },
         "postgres": {

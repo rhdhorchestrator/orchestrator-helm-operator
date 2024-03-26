@@ -14,18 +14,6 @@ metadata:
 spec: {}
 ---
 {{- end }}
-{{- if ne .Values.rhdhOperator.subscription.sourceImage "" }}
-apiVersion: operators.coreos.com/v1alpha1
-kind: CatalogSource
-metadata:
-  name: {{ .Values.rhdhOperator.subscription.source }}
-  namespace: openshift-marketplace
-spec:
-  displayName: RHDH Operator (Development)
-  image: {{ .Values.rhdhOperator.subscription.sourceImage }}
-  sourceType: grpc
----
-{{- end }}
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
@@ -34,9 +22,9 @@ metadata:
 spec:
   channel: {{ .Values.rhdhOperator.subscription.channel }}
   installPlanApproval: Automatic
-  name: {{ .Values.rhdhOperator.subscription.pkgName }}
-  source: {{ .Values.rhdhOperator.subscription.source }}
-  sourceNamespace: {{ .Values.rhdhOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
+  name: {{ .Values.rhdhOperator.subscription.name }}
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
 ---
 apiVersion: v1
 kind: Secret
@@ -51,6 +39,11 @@ stringData:
   K8S_CLUSTER_URL: {{ .Values.rhdhOperator.k8s.clusterUrl }}
   K8S_CLUSTER_TOKEN: {{ .Values.rhdhOperator.k8s.clusterToken }}
   {{- end }}
+{{- if .Values.argocd.enabled }}
+  ARGOCD_URL: {{ .Values.argocd.url }}
+  ARGOCD_USERNAME: {{ .Values.argocd.username }}
+  ARGOCD_PASSWORD: {{ .Values.argocd.password }}
+{{- end }}
   {{- if ne .Values.rhdhOperator.github.token "" }}
   GITHUB_TOKEN: {{ .Values.rhdhOperator.github.token }}
   {{- end }}
@@ -236,9 +229,9 @@ data:
                     module: OrchestratorPlugin
                     path: /orchestrator
       - disabled: false
-        package: "@janus-idp/plugin-notifications@1.1.12"
+        package: "@janus-idp/plugin-notifications@1.1.13"
         integrity: >-
-          sha512-GCdEuHRQek3ay428C8C4wWgxjNpNwCXgIdFbUUFGCLLkBFSaOEw+XaBvWaBGtQ5BLgE3jQEUxa+422uzSYC5oQ==
+          sha512-Vf5tbLqdK2vnJaJovaABcynDNbL4gpYwFkBfc7El2xgp6OesF0/JwdRoVwRjEGCqiXSgM4wyCjwo1v5Gl82URw==
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -257,9 +250,9 @@ data:
                     config:
                       pollingIntervalMs: 5000
       - disabled: false
-        package: "@janus-idp/plugin-notifications-backend-dynamic@1.3.6"
+        package: "@janus-idp/plugin-notifications-backend-dynamic@1.4.0"
         integrity: >-
-          sha512-Qd8pniy1yRx+x7LnwjzQ6k9zP+C1yex24MaCcx7dGDPT/XbTokwoSZr4baSSn8jUA6P45NUUevu1d629mG4JGQ==
+          sha512-V/FQwzAAUuhjUeZiYqCVJqPz5U3TRYEZN4LfxOwtG6lEps7fdwBNax7XeEUuCJG0D8Wv7RR+CtxljOKRxn21AA==
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -336,5 +329,6 @@ spec:
       secrets:
         - name: backstage-backend-auth-secret
     replicas: 1
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "rhdh.redhat.com" "resourceName" "backstages") }}
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "rhdh.redhat.com" "kind" "backstages") }}
+{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "rhdh.redhat.com" "kind" "backstages" "targetNamespace" .Values.rhdhOperator.subscription.namespace "resourceName" "backstage") }}
 {{- end }}

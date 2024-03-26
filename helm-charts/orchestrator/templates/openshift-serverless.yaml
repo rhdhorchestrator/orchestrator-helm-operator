@@ -25,9 +25,9 @@ metadata:
 spec:
   channel: {{ .Values.serverlessOperator.subscription.channel }}
   installPlanApproval: Automatic
-  name: serverless-operator
+  name: {{ .Values.serverlessOperator.subscription.name }}
   source: redhat-operators
-  sourceNamespace: {{ .Values.serverlessOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
+  sourceNamespace: openshift-marketplace
   {{- end }}
   {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name .Capabilities.APIVersions) }}
   {{- if eq $unmanagedNamespaceExists "false" }}
@@ -59,7 +59,9 @@ metadata:
     "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available
 spec:
   Registry:
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeeventings") }}
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "kind" "knativeeventings") }}
+{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "kind" "knativeeventings" "targetNamespace" "knative-eventing" "resourceName" "knative-eventing") }}
+---
 apiVersion: operator.knative.dev/v1beta1
 kind: KnativeServing
 metadata:
@@ -74,6 +76,7 @@ spec:
     name: ""
     type: ""
   registry: {}
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "resourceName" "knativeservings") }}
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "kind" "knativeservings") }}
+{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "kind" "knativeservings" "targetNamespace" "knative-serving" "resourceName" "knative-serving") }}
   {{- end }}
 {{- end }}

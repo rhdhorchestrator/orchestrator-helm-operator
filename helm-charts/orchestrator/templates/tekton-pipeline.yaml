@@ -3,7 +3,7 @@ apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: workflow-deployment
-  namespace: {{ .Values.orchestrator.namespace }}
+  namespace: {{ .Values.argocd.namespace }}
 spec:
   description: |
     This pipeline clones a git repo, builds a Docker image with Kaniko and
@@ -12,7 +12,7 @@ spec:
     - name: gitUrl
       description: The SSH URL of the repository to clone
       type: string
-    - name: gitConfigUrl
+    - name: gitOpsUrl
       description: The SSH URL of the config repository for pushing the changes
       type: string
     - name: workflowId
@@ -24,7 +24,7 @@ spec:
       default: "true"
   workspaces:
     - name: workflow-source
-    - name: workflow-config
+    - name: workflow-gitops
     - name: ssh-creds
     - name: docker-credentials
   tasks:
@@ -49,12 +49,12 @@ spec:
             ssh-add "${PARAM_USER_HOME}"/.ssh/id_rsa
             git clone $(params.gitUrl) workflow
             cd workflow
-    - name: fetch-workflow-config
+    - name: fetch-workflow-gitops
       taskRef:
         name: git-cli
       workspaces:
         - name: source
-          workspace: workflow-config
+          workspace: workflow-gitops
         - name: ssh-directory
           workspace: ssh-creds
       params:
@@ -68,7 +68,7 @@ spec:
           value: |
             eval "$(ssh-agent -s)"
             ssh-add "${PARAM_USER_HOME}"/.ssh/id_rsa
-            git clone $(params.gitConfigUrl) workflow-config
+            git clone $(params.gitOpsUrl) workflow-gitops
     - name: flatten-workflow
       runAfter: ["fetch-workflow"]
       taskRef:
@@ -91,15 +91,15 @@ spec:
       params:
         - name: workflowId
           value: $(params.workflowId)
-    - name: build-config
-      runAfter: ["build-manifests", "fetch-workflow-config"]
+    - name: build-gitops
+      runAfter: ["build-manifests", "fetch-workflow-gitops"]
       taskRef:
-        name: build-config
+        name: build-gitops
       workspaces:
         - name: workflow-source
           workspace: workflow-source
-        - name: workflow-config
-          workspace: workflow-config
+        - name: workflow-gitops
+          workspace: workflow-gitops
       params:
         - name: workflowId
           value: $(params.workflowId)
@@ -124,13 +124,13 @@ spec:
           value: flat/$(params.workflowId)
         - name: BUILD_EXTRA_ARGS
           value: --ulimit nofile=4096:4096             
-    - name: push-workflow-config
-      runAfter: ["build-config", "build-and-push-image"]
+    - name: push-workflow-gitops
+      runAfter: ["build-gitops", "build-and-push-image"]
       taskRef:
         name: git-cli
       workspaces:
         - name: source
-          workspace: workflow-config
+          workspace: workflow-gitops
         - name: ssh-directory
           workspace: ssh-creds
       params:
@@ -147,7 +147,7 @@ spec:
             eval "$(ssh-agent -s)"
             ssh-add "${PARAM_USER_HOME}"/.ssh/id_rsa
 
-            cd workflow-config
+            cd workflow-gitops
             git add .
             git diff
             # TODO: create PR

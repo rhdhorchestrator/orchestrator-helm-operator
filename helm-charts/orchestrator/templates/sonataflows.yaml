@@ -11,13 +11,27 @@
 {{- end }}
 
 {{- if .Values.sonataFlowOperator.enabled }}
-  {{- $ns := .Values.orchestrator.namespace }}
+---
+apiVersion: sonataflow.org/v1alpha08
+kind: SonataFlowClusterPlatform
+metadata:
+  name: cluster-platform
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-fail
+    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available 
+spec:
+  platformRef:
+    name: sonataflow-platform
+    namespace: {{ .Values.orchestrator.namespace }}
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowclusterplatforms") }}
+{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowclusterplatforms" "resourceName" "cluster-platform") }}
   {{- if .Values.orchestrator.devmode }}
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ $ns }}
+  name: {{ .Values.orchestrator.namespace }}
   labels:
     {{- if .Values.argocd.enabled }}
     argocd.argoproj.io/managed-by: {{ .Values.argocd.namespace }}
@@ -28,7 +42,7 @@ apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowPlatform
 metadata:
   name: sonataflow-platform
-  namespace: {{ $ns }}
+  namespace: {{ .Values.orchestrator.namespace }}
   annotations:
     "helm.sh/hook": post-install
     "helm.sh/hook-delete-policy": hook-fail
@@ -47,25 +61,13 @@ spec:
     dataIndex:
       enabled: true
   {{- if not .Values.orchestrator.devmode }}
-{{- include "persistence" . }}
+    {{- include "persistence" . }}
   {{- end }}
     jobService:
       enabled: true
   {{- if not .Values.orchestrator.devmode }}      
-{{- template "persistence" . }}
+    {{- include "persistence" . }}
   {{- end }}
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowplatforms") }}
-apiVersion: sonataflow.org/v1alpha08
-kind: SonataFlowClusterPlatform
-metadata:
-  name: cluster-platform
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": hook-fail
-    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available 
-spec:
-  platformRef:
-    name: sonataflow-platform
-    namespace: {{ $ns }}
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "resourceName" "sonataflowclusterplatforms") }}
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowplatforms") }}
+{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowplatforms" "targetNamespace" .Values.orchestrator.namespace "resourceName" "sonataflow-platform") }}
 {{- end }}

@@ -1,13 +1,10 @@
 sonataFlowOperator:
   enabled: true # whether the operator should be deployed by the chart
   subscription:
-    namespace: openshift-operators # namespace where the operator should be deployed
+    namespace: openshift-serverless-logic # namespace where the operator should be deployed
     channel: alpha # channel of an operator package to subscribe to
     installPlanApproval: Automatic # whether the update should be installed automatically
-    pkgName: sonataflow-operator # name of the operator package
-    sourceImage: quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot # catalog image of the development build. Unset it for the release build.
-    sourceNamespace: openshift-marketplace # namespace of the catalog source
-    source: sonataflow-operator # name of the catalog source for the operator
+    name: logic-operator-rhel8 # name of the operator package
 
 serverlessOperator:
   enabled: true # whether the operator should be deployed by the chart
@@ -15,8 +12,7 @@ serverlessOperator:
     namespace: openshift-serverless # namespace where the operator should be deployed
     channel: stable # channel of an operator package to subscribe to
     installPlanApproval: Automatic # whether the update should be installed automatically
-    pkgName: serverless-operator # name of the operator package
-    sourceNamespace: openshift-marketplace # namespace of the catalog source
+    name: serverless-operator # name of the operator package
 
 rhdhOperator:
   enabled: true # whether the operator should be deployed by the chart
@@ -28,13 +24,10 @@ rhdhOperator:
     clusterToken: "" # Kubernetes API bearer token used for authentication.
     clusterUrl: "" # API url of the kubernetes cluster
   subscription:
-    namespace: backstage-system # namespace where the operator should be deployed
-    channel: alpha # channel of an operator package to subscribe to
+    namespace: rhdh-operator # namespace where the operator should be deployed
+    channel: fast # channel of an operator package to subscribe to
     installPlanApproval: Automatic # whether the update should be installed automatically
-    pkgName: backstage-operator # name of the operator package
-    sourceImage: quay.io/janus-idp/operator-catalog:0.2.0
-    sourceNamespace: openshift-marketplace # namespace of the catalog source
-    source: rhdh-operator # name of the catalog source for the operator
+    name: rhdh # name of the operator package
 
 postgres:
   serviceName: "sonataflow-psql-postgresql" # The name of the Postgres DB service to be used by platform services. Cannot be empty.
@@ -61,8 +54,8 @@ tekton:
   enabled: false # whether to create the Tekton pipeline resources
 
 argocd:
-  enabled: false # whether to install the ArgoCD plugin and create the AppProject
+  enabled: false # whether to install the ArgoCD plugin and create the orchestrator AppProject
   url: ""
-  namespace: argocd
+  namespace: orchestrator-gitops
   username: admin
   password: ""

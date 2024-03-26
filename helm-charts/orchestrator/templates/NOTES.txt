@@ -59,8 +59,8 @@ SonataFlow Operator          {{ $sonataFlowOperatorInstalled }}        {{ .Value
 SonataFlowPlatform           {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
 Data Index Service           {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
 Job Service                  {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
-Tekton pipeline              {{ $tektonPipelineInstalled }}        {{ .Values.orchestrator.namespace }}
-Tekton task                  {{ $tektonTaskInstalled }}        {{ .Values.orchestrator.namespace }}
+Tekton pipeline              {{ $tektonPipelineInstalled }}        {{ .Values.argocd.namespace }}
+Tekton task                  {{ $tektonTaskInstalled }}        {{ .Values.argocd.namespace }}
 ArgoCD project               {{ $argocdInstalled }}        {{ .Values.argocd.namespace }}
 {{/* Empty line */}}
 ====================================================================
@@ -94,7 +94,7 @@ Run the following commands to wait until the services are ready:
   oc wait -n knative-serving knativeserving/knative-serving --for=condition=Ready {{ $timeout }}
 {{- end }}
 {{- if eq $sonataFlowOperatorInstalled $yes }}
-  oc wait -n {{ .Values.sonataFlowOperator.subscription.namespace }} deploy/sonataflow-operator-controller-manager --for=condition=Available {{ $timeout }}
+  oc wait -n {{ .Values.sonataFlowOperator.subscription.namespace }} deploy/logic-operator-rhel8-controller-manager --for=condition=Available {{ $timeout }}
 {{- end }}
 {{- if eq $sonataFlowPlatformInstalled $yes }}
   oc wait -n {{ .Values.orchestrator.namespace }} sonataflowplatform/sonataflow-platform --for=condition=Succeed {{ $timeout }}
@@ -112,3 +112,6 @@ Run the following commands to wait until the services are ready:
   oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} backstage backstage --for=condition=Deployed=True
   oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} deploy/backstage-backstage --for=condition=Available {{ $timeout }}
 {{- end }}
+
+In case of a CR deployment failure, check the logs of the pods created by the corresponding job to deploy the failed CRs instance. The jobs are always
+deleted after the deployment of the chart is completed.

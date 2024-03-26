@@ -1,35 +1,29 @@
 {{- if .Values.sonataFlowOperator.enabled }}
-{{- $operatorGroupExists := include "operator-group-exists" (list .Values.sonataFlowOperator.subscription.namespace) }}
-{{- if eq $operatorGroupExists "false" }}
+  {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.sonataFlowOperator.subscription.namespace .Release.Name .Capabilities.APIVersions) }}
+  {{- if and (eq $unmanagedNamespaceExists "false") .Values.sonataFlowOperator.enabled }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.sonataFlowOperator.subscription.namespace }}
+---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
-  name: sonataflow-operator-group
+  name: openshift-serverless-logic
   namespace: {{ .Values.sonataFlowOperator.subscription.namespace }}
 spec: {}
 ---
 {{- end }}
-{{- if ne .Values.sonataFlowOperator.subscription.sourceImage "" }}
-apiVersion: operators.coreos.com/v1alpha1
-kind: CatalogSource
-metadata:
-  name: {{ .Values.sonataFlowOperator.subscription.source }}
-  namespace: openshift-marketplace
-spec:
-  displayName: SonataFlow Operator (Development)
-  image: {{ .Values.sonataFlowOperator.subscription.sourceImage }}
-  sourceType: grpc
-{{- end }}
----
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: sonataflow-operator
+  name: logic-operator-rhel8
   namespace: {{ .Values.sonataFlowOperator.subscription.namespace }}
 spec:
   channel: {{ .Values.sonataFlowOperator.subscription.channel }}
   installPlanApproval: Automatic
-  name: {{ .Values.sonataFlowOperator.subscription.pkgName }}
-  source: {{ .Values.sonataFlowOperator.subscription.source | default (include "get-default-catalogsource-name" .) | quote }}
-  sourceNamespace: {{ .Values.sonataFlowOperator.subscription.sourceNamespace | default (include "get-default-catalogsource-namespace" .) | quote }}
+  name: {{ .Values.sonataFlowOperator.subscription.name }}
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
 {{- end }}
