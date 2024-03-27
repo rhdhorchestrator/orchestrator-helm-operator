@@ -96,22 +96,20 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-03-27T13:26:04Z"
+    createdAt: "2024-03-27T21:42:46Z"
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
   name: operator.v0.0.1
   namespace: placeholder
 spec:
-  minKubeVersion: 1.27.0
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
     - kind: Orchestrator
       name: orchestrators.orchestrator.parodos.dev
       version: v1alpha1
-  description: This is a helm based operator that deploys the helm charts of the Parodos
-    Orchestrator project
-  displayName: Parodos Orchestrator Operator
+  description: Parodos Orchestrator
+  displayName: Parodos Orchestrator
   icon:
   - base64data: ""
     mediatype: ""
@@ -146,12 +144,8 @@ spec:
           resources:
           - customresourcedefinitions
           verbs:
-          - create
-          - delete
-          - update
           - get
           - list
-          - patch
         - apiGroups:
           - operators.coreos.com
           resources:
@@ -416,7 +410,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=operator
-                image: quay.io/parodos-dev/orchestrator-controller:latest
+                image: quay.io/jordigilh/orchestrator-controller:latest
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -495,9 +489,9 @@ spec:
   - orchestrator
   links:
   - name: Operator
-    url: https://www.parodos.dev/
+    url: https://github.com/parodos-dev/orchestrator-helm-operator
   maturity: alpha
   provider:
     name: Red Hat
-    url: https://github.com/jordigilh/orchestrator-helm-operator
+    url: https://parodos.dev
   version: 0.0.1

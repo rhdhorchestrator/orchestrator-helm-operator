@@ -36,12 +36,8 @@ rules:
   resources:
   - customresourcedefinitions
   verbs:
-  - create
-  - delete
-  - update
   - get
   - list
-  - patch
 - apiGroups:
   - operators.coreos.com
   resources:
