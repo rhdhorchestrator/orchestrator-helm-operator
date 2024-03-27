@@ -99,8 +99,8 @@ metadata:
     createdAt: "2024-03-27T21:42:46Z"
     operators.operatorframework.io/builder: operator-sdk-v1.34.1
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
-  name: operator.v0.0.1
-  namespace: placeholder
+  name: parodos-orchestrator-operator.v0.0.1
+  namespace: openshift-operators
 spec:
   minKubeVersion: 1.27.0
   apiservicedefinitions: {}
