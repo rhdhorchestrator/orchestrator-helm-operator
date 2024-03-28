@@ -343,7 +343,7 @@ spec:
           - subjectaccessreviews
           verbs:
           - create
-        serviceAccountName: orchestrator-controller-manager
+        serviceAccountName: parodos-orchestrator-operator
       deployments:
       - label:
           app.kubernetes.io/component: manager
@@ -352,20 +352,20 @@ spec:
           app.kubernetes.io/managed-by: kustomize
           app.kubernetes.io/name: deployment
           app.kubernetes.io/part-of: operator
-          control-plane: controller-manager
-        name: orchestrator-controller-manager
+          operator.parodos.dev/name: orchestrator
+        name: parodos-orchestrator-operator
         spec:
           replicas: 1
           selector:
             matchLabels:
-              control-plane: controller-manager
+              operator.parodos.dev/name: orchestrator
           strategy: {}
           template:
             metadata:
               annotations:
                 kubectl.kubernetes.io/default-container: manager
               labels:
-                control-plane: controller-manager
+                operator.parodos.dev/name: orchestrator
             spec:
               affinity:
                 nodeAffinity:
@@ -440,7 +440,7 @@ spec:
                     - ALL
               securityContext:
                 runAsNonRoot: true
-              serviceAccountName: orchestrator-controller-manager
+              serviceAccountName: parodos-orchestrator-operator
               terminationGracePeriodSeconds: 10
       permissions:
       - rules:
@@ -475,7 +475,7 @@ spec:
           verbs:
           - create
           - patch
-        serviceAccountName: orchestrator-controller-manager
+        serviceAccountName: parodos-orchestrator-operator
     strategy: deployment
   installModes:
   - supported: false
