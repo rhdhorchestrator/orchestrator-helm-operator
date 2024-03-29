@@ -27,9 +27,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # IMAGE_TAG_BASE defines the docker.io namespace and part of the image name for remote images.
 # This variable is used to construct full image tags for bundle and catalog images.
 #
-# For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
-# parodos.dev/operator-bundle:$VERSION and parodos.dev/operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= quay.io/parodos-dev/orchestrator-controller
+IMAGE_TAG_BASE ?= quay.io/orchestrator/controller-manager
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
@@ -48,7 +46,7 @@ endif
 
 # Set the Operator SDK version to use. By default, what is installed on the system is used.
 # This is useful for CI or a project to utilize a specific version of the operator-sdk toolkit.
-OPERATOR_SDK_VERSION ?= v1.34.1
+OPERATOR_SDK_VERSION ?= v1.33.0
 
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMAGE_TAG_BASE):latest
@@ -95,11 +93,14 @@ docker-push: ## Push docker image with the manager.
 # To properly provided solutions that supports more than one platform you should use this option.
 PLATFORMS ?= linux/arm64,linux/amd64,linux/s390x,linux/ppc64le
 .PHONY: docker-buildx
-docker-buildx: ## Build and push docker image for the manager for cross-platform support
+docker-buildx: test ## Build and push docker image for the manager for cross-platform support
+	# copy existing Dockerfile and insert --platform=${BUILDPLATFORM} into Dockerfile.cross, and preserve the original Dockerfile
+	sed -e '1 s/\(^FROM\)/FROM --platform=\$$\{BUILDPLATFORM\}/; t' -e ' 1,// s//FROM --platform=\$$\{BUILDPLATFORM\}/' Dockerfile > Dockerfile.cross
 	- docker buildx create --name project-v3-builder
 	docker buildx use project-v3-builder
-	- docker buildx build --push --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile .
+	- docker buildx build --push --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile.cross .
 	- docker buildx rm project-v3-builder
+	rm Dockerfile.cross
 
 ##@ Deployment
 
@@ -131,7 +132,7 @@ ifeq (,$(shell which kustomize 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p $(dir $(KUSTOMIZE)) ;\
-	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.2.1/kustomize_v5.2.1_$(OS)_$(ARCH).tar.gz | \
+	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.0.1/kustomize_v5.0.1_$(OS)_$(ARCH).tar.gz | \
 	tar xzf - -C bin/ ;\
 	}
 else
@@ -147,7 +148,7 @@ ifeq (,$(shell which helm-operator 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p $(dir $(HELM_OPERATOR)) ;\
-	curl -sSLo $(HELM_OPERATOR) https://github.com/operator-framework/operator-sdk/releases/download/v1.34.1/helm-operator_$(OS)_$(ARCH) ;\
+	curl -sSLo $(HELM_OPERATOR) https://github.com/operator-framework/operator-sdk/releases/download/v1.33.0/helm-operator_$(OS)_$(ARCH) ;\
 	chmod +x $(HELM_OPERATOR) ;\
 	}
 else
@@ -156,7 +157,7 @@ endif
 endif
 
 .PHONY: operator-sdk
-OPERATOR_SDK ?= $(LOCALBIN)/operator-sdk
+OPERATOR_SDK ?= ./bin/operator-sdk
 operator-sdk: ## Download operator-sdk locally if necessary.
 ifeq (,$(wildcard $(OPERATOR_SDK)))
 ifeq (, $(shell which operator-sdk 2>/dev/null))
@@ -187,7 +188,7 @@ bundle-push: ## Push the bundle image.
 	$(MAKE) docker-push IMG=$(BUNDLE_IMG)
 
 .PHONY: opm
-OPM = $(LOCALBIN)/opm
+OPM = ./bin/opm
 opm: ## Download opm locally if necessary.
 ifeq (,$(wildcard $(OPM)))
 ifeq (,$(shell which opm 2>/dev/null))

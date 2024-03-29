@@ -7,20 +7,11 @@ rules:
 ## Base operator rules
 ##
 # We need to get namespaces so the operator can read namespaces to ensure they exist
-- apiGroups:
-  - ""
-  resources:
-  - namespaces
-  verbs:
-  - get
-  - list
-  - watch
-  - patch
-  - update
 # We need to manage Helm release secrets
 - apiGroups:
   - ""
   resources:
+  - namespaces
   - secrets
   verbs:
   - "*"
@@ -113,13 +104,6 @@ rules:
   - delete
   - watch
   - patch
-- apiGroups:
-  - ""
-  resources:
-  - namespaces
-  verbs:
-  - create
-  - delete
 - apiGroups:
   - apps.openshift.io
   resources:

@@ -6,23 +6,23 @@ metadata:
     app.kubernetes.io/name: namespace
     app.kubernetes.io/instance: system
     app.kubernetes.io/component: manager
-    app.kubernetes.io/created-by: operator
-    app.kubernetes.io/part-of: operator
+    app.kubernetes.io/created-by: orchestrator-operator
+    app.kubernetes.io/part-of: orchestrator-operator
     app.kubernetes.io/managed-by: kustomize
   name: system
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: controller-manager
+  name: operator
   namespace: system
   labels:
     control-plane: controller-manager
     app.kubernetes.io/name: deployment
     app.kubernetes.io/instance: controller-manager
     app.kubernetes.io/component: manager
-    app.kubernetes.io/created-by: operator
-    app.kubernetes.io/part-of: operator
+    app.kubernetes.io/created-by: orchestrator-operator
+    app.kubernetes.io/part-of: orchestrator-operator
     app.kubernetes.io/managed-by: kustomize
 spec:
   selector:
@@ -68,7 +68,7 @@ spec:
       containers:
       - args:
         - --leader-elect
-        - --leader-election-id=operator
+        - --leader-election-id=orchestrator-operator
         image: controller:latest
         name: manager
         securityContext:
@@ -97,5 +97,5 @@ spec:
           requests:
             cpu: 10m
             memory: 64Mi
-      serviceAccountName: controller-manager
+      serviceAccountName: operator
       terminationGracePeriodSeconds: 10

@@ -1,0 +1,456 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "orchestrator.parodos.dev/v1alpha1",
+          "kind": "Orchestrator",
+          "metadata": {
+            "name": "orchestrator-sample"
+          },
+          "spec": {
+            "argocd": {
+              "enabled": false,
+              "namespace": "orchestrator-gitops",
+              "password": "",
+              "url": "",
+              "username": "admin"
+            },
+            "orchestrator": {
+              "devmode": false,
+              "namespace": "sonataflow-infra",
+              "sonataPlatform": {
+                "resources": {
+                  "limits": {
+                    "cpu": "500m",
+                    "memory": "1Gi"
+                  },
+                  "requests": {
+                    "cpu": "250m",
+                    "memory": "64Mi"
+                  }
+                }
+              }
+            },
+            "postgres": {
+              "authSecret": {
+                "name": "sonataflow-psql-postgresql",
+                "passwordKey": "postgres-password",
+                "userKey": "postgres-username"
+              },
+              "database": "sonataflow",
+              "serviceName": "sonataflow-psql-postgresql",
+              "serviceNamespace": "sonataflow-infra"
+            },
+            "rhdhOperator": {
+              "enabled": true,
+              "github": {
+                "clientId": "",
+                "clientSecret": "",
+                "token": ""
+              },
+              "k8s": {
+                "clusterToken": "",
+                "clusterUrl": ""
+              },
+              "subscription": {
+                "channel": "fast",
+                "installPlanApproval": "Automatic",
+                "name": "rhdh",
+                "namespace": "rhdh-operator"
+              }
+            },
+            "serverlessOperator": {
+              "enabled": true,
+              "subscription": {
+                "channel": "stable",
+                "installPlanApproval": "Automatic",
+                "name": "serverless-operator",
+                "namespace": "openshift-serverless"
+              }
+            },
+            "sonataFlowOperator": {
+              "enabled": true,
+              "subscription": {
+                "channel": "alpha",
+                "installPlanApproval": "Automatic",
+                "name": "logic-operator-rhel8",
+                "namespace": "openshift-serverless-logic"
+              }
+            },
+            "tekton": {
+              "enabled": false
+            }
+          }
+        }
+      ]
+    capabilities: Basic Install
+    createdAt: "2024-03-28T20:50:26Z"
+    operators.operatorframework.io/builder: operator-sdk-v1.33.0
+    operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
+  name: orchestrator-operator.v0.0.1
+  namespace: openshift-operators
+spec:
+  minKubeVersion: 1.27.0
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - kind: Orchestrator
+      name: orchestrators.orchestrator.parodos.dev
+      version: v1alpha1
+  description: Orchestrator helm based operator
+  displayName: Orchestrator Operator
+  icon:
+  - base64data: "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4NC44NCA5Ny40NSI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgZmlsbDogIzAwMDsKICAgICAgICBzdHJva2Utd2lkdGg6IDBweDsKICAgICAgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPGcgaWQ9IkxheWVyXzItMiIgZGF0YS1uYW1lPSJMYXllciAyIj4KICAgIDxnIGlkPSJMYXllcl81IiBkYXRhLW5hbWU9IkxheWVyIDUiPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yOC45MSw1NC45NWMuNiwwLDEuMy4yLDEuOS4yLDUuOSwwLDExLjEtNC4zLDEyLTEwLjMsMS02LjYtMy41LTEyLjktMTAuMS0xMy45LTMuMi0uNS02LjQuMy05LjEsMi4yLTIuNiwxLjktNC40LDQuNy00LjksNy45LTEsNi42LDMuNSwxMi45LDEwLjEsMTMuOWguMVoiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNODQuNjEsMzMuNDVzMC0uMS0uMS0uMkw0OS4zMS4xNWMtLjItLjItLjYtLjItLjksMC0uMi4yLS4yLjYsMCwuOWwzMS43LDM1LjNoMHMxLjEuOCwyLjQuOC44LDAsMS4yLS4zYy41LS4yLjktLjYsMS0xLjEuNC0xLjEtLjItMi4zLS4zLTIuNGgwbC4yLjFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTcxLjQxLDM0Ljc1YzAtLjItLjMtLjQtLjYtLjRoMGMtLjIsMC0uNS4yLS42LjQtMS40LDMuNC00LjksMTAuMy0xMi4yLDE4LjQtNCw0LjQtMTMuNSwxNC44LTM0LjIsMTIuNEMzLjkxLDYzLjI1LDMuMjEsMzguNjUsMy4yMSwzOC40NWMwLS4zLS4yLS42LS41LS42cy0uNi4yLS43LjRjLS4xLjUtMy44LDEzLjQtLjksMjQuMSwxLjEsNC4yLDQuNiwxMCwxMC45LDE0LjFsLTIuOCwyLjRjLS4yLjItLjMuNS0uMi43czIuOSw2LDE5LjQsMTIuM2MxMS41LDQuNCwxOC43LDUuNiwyMyw1LjZzNS41LTEsNS43LTEuMS4zLS40LjMtLjYtLjItLjQtLjUtLjVjMCwwLS4yLDAtLjUtLjItMi43LS44LTEyLjItNC4xLTIxLjItMTIuOC0uNi0uNi0xLjItMS4yLTEuOC0xLjgsMTIuOC0yLjgsMjQuNC0xNC4yLDMxLjEtMjQuMSw1LjMtNy44LDcuMi0xNC45LDcuOC0xOS41di0uM2wtLjgtMS45aDBsLS4xLjFaIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4="
+    mediatype: "image/svg+xml"
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+        - apiGroups:
+          - apiextensions.k8s.io
+          resources:
+          - customresourcedefinitions
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - operators.coreos.com
+          resources:
+          - operatorgroups
+          - subscriptions
+          - catalogsources
+          verbs:
+          - list
+          - get
+          - delete
+          - update
+          - create
+          - patch
+          - watch
+        - apiGroups:
+          - config.openshift.io
+          resources:
+          - ingresses
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - operator.knative.dev
+          resources:
+          - knativeeventings
+          - knativeservings
+          verbs:
+          - get
+          - create
+          - delete
+          - list
+          - watch
+          - patch
+        - apiGroups:
+          - serving.knative.dev
+          resources:
+          - services
+          verbs:
+          - list
+          - get
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - roles
+          - rolebindings
+          verbs:
+          - get
+          - list
+          - create
+          - delete
+          - watch
+        - apiGroups:
+          - rhdh.redhat.com
+          resources:
+          - backstages
+          verbs:
+          - get
+          - create
+          - delete
+          - list
+          - watch
+          - patch
+        - apiGroups:
+          - sonataflow.org
+          resources:
+          - sonataflows
+          - sonataflowclusterplatforms
+          - sonataflowplatforms
+          verbs:
+          - get
+          - list
+          - create
+          - delete
+          - watch
+          - patch
+        - apiGroups:
+          - apps.openshift.io
+          resources:
+          - deploymentconfigs
+          verbs:
+          - get
+          - list
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - ingresses
+          verbs:
+          - list
+          - get
+        - apiGroups:
+          - route.openshift.io
+          resources:
+          - routes
+          verbs:
+          - list
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          verbs:
+          - delete
+          - create
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterroles
+          - clusterrolebindings
+          verbs:
+          - delete
+          - create
+        - apiGroups:
+          - batch
+          resources:
+          - jobs
+          verbs:
+          - delete
+          - create
+          - list
+          - watch
+        - apiGroups:
+          - orchestrator.parodos.dev
+          resources:
+          - orchestrators
+          - orchestrators/status
+          - orchestrators/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          - services/finalizers
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - argoproj.io
+          resources:
+          - appprojects
+          verbs:
+          - get
+          - create
+          - list
+        serviceAccountName: orchestrator-operator
+      deployments:
+      - label:
+          app.kubernetes.io/component: manager
+          app.kubernetes.io/created-by: orchestrator-operator
+          app.kubernetes.io/instance: controller-manager
+          app.kubernetes.io/managed-by: kustomize
+          app.kubernetes.io/name: deployment
+          app.kubernetes.io/part-of: orchestrator-operator
+          control-plane: controller-manager
+        name: orchestrator-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+          strategy: {}
+          template:
+            metadata:
+              annotations:
+                kubectl.kubernetes.io/default-container: manager
+              labels:
+                control-plane: controller-manager
+            spec:
+              containers:
+              - args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --logtostderr=true
+                - --v=0
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.14.1
+                name: kube-rbac-proxy
+                ports:
+                - containerPort: 8443
+                  name: https
+                  protocol: TCP
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 128Mi
+                  requests:
+                    cpu: 5m
+                    memory: 64Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+              - args:
+                - --health-probe-bind-address=:8081
+                - --metrics-bind-address=127.0.0.1:8080
+                - --leader-elect
+                - --leader-election-id=orchestrator-operator
+                image: quay.io/orchestrator/controller-manager:latest
+                livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+                  initialDelaySeconds: 15
+                  periodSeconds: 20
+                name: manager
+                readinessProbe:
+                  httpGet:
+                    path: /readyz
+                    port: 8081
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 512Mi
+                  requests:
+                    cpu: 10m
+                    memory: 64Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+              securityContext:
+                runAsNonRoot: true
+              serviceAccountName: orchestrator-operator
+              terminationGracePeriodSeconds: 10
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - coordination.k8s.io
+          resources:
+          - leases
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
+        serviceAccountName: orchestrator-operator
+    strategy: deployment
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - orchestrator
+  links:
+  - name: Orchestrator Operator
+    url: https://github.com/parodos-dev/orchestrator-helm-operator
+  maturity: alpha
+  provider:
+    name: Red Hat
+    url: https://parodos.dev
+  version: 0.0.1

@@ -4,14 +4,16 @@ metadata:
   name: orchestrator-sample
 spec:
   # Default values copied from <project_dir>/helm-charts/orchestrator/values.yaml
+  argocd:
+    enabled: false
+    namespace: orchestrator-gitops
+    password: ""
+    url: ""
+    username: admin
   orchestrator:
     devmode: false
     namespace: sonataflow-infra
     sonataPlatform:
-      dataIndex:
-        image: quay.io/kiegroup/kogito-data-index-postgresql-nightly:latest
-      jobService:
-        image: quay.io/kiegroup/kogito-jobs-service-postgresql-nightly:latest
       resources:
         limits:
           cpu: 500m
@@ -19,9 +21,6 @@ spec:
         requests:
           cpu: 250m
           memory: 64Mi
-    sonataflows:
-    - image: quay.io/orchestrator/serverless-workflow-greeting:latest
-      name: greeting
   postgres:
     authSecret:
       name: sonataflow-psql-postgresql
@@ -40,30 +39,25 @@ spec:
       clusterToken: ""
       clusterUrl: ""
     subscription:
-      channel: alpha
+      channel: fast
       installPlanApproval: Automatic
-      namespace: backstage-system
-      pkgName: backstage-operator
-      source: rhdh-operator
-      sourceImage: quay.io/janus-idp/operator-catalog:0.1.0
-      sourceNamespace: openshift-marketplace
+      name: rhdh
+      namespace: rhdh-operator
   serverlessOperator:
     enabled: true
     subscription:
       channel: stable
       installPlanApproval: Automatic
+      name: serverless-operator
       namespace: openshift-serverless
-      pkgName: serverless-operator
-      sourceNamespace: openshift-marketplace
   sonataFlowOperator:
     enabled: true
     subscription:
       channel: alpha
       installPlanApproval: Automatic
-      namespace: openshift-operators
-      pkgName: sonataflow-operator
-      source: sonataflow-operator
-      sourceImage: quay.io/masayag/kogito-serverless-operator-catalog:v999.0.0-snapshot
-      sourceNamespace: openshift-marketplace
+      name: logic-operator-rhel8
+      namespace: openshift-serverless-logic
+  tekton:
+    enabled: false
   
   
