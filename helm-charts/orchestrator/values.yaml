@@ -1,0 +1,61 @@
+sonataFlowOperator:
+  enabled: true # whether the operator should be deployed by the chart
+  subscription:
+    namespace: openshift-serverless-logic # namespace where the operator should be deployed
+    channel: alpha # channel of an operator package to subscribe to
+    installPlanApproval: Automatic # whether the update should be installed automatically
+    name: logic-operator-rhel8 # name of the operator package
+
+serverlessOperator:
+  enabled: true # whether the operator should be deployed by the chart
+  subscription:
+    namespace: openshift-serverless # namespace where the operator should be deployed
+    channel: stable # channel of an operator package to subscribe to
+    installPlanApproval: Automatic # whether the update should be installed automatically
+    name: serverless-operator # name of the operator package
+
+rhdhOperator:
+  enabled: true # whether the operator should be deployed by the chart
+  github:
+    token: "" # An authentication token as expected by GitHub. Required for importing resource to the catalog, launching software templates and more.
+    clientId: "" # The client ID that you generated on GitHub, for GitHub authentication (requires GitHub App).
+    clientSecret: "" # The client secret tied to the generated client ID.
+  k8s:
+    clusterToken: "" # Kubernetes API bearer token used for authentication.
+    clusterUrl: "" # API url of the kubernetes cluster
+  subscription:
+    namespace: rhdh-operator # namespace where the operator should be deployed
+    channel: fast # channel of an operator package to subscribe to
+    installPlanApproval: Automatic # whether the update should be installed automatically
+    name: rhdh # name of the operator package
+
+postgres:
+  serviceName: "sonataflow-psql-postgresql" # The name of the Postgres DB service to be used by platform services. Cannot be empty.
+  serviceNamespace: "sonataflow-infra" # The namespace of the Postgres DB service to be used by platform services.
+  authSecret:
+    name: "sonataflow-psql-postgresql" # name of existing secret to use for PostgreSQL credentials.
+    userKey: postgres-username # name of key in existing secret to use for PostgreSQL credentials.
+    passwordKey: postgres-password # name of key in existing secret to use for PostgreSQL credentials.
+  database: sonataflow # existing database instance used by data index and job service
+
+orchestrator:
+  devmode: false # devmode runs sonataflow services in ephemeral mode (for a non-production use)
+  namespace: sonataflow-infra # namespace where the data index, job service and workflows are deployed
+  sonataPlatform:
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+
+tekton:
+  enabled: false # whether to create the Tekton pipeline resources
+
+argocd:
+  enabled: false # whether to install the ArgoCD plugin and create the orchestrator AppProject
+  url: ""
+  namespace: orchestrator-gitops
+  username: admin
+  password: ""

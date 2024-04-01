@@ -1,0 +1,63 @@
+apiVersion: orchestrator.parodos.dev/v1alpha1
+kind: Orchestrator
+metadata:
+  name: orchestrator-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/orchestrator/values.yaml
+  argocd:
+    enabled: false
+    namespace: orchestrator-gitops
+    password: ""
+    url: ""
+    username: admin
+  orchestrator:
+    devmode: false
+    namespace: sonataflow-infra
+    sonataPlatform:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1Gi
+        requests:
+          cpu: 250m
+          memory: 64Mi
+  postgres:
+    authSecret:
+      name: sonataflow-psql-postgresql
+      passwordKey: postgres-password
+      userKey: postgres-username
+    database: sonataflow
+    serviceName: sonataflow-psql-postgresql
+    serviceNamespace: sonataflow-infra
+  rhdhOperator:
+    enabled: true
+    github:
+      clientId: ""
+      clientSecret: ""
+      token: ""
+    k8s:
+      clusterToken: ""
+      clusterUrl: ""
+    subscription:
+      channel: fast
+      installPlanApproval: Automatic
+      name: rhdh
+      namespace: rhdh-operator
+  serverlessOperator:
+    enabled: true
+    subscription:
+      channel: stable
+      installPlanApproval: Automatic
+      name: serverless-operator
+      namespace: openshift-serverless
+  sonataFlowOperator:
+    enabled: true
+    subscription:
+      channel: alpha
+      installPlanApproval: Automatic
+      name: logic-operator-rhel8
+      namespace: openshift-serverless-logic
+  tekton:
+    enabled: false
+  
+  

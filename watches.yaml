@@ -1,0 +1,7 @@
+# Use the 'create api' subcommand to add watches to this file.
+- group: orchestrator.parodos.dev
+  version: v1alpha1
+  kind: Orchestrator
+  chart: helm-charts/orchestrator
+  dryRunOption: server
+#+kubebuilder:scaffold:watch

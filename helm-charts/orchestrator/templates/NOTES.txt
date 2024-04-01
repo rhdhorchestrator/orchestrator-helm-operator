@@ -1,0 +1,117 @@
+{{/* Empty line */}}
+Helm Release {{ .Release.Name }} installed in namespace {{ .Release.Namespace }}.
+{{- $yes := "YES" }}
+{{- $no := "NO " }}
+{{- $backstageInstalled := $yes }} 
+{{- $postgresBackstageInstalled := $no }}
+{{- $serverlessOperatorInstalled := $no }}
+{{- $knativeServingInstalled := $no }}
+{{- $knativeEventingInstalled := $no }}
+{{- $sonataFlowOperatorInstalled := $no }} 
+{{- $sonataFlowPlatformInstalled := $no }}
+{{- $tektonPipelineInstalled := $no }}
+{{- $tektonTaskInstalled := $no }}
+{{- $argocdInstalled := $no }}
+{{- $timeout := "--timeout=5m" }}
+
+{{- if .Values.serverlessOperator.enabled }}
+{{- $unmanagedSubscriptionExists := include "unmanaged-resource-exists" (list "operators.coreos.com/v1alpha1" "Subscription" .Values.serverlessOperator.subscription.namespace "serverless-operator" .Release.Name .Capabilities.APIVersions ) }}
+{{- if eq $unmanagedSubscriptionExists "false" }}
+{{- $serverlessOperatorInstalled = $yes }}
+{{- end }}
+{{- end }}
+
+{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name .Capabilities.APIVersions) }}
+{{- $unmanagedKnativeEventingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeEventing" "knative-eventing" "knative-eventing" .Release.Name .Capabilities.APIVersions ) }}
+{{- if eq $unmanagedKnativeEventingExists "false" }}
+{{- $knativeEventingInstalled = $yes }}
+{{- end }}
+{{- $unmanagedKnativeServingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeServing" "knative-serving" "knative-serving" .Release.Name .Capabilities.APIVersions ) }}
+{{- if eq $unmanagedKnativeServingExists "false" }}
+{{- $knativeServingInstalled = $yes }}
+{{- end }}
+
+{{- if .Values.sonataFlowOperator.enabled }}
+{{- $sonataFlowOperatorInstalled = $yes }}
+{{- $sonataFlowPlatformInstalled = $yes }}
+{{- end }}
+
+{{- if eq "true" (include "install-tekton-pipeline" .) }}
+{{- $tektonPipelineInstalled = $yes }}
+{{- end }}
+
+{{- if eq "true" (include "install-tekton-task" .) }}
+{{- $tektonTaskInstalled = $yes }}
+{{- end }}
+
+{{- if eq "true" (include "install-argocd-project" .) }}
+{{- $argocdInstalled = $yes }}
+{{- end }}
+
+Components                   Installed   Namespace
+====================================================================
+Backstage                    {{ $backstageInstalled }}        {{ .Values.rhdhOperator.subscription.namespace }}
+Postgres DB - Backstage      {{ $postgresBackstageInstalled }}        {{ .Values.rhdhOperator.subscription.namespace }}
+Red Hat Serverless Operator  {{ $serverlessOperatorInstalled }}        {{ .Values.serverlessOperator.subscription.namespace }}     
+KnativeServing               {{ $knativeServingInstalled }}        knative-serving
+KnativeEventing              {{ $knativeEventingInstalled }}        knative-eventing
+SonataFlow Operator          {{ $sonataFlowOperatorInstalled }}        {{ .Values.sonataFlowOperator.subscription.namespace }}
+SonataFlowPlatform           {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
+Data Index Service           {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
+Job Service                  {{ $sonataFlowPlatformInstalled }}        {{ .Values.orchestrator.namespace }}
+Tekton pipeline              {{ $tektonPipelineInstalled }}        {{ .Values.argocd.namespace }}
+Tekton task                  {{ $tektonTaskInstalled }}        {{ .Values.argocd.namespace }}
+ArgoCD project               {{ $argocdInstalled }}        {{ .Values.argocd.namespace }}
+{{/* Empty line */}}
+====================================================================
+Prerequisites check:
+{{- if not (.Capabilities.APIVersions.Has "tekton.dev/v1/Task") }}
+WARN: CRD for tekton.dev/v1/Task is not installed
+{{- else }}
+The required CRD tekton.dev/v1beta1/Task is already installed.
+{{- end }}
+{{- if not (.Capabilities.APIVersions.Has "tekton.dev/v1/Pipeline") }}
+WARN: CRD for tekton.dev/v1/Pipeline is not installed
+{{- else }}
+The required CRD tekton.dev/v1/Pipeline is already installed.
+{{- end }}
+{{- if not (.Capabilities.APIVersions.Has "argoproj.io/v1alpha1/AppProject") }}
+WARN: CRD for argoproj.io/v1alpha1/AppProject is not installed
+{{- else }}
+The required CRD argoproj.io/v1alpha1/AppProject is already installed.
+{{- end }}
+====================================================================
+{{/* Empty line */}}
+
+Run the following commands to wait until the services are ready:
+{{- if eq $serverlessOperatorInstalled $yes }}
+  oc wait -n {{ .Values.serverlessOperator.subscription.namespace }} deploy/knative-openshift --for=condition=Available {{ $timeout }}
+{{- end }}
+{{- if eq $knativeEventingInstalled $yes }}
+  oc wait -n knative-eventing knativeeventing/knative-eventing --for=condition=Ready {{ $timeout }}
+{{- end }}
+{{- if eq $knativeServingInstalled $yes }}
+  oc wait -n knative-serving knativeserving/knative-serving --for=condition=Ready {{ $timeout }}
+{{- end }}
+{{- if eq $sonataFlowOperatorInstalled $yes }}
+  oc wait -n {{ .Values.sonataFlowOperator.subscription.namespace }} deploy/logic-operator-rhel8-controller-manager --for=condition=Available {{ $timeout }}
+{{- end }}
+{{- if eq $sonataFlowPlatformInstalled $yes }}
+  oc wait -n {{ .Values.orchestrator.namespace }} sonataflowplatform/sonataflow-platform --for=condition=Succeed {{ $timeout }}
+{{- end }}
+{{- if eq $sonataFlowPlatformInstalled $yes }}
+  oc wait -n {{ .Values.orchestrator.namespace }} deploy/sonataflow-platform-data-index-service --for=condition=Available {{ $timeout }}
+{{- end }}
+{{- if eq $sonataFlowPlatformInstalled $yes }}
+  oc wait -n {{ .Values.orchestrator.namespace }} deploy/sonataflow-platform-jobs-service --for=condition=Available {{ $timeout }}
+{{- end }}
+{{- if eq $postgresBackstageInstalled $yes }}
+  oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} pod/backstage-psql-backstage-0 --for=condition=Ready {{ $timeout }}
+{{- end }}
+{{- if eq $backstageInstalled $yes }}
+  oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} backstage backstage --for=condition=Deployed=True
+  oc wait -n {{ .Values.rhdhOperator.subscription.namespace }} deploy/backstage-backstage --for=condition=Available {{ $timeout }}
+{{- end }}
+
+In case of a CR deployment failure, check the logs of the pods created by the corresponding job to deploy the failed CRs instance. The jobs are always
+deleted after the deployment of the chart is completed.

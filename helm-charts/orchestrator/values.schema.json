@@ -1,0 +1,731 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "sonataFlowOperator",
+        "serverlessOperator",
+        "rhdhOperator",
+        "postgres",
+        "orchestrator",
+        "tekton",
+        "argocd"
+    ],
+    "properties": {
+        "sonataFlowOperator": {
+            "type": "object",
+            "default": {},
+            "title": "The sonataFlowOperator Schema",
+            "required": [
+                "enabled",
+                "subscription"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        true
+                    ]
+                },
+                "subscription": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The subscription Schema",
+                    "required": [
+                        "namespace",
+                        "channel",
+                        "installPlanApproval",
+                        "name"
+                    ],
+                    "properties": {
+                        "namespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The namespace Schema",
+                            "examples": [
+                                "openshift-serverless-logic"
+                            ]
+                        },
+                        "channel": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The channel Schema",
+                            "examples": [
+                                "alpha"
+                            ]
+                        },
+                        "installPlanApproval": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The installPlanApproval Schema",
+                            "examples": [
+                                "Automatic"
+                            ]
+                        },
+                        "name": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The name Schema",
+                            "examples": [
+                                "logic-operator-rhel8"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "namespace": "openshift-serverless-logic",
+                        "channel": "alpha",
+                        "installPlanApproval": "Automatic",
+                        "name": "logic-operator-rhel8"
+                    }]
+                }
+            },
+            "examples": [{
+                "enabled": true,
+                "subscription": {
+                    "namespace": "openshift-serverless-logic",
+                    "channel": "alpha",
+                    "installPlanApproval": "Automatic",
+                    "name": "logic-operator-rhel8"
+                }
+            }]
+        },
+        "serverlessOperator": {
+            "type": "object",
+            "default": {},
+            "title": "The serverlessOperator Schema",
+            "required": [
+                "enabled",
+                "subscription"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        true
+                    ]
+                },
+                "subscription": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The subscription Schema",
+                    "required": [
+                        "namespace",
+                        "channel",
+                        "installPlanApproval",
+                        "name"
+                    ],
+                    "properties": {
+                        "namespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The namespace Schema",
+                            "examples": [
+                                "openshift-serverless"
+                            ]
+                        },
+                        "channel": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The channel Schema",
+                            "examples": [
+                                "stable"
+                            ]
+                        },
+                        "installPlanApproval": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The installPlanApproval Schema",
+                            "examples": [
+                                "Automatic"
+                            ]
+                        },
+                        "name": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The name Schema",
+                            "examples": [
+                                "serverless-operator"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "namespace": "openshift-serverless",
+                        "channel": "stable",
+                        "installPlanApproval": "Automatic",
+                        "name": "serverless-operator"
+                    }]
+                }
+            },
+            "examples": [{
+                "enabled": true,
+                "subscription": {
+                    "namespace": "openshift-serverless",
+                    "channel": "stable",
+                    "installPlanApproval": "Automatic",
+                    "name": "serverless-operator"
+                }
+            }]
+        },
+        "rhdhOperator": {
+            "type": "object",
+            "default": {},
+            "title": "The rhdhOperator Schema",
+            "required": [
+                "enabled",
+                "github",
+                "k8s",
+                "subscription"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        true
+                    ]
+                },
+                "github": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The github Schema",
+                    "required": [
+                        "token",
+                        "clientId",
+                        "clientSecret"
+                    ],
+                    "properties": {
+                        "token": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The token Schema",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "clientId": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The clientId Schema",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "clientSecret": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The clientSecret Schema",
+                            "examples": [
+                                ""
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "token": "",
+                        "clientId": "",
+                        "clientSecret": ""
+                    }]
+                },
+                "k8s": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The k8s Schema",
+                    "required": [
+                        "clusterToken",
+                        "clusterUrl"
+                    ],
+                    "properties": {
+                        "clusterToken": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The clusterToken Schema",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "clusterUrl": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The clusterUrl Schema",
+                            "examples": [
+                                ""
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "clusterToken": "",
+                        "clusterUrl": ""
+                    }]
+                },
+                "subscription": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The subscription Schema",
+                    "required": [
+                        "namespace",
+                        "channel",
+                        "installPlanApproval",
+                        "name"
+                    ],
+                    "properties": {
+                        "namespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The namespace Schema",
+                            "examples": [
+                                "rhdh-operator"
+                            ]
+                        },
+                        "channel": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The channel Schema",
+                            "examples": [
+                                "fast"
+                            ]
+                        },
+                        "installPlanApproval": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The installPlanApproval Schema",
+                            "examples": [
+                                "Automatic"
+                            ]
+                        },
+                        "name": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The name Schema",
+                            "examples": [
+                                "rhdh"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "namespace": "rhdh-operator",
+                        "channel": "fast",
+                        "installPlanApproval": "Automatic",
+                        "name": "rhdh"
+                    }]
+                }
+            },
+            "examples": [{
+                "enabled": true,
+                "github": {
+                    "token": "",
+                    "clientId": "",
+                    "clientSecret": ""
+                },
+                "k8s": {
+                    "clusterToken": "",
+                    "clusterUrl": ""
+                },
+                "subscription": {
+                    "namespace": "rhdh-operator",
+                    "channel": "fast",
+                    "installPlanApproval": "Automatic",
+                    "name": "rhdh"
+                }
+            }]
+        },
+        "postgres": {
+            "type": "object",
+            "default": {},
+            "title": "The postgres Schema",
+            "required": [
+                "serviceName",
+                "serviceNamespace",
+                "authSecret",
+                "database"
+            ],
+            "properties": {
+                "serviceName": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The serviceName Schema",
+                    "examples": [
+                        "sonataflow-psql-postgresql"
+                    ]
+                },
+                "serviceNamespace": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The serviceNamespace Schema",
+                    "examples": [
+                        "sonataflow-infra"
+                    ]
+                },
+                "authSecret": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The authSecret Schema",
+                    "required": [
+                        "name",
+                        "userKey",
+                        "passwordKey"
+                    ],
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The name Schema",
+                            "examples": [
+                                "sonataflow-psql-postgresql"
+                            ]
+                        },
+                        "userKey": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The userKey Schema",
+                            "examples": [
+                                "postgres-username"
+                            ]
+                        },
+                        "passwordKey": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The passwordKey Schema",
+                            "examples": [
+                                "postgres-password"
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "name": "sonataflow-psql-postgresql",
+                        "userKey": "postgres-username",
+                        "passwordKey": "postgres-password"
+                    }]
+                },
+                "database": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The database Schema",
+                    "examples": [
+                        "sonataflow"
+                    ]
+                }
+            },
+            "examples": [{
+                "serviceName": "sonataflow-psql-postgresql",
+                "serviceNamespace": "sonataflow-infra",
+                "authSecret": {
+                    "name": "sonataflow-psql-postgresql",
+                    "userKey": "postgres-username",
+                    "passwordKey": "postgres-password"
+                },
+                "database": "sonataflow"
+            }]
+        },
+        "orchestrator": {
+            "type": "object",
+            "default": {},
+            "title": "The orchestrator Schema",
+            "required": [
+                "devmode",
+                "namespace",
+                "sonataPlatform"
+            ],
+            "properties": {
+                "devmode": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The devmode Schema",
+                    "examples": [
+                        false
+                    ]
+                },
+                "namespace": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The namespace Schema",
+                    "examples": [
+                        "sonataflow-infra"
+                    ]
+                },
+                "sonataPlatform": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The sonataPlatform Schema",
+                    "required": [
+                        "resources"
+                    ],
+                    "properties": {
+                        "resources": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The resources Schema",
+                            "required": [
+                                "requests",
+                                "limits"
+                            ],
+                            "properties": {
+                                "requests": {
+                                    "type": "object",
+                                    "default": {},
+                                    "title": "The requests Schema",
+                                    "required": [
+                                        "memory",
+                                        "cpu"
+                                    ],
+                                    "properties": {
+                                        "memory": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The memory Schema",
+                                            "examples": [
+                                                "64Mi"
+                                            ]
+                                        },
+                                        "cpu": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The cpu Schema",
+                                            "examples": [
+                                                "250m"
+                                            ]
+                                        }
+                                    },
+                                    "examples": [{
+                                        "memory": "64Mi",
+                                        "cpu": "250m"
+                                    }]
+                                },
+                                "limits": {
+                                    "type": "object",
+                                    "default": {},
+                                    "title": "The limits Schema",
+                                    "required": [
+                                        "memory",
+                                        "cpu"
+                                    ],
+                                    "properties": {
+                                        "memory": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The memory Schema",
+                                            "examples": [
+                                                "1Gi"
+                                            ]
+                                        },
+                                        "cpu": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The cpu Schema",
+                                            "examples": [
+                                                "500m"
+                                            ]
+                                        }
+                                    },
+                                    "examples": [{
+                                        "memory": "1Gi",
+                                        "cpu": "500m"
+                                    }]
+                                }
+                            },
+                            "examples": [{
+                                "requests": {
+                                    "memory": "64Mi",
+                                    "cpu": "250m"
+                                },
+                                "limits": {
+                                    "memory": "1Gi",
+                                    "cpu": "500m"
+                                }
+                            }]
+                        }
+                    },
+                    "examples": [{
+                        "resources": {
+                            "requests": {
+                                "memory": "64Mi",
+                                "cpu": "250m"
+                            },
+                            "limits": {
+                                "memory": "1Gi",
+                                "cpu": "500m"
+                            }
+                        }
+                    }]
+                }
+            },
+            "examples": [{
+                "devmode": false,
+                "namespace": "sonataflow-infra",
+                "sonataPlatform": {
+                    "resources": {
+                        "requests": {
+                            "memory": "64Mi",
+                            "cpu": "250m"
+                        },
+                        "limits": {
+                            "memory": "1Gi",
+                            "cpu": "500m"
+                        }
+                    }
+                }
+            }]
+        },
+        "tekton": {
+            "type": "object",
+            "default": {},
+            "title": "The tekton Schema",
+            "required": [
+                "enabled"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        false
+                    ]
+                }
+            },
+            "examples": [{
+                "enabled": false
+            }]
+        },
+        "argocd": {
+            "type": "object",
+            "default": {},
+            "title": "The argocd Schema",
+            "required": [
+                "enabled",
+                "url",
+                "namespace",
+                "username",
+                "password"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The enabled Schema",
+                    "examples": [
+                        false
+                    ]
+                },
+                "url": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The url Schema",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "namespace": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The namespace Schema",
+                    "examples": [
+                        "argocd"
+                    ]
+                },
+                "username": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The username Schema",
+                    "examples": [
+                        "admin"
+                    ]
+                },
+                "password": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The password Schema",
+                    "examples": [
+                        ""
+                    ]
+                }
+            },
+            "examples": [{
+                "enabled": false,
+                "url": "",
+                "namespace": "argocd",
+                "username": "admin",
+                "password": ""
+            }]
+        }
+    },
+    "examples": [{
+        "sonataFlowOperator": {
+            "enabled": true,
+            "subscription": {
+                "namespace": "openshift-serverless-logic",
+                "channel": "alpha",
+                "installPlanApproval": "Automatic",
+                "name": "logic-operator-rhel8"
+            }
+        },
+        "serverlessOperator": {
+            "enabled": true,
+            "subscription": {
+                "namespace": "openshift-serverless",
+                "channel": "stable",
+                "installPlanApproval": "Automatic",
+                "name": "serverless-operator"
+            }
+        },
+        "rhdhOperator": {
+            "enabled": true,
+            "github": {
+                "token": "",
+                "clientId": "",
+                "clientSecret": ""
+            },
+            "k8s": {
+                "clusterToken": "",
+                "clusterUrl": ""
+            },
+            "subscription": {
+                "namespace": "rhdh-operator",
+                "channel": "fast",
+                "installPlanApproval": "Automatic",
+                "name": "rhdh"
+            }
+        },
+        "postgres": {
+            "serviceName": "sonataflow-psql-postgresql",
+            "serviceNamespace": "sonataflow-infra",
+            "authSecret": {
+                "name": "sonataflow-psql-postgresql",
+                "userKey": "postgres-username",
+                "passwordKey": "postgres-password"
+            },
+            "database": "sonataflow"
+        },
+        "orchestrator": {
+            "devmode": false,
+            "namespace": "sonataflow-infra",
+            "sonataPlatform": {
+                "resources": {
+                    "requests": {
+                        "memory": "64Mi",
+                        "cpu": "250m"
+                    },
+                    "limits": {
+                        "memory": "1Gi",
+                        "cpu": "500m"
+                    }
+                }
+            }
+        },
+        "tekton": {
+            "enabled": false
+        },
+        "argocd": {
+            "enabled": false,
+            "url": "",
+            "namespace": "argocd",
+            "username": "admin",
+            "password": ""
+        }
+    }]
+}

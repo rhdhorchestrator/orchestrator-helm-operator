@@ -1,0 +1,334 @@
+{{- if .Values.rhdhOperator.enabled }}
+{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.rhdhOperator.subscription.namespace .Release.Name .Capabilities.APIVersions ) }}
+{{- if and (eq $unmanagedNamespaceExists "false") .Values.rhdhOperator.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.rhdhOperator.subscription.namespace }}
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: rhdh-operator-group
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+spec: {}
+---
+{{- end }}
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: rhdh-operator
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+spec:
+  channel: {{ .Values.rhdhOperator.subscription.channel }}
+  installPlanApproval: Automatic
+  name: {{ .Values.rhdhOperator.subscription.name }}
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backstage-backend-auth-secret
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+stringData:
+{{- $old_secret := lookup "v1" "Secret" .Values.rhdhOperator.subscription.namespace "backstage-backend-auth-secret" }}
+{{- $generated_secret := randAlphaNum 24 | nospace | b64enc }}
+  BACKEND_SECRET: {{ $old_secret | dig "data" "BACKEND_SECRET" $generated_secret | b64dec }}
+  {{- if ne .Values.rhdhOperator.k8s.clusterToken "" }}
+  K8S_CLUSTER_URL: {{ .Values.rhdhOperator.k8s.clusterUrl }}
+  K8S_CLUSTER_TOKEN: {{ .Values.rhdhOperator.k8s.clusterToken }}
+  {{- end }}
+{{- if .Values.argocd.enabled }}
+  ARGOCD_URL: {{ .Values.argocd.url }}
+  ARGOCD_USERNAME: {{ .Values.argocd.username }}
+  ARGOCD_PASSWORD: {{ .Values.argocd.password }}
+{{- end }}
+  {{- if ne .Values.rhdhOperator.github.token "" }}
+  GITHUB_TOKEN: {{ .Values.rhdhOperator.github.token }}
+  {{- end }}
+  {{- if ne .Values.rhdhOperator.github.clientId "" }}
+  GITHUB_CLIENT_ID: {{ .Values.rhdhOperator.github.clientId }}
+  GITHUB_CLIENT_SECRET: {{ .Values.rhdhOperator.github.clientSecret }}
+  {{- end }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: app-config-rhdh
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+data:
+  "app-config-rhdh.yaml": |
+    app:
+      title: Red Hat Developer Hub
+      baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.namespace }}.{{ include "cluster.domain" . }}
+    backend:
+      auth:
+        keys:
+          - secret: "${BACKEND_SECRET}"
+      baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.namespace }}.{{ include "cluster.domain" . }}
+      csp:
+        frame-src:
+          - "https://sandbox.kie.org"
+      cors:
+        origin: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.namespace }}.{{ include "cluster.domain" . }}
+      database:
+        client: pg
+        connection:
+          password: ${POSTGRESQL_ADMIN_PASSWORD}
+          user: ${POSTGRES_USER}
+          host: ${POSTGRES_HOST}
+          port: ${POSTGRES_PORT}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: dynamic-plugins-rhdh
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+data:
+  "dynamic-plugins.yaml": |
+    includes:
+      - dynamic-plugins.default.yaml
+    plugins:
+{{- if ne .Values.rhdhOperator.k8s.clusterToken "" }}
+      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
+        disabled: false
+        pluginConfig:
+          kubernetes:
+            customResources:
+              - group: 'tekton.dev'
+                apiVersion: 'v1'
+                plural: 'pipelines'
+              - group: 'tekton.dev'
+                apiVersion: 'v1'
+                plural: 'pipelineruns'
+              - group: 'tekton.dev'
+                apiVersion: 'v1'
+                plural: 'taskruns'
+              - group: 'route.openshift.io'
+                apiVersion: 'v1'
+                plural: 'routes'
+            serviceLocatorMethod:
+              type: 'multiTenant'
+            clusterLocatorMethods:
+              - type: 'config'
+                clusters:
+                  - name: 'OpenShift Orchestrator Demo'
+                    url: ${K8S_CLUSTER_URL}
+                    authProvider: 'serviceAccount'
+                    skipTLSVerify: true
+                    serviceAccountToken: ${K8S_CLUSTER_TOKEN}
+      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
+        disabled: false
+        pluginConfig:
+          dynamicPlugins:
+            frontend:
+              backstage.plugin-kubernetes:
+                mountPoints:
+                  - mountPoint: entity.page.kubernetes/cards
+                    importName: EntityKubernetesContent
+                    config:
+                      layout:
+                        gridColumn: "1 / -1"
+                      if:
+                        anyOf:
+                          - hasAnnotation: backstage.io/kubernetes-id
+                          - hasAnnotation: backstage.io/kubernetes-namespace
+      - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-tekton
+        disabled: false
+        pluginConfig:
+          dynamicPlugins:
+            frontend:
+              janus-idp.backstage-plugin-tekton:
+                mountPoints:
+                  - mountPoint: entity.page.ci/cards
+                    importName: TektonCI
+                    config:
+                      layout:
+                        gridColumn: "1 / -1"
+                      if:
+                        allOf:
+                          - isTektonCIAvailable
+{{- end }}
+{{- if .Values.argocd.enabled }}
+      - disabled: false
+        package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic
+        pluginConfig:
+          argocd:
+            appLocatorMethods:
+            - instances:
+              - name: main
+                url: ${ARGOCD_URL}
+                username: ${ARGOCD_USERNAME}
+                password: ${ARGOCD_PASSWORD}
+              type: config
+      - disabled: false
+        package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd
+        pluginConfig:
+          dynamicPlugins:
+            frontend:
+              roadiehq.backstage-plugin-argo-cd:
+                mountPoints:
+                  - mountPoint: entity.page.overview/cards
+                    importName: EntityArgoCDOverviewCard
+                    config:
+                      layout:
+                        gridColumnEnd:
+                          lg: "span 8"
+                          xs: "span 12"
+                      if:
+                        allOf:
+                          - isArgocdAvailable
+                  - mountPoint: entity.page.cd/cards
+                    importName: EntityArgoCDHistoryCard
+                    config:
+                      layout:
+                        gridColumn: "1 / -1"
+                      if:
+                        allOf:
+                          - isArgocdAvailable
+      - disabled: false
+        package: ./dynamic-plugins/dist/roadiehq-scaffolder-backend-argocd-dynamic
+        pluginConfig:
+          argocd:
+            appLocatorMethods:
+            - instances:
+              - name: main
+                url: ${ARGOCD_URL}
+                username: ${ARGOCD_USERNAME}
+                password: ${ARGOCD_PASSWORD}
+              type: config
+{{- end }}
+      - disabled: false
+        package: "@janus-idp/backstage-plugin-orchestrator-backend-dynamic@1.6.0"
+        integrity: >-
+          sha512-mrRbeNtmaztyDWV3wRiYTykIBwRyF7+RuXN5YbOXLgZ6GoUsfWMu4PHu6Fl4+/CLm2aGyOrGO32RNWU/txY3Wg==
+        pluginConfig:
+          orchestrator:
+            dataIndexService:
+              url: http://sonataflow-platform-data-index-service.{{ .Values.orchestrator.namespace }}
+            editor:
+              path: "https://sandbox.kie.org/swf-chrome-extension/0.32.0"
+      - disabled: false
+        package: "@janus-idp/backstage-plugin-orchestrator@1.8.2"
+        integrity: >-
+          sha512-KmpDjaOJUrfvulC2MYkvLze8tojE4wpROUK0Bb+ICdj43ZbJtrrnFMl0YrM2zr3Lha2fTfUiHRSslpBrtS3QWA==
+        pluginConfig:
+          dynamicPlugins:
+            frontend:
+              janus-idp.backstage-plugin-orchestrator:
+                appIcons:
+                  - importName: OrchestratorIcon
+                    module: OrchestratorPlugin
+                    name: orchestratorIcon
+                dynamicRoutes:
+                  - importName: OrchestratorPage
+                    menuItem:
+                      icon: orchestratorIcon
+                      text: Orchestrator
+                    module: OrchestratorPlugin
+                    path: /orchestrator
+      - disabled: false
+        package: "@janus-idp/plugin-notifications@1.1.13"
+        integrity: >-
+          sha512-Vf5tbLqdK2vnJaJovaABcynDNbL4gpYwFkBfc7El2xgp6OesF0/JwdRoVwRjEGCqiXSgM4wyCjwo1v5Gl82URw==
+        pluginConfig:
+          dynamicPlugins:
+            frontend:
+              janus-idp.backstage-plugin-notifications:
+                appIcons:
+                  - name: notificationsIcon
+                    module: NotificationsPlugin
+                    importName: NotificationsActiveIcon
+                dynamicRoutes:
+                  - path: /notifications
+                    importName: NotificationsPage
+                    module: NotificationsPlugin
+                    menuItem:
+                      icon: notificationsIcon
+                      text: Notifications
+                    config:
+                      pollingIntervalMs: 5000
+      - disabled: false
+        package: "@janus-idp/plugin-notifications-backend-dynamic@1.4.0"
+        integrity: >-
+          sha512-V/FQwzAAUuhjUeZiYqCVJqPz5U3TRYEZN4LfxOwtG6lEps7fdwBNax7XeEUuCJG0D8Wv7RR+CtxljOKRxn21AA==
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config-rhdh-auth
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+data:
+  app-config-auth.gh.yaml: |
+{{- if ne .Values.rhdhOperator.github.token "" }}
+    integrations:
+      github:
+        - host: github.com
+          token: ${GITHUB_TOKEN}
+    auth:
+      environment: development
+{{- end }}      
+{{- if ne .Values.rhdhOperator.github.clientId "" }}
+      providers:
+        github:
+          development:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+{{- end }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: app-config-rhdh-catalog
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+data:
+  "app-config-catalog.yaml": |
+    catalog:
+      rules:
+        - allow:
+            [
+              Component,
+              System,
+              Group,
+              Resource,
+              Location,
+              Template,
+              API,
+              User,
+              Domain,
+            ]
+      locations:
+        - type: url
+          target: https://github.com/janus-idp/backstage-plugins/blob/main/plugins/notifications-backend/users.yaml
+        - type: url
+          target: https://github.com/parodos-dev/workflow-software-templates/blob/main/entities/workflow-resources.yaml
+        - type: url
+          target: https://github.com/parodos-dev/workflow-software-templates/blob/main/scaffolder-templates/basic-workflow/template.yaml
+        - type: url
+          target: https://github.com/parodos-dev/workflow-software-templates/blob/main/scaffolder-templates/complex-assessment-workflow/template.yaml
+---
+apiVersion: rhdh.redhat.com/v1alpha1
+kind: Backstage
+metadata:
+  name: backstage
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-fail
+    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available    
+spec:
+  application:
+    appConfig:
+      configMaps:
+        - name: app-config-rhdh
+        - name: app-config-rhdh-auth
+        - name: app-config-rhdh-catalog
+    dynamicPluginsConfigMapName: dynamic-plugins-rhdh
+    extraEnvs:
+      secrets:
+        - name: backstage-backend-auth-secret
+    replicas: 1
+{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "rhdh.redhat.com" "kind" "backstages") }}
+{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "rhdh.redhat.com" "kind" "backstages" "targetNamespace" .Values.rhdhOperator.subscription.namespace "resourceName" "backstage") }}
+{{- end }}
