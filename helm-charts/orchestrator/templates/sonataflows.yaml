@@ -1,15 +1,3 @@
-{{- define "persistence" }}
-      persistence:
-        postgresql:
-          secretRef:
-            name: {{ .Values.postgres.authSecret.name }}
-            userKey: {{ .Values.postgres.authSecret.userKey }}
-            passwordKey: {{ .Values.postgres.authSecret.passwordKey }}
-          serviceRef:
-            name: {{ .Values.postgres.serviceName }}
-            namespace: {{ .Values.postgres.serviceNamespace }}
-{{- end }}
-
 {{- if .Values.sonataFlowOperator.enabled }}
 ---
 apiVersion: sonataflow.org/v1alpha08
@@ -26,17 +14,6 @@ spec:
     namespace: {{ .Values.orchestrator.namespace }}
 {{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowclusterplatforms") }}
 {{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowclusterplatforms" "resourceName" "cluster-platform") }}
-  {{- if .Values.orchestrator.devmode }}
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ .Values.orchestrator.namespace }}
-  labels:
-    {{- if .Values.argocd.enabled }}
-    argocd.argoproj.io/managed-by: {{ .Values.argocd.namespace }}
-    {{- end }}
-  {{- end }}
 ---
 apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowPlatform
@@ -60,14 +37,26 @@ spec:
   services:
     dataIndex:
       enabled: true
-  {{- if not .Values.orchestrator.devmode }}
-    {{- include "persistence" . }}
-  {{- end }}
+      persistence:
+        postgresql:
+          secretRef:
+            name: {{ .Values.postgres.authSecret.name }}
+            userKey: {{ .Values.postgres.authSecret.userKey }}
+            passwordKey: {{ .Values.postgres.authSecret.passwordKey }}
+          serviceRef:
+            name: {{ .Values.postgres.serviceName }}
+            namespace: {{ .Values.postgres.serviceNamespace }}
     jobService:
       enabled: true
-  {{- if not .Values.orchestrator.devmode }}      
-    {{- include "persistence" . }}
-  {{- end }}
+      persistence:
+        postgresql:
+          secretRef:
+            name: {{ .Values.postgres.authSecret.name }}
+            userKey: {{ .Values.postgres.authSecret.userKey }}
+            passwordKey: {{ .Values.postgres.authSecret.passwordKey }}
+          serviceRef:
+            name: {{ .Values.postgres.serviceName }}
+            namespace: {{ .Values.postgres.serviceNamespace }}
 {{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowplatforms") }}
 {{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowplatforms" "targetNamespace" .Values.orchestrator.namespace "resourceName" "sonataflow-platform") }}
 {{- end }}

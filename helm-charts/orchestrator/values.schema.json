@@ -427,19 +427,10 @@
             "default": {},
             "title": "The orchestrator Schema",
             "required": [
-                "devmode",
                 "namespace",
                 "sonataPlatform"
             ],
             "properties": {
-                "devmode": {
-                    "type": "boolean",
-                    "default": false,
-                    "title": "The devmode Schema",
-                    "examples": [
-                        false
-                    ]
-                },
                 "namespace": {
                     "type": "string",
                     "default": "",
@@ -555,7 +546,6 @@
                 }
             },
             "examples": [{
-                "devmode": false,
                 "namespace": "sonataflow-infra",
                 "sonataPlatform": {
                     "resources": {
@@ -625,7 +615,7 @@
                     "default": "",
                     "title": "The namespace Schema",
                     "examples": [
-                        "argocd"
+                        "orchestrator-gitops"
                     ]
                 },
                 "username": {
@@ -648,7 +638,7 @@
             "examples": [{
                 "enabled": false,
                 "url": "",
-                "namespace": "argocd",
+                "namespace": "orchestrator-gitops",
                 "username": "admin",
                 "password": ""
             }]
@@ -702,7 +692,6 @@
             "database": "sonataflow"
         },
         "orchestrator": {
-            "devmode": false,
             "namespace": "sonataflow-infra",
             "sonataPlatform": {
                 "resources": {
@@ -723,7 +712,7 @@
         "argocd": {
             "enabled": false,
             "url": "",
-            "namespace": "argocd",
+            "namespace": "orchestrator-gitops",
             "username": "admin",
             "password": ""
         }

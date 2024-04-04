@@ -39,7 +39,6 @@ postgres:
   database: sonataflow # existing database instance used by data index and job service
 
 orchestrator:
-  devmode: false # devmode runs sonataflow services in ephemeral mode (for a non-production use)
   namespace: sonataflow-infra # namespace where the data index, job service and workflows are deployed
   sonataPlatform:
     resources:

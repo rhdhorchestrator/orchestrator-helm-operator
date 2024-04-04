@@ -38,7 +38,6 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `postgres.authSecret.userKey` | name of key in existing secret to use for PostgreSQL credentials. | `"postgres-username"` |
 | `postgres.authSecret.passwordKey` | name of key in existing secret to use for PostgreSQL credentials. | `"postgres-password"` |
 | `postgres.database` | existing database instance used by data index and job service | `"sonataflow"` |
-| `orchestrator.devmode` | devmode runs sonataflow services in ephemeral mode (for a non-production use) | `false` |
 | `orchestrator.namespace` | namespace where the data index, job service and workflows are deployed | `"sonataflow-infra"` |
 | `orchestrator.sonataPlatform.resources.requests.memory` |  | `"64Mi"` |
 | `orchestrator.sonataPlatform.resources.requests.cpu` |  | `"250m"` |
