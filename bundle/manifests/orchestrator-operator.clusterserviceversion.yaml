@@ -86,10 +86,10 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    createdAt: "2024-04-04T19:03:27Z"
+    createdAt: "2024-04-17T17:09:04Z"
     operators.operatorframework.io/builder: operator-sdk-v1.33.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
-  name: orchestrator-operator.v0.0.2
+  name: orchestrator-operator.v0.0.3
   namespace: openshift-operators
 spec:
   apiservicedefinitions: {}
@@ -452,4 +452,4 @@ spec:
   provider:
     name: Red Hat
     url: https://parodos.dev
-  version: 0.0.2
+  version: 0.0.3

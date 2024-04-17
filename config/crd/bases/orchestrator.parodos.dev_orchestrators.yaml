@@ -12,7 +12,14 @@ spec:
     singular: orchestrator
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Deployed')].status
+      name: Ready
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Deployed')].reason
+      name: Reason
+      type: string
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: Orchestrator is the Schema for the orchestrators API
