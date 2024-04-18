@@ -4,12 +4,28 @@ metadata:
   annotations:
     alm-examples: '[]'
     capabilities: Basic Install
+    operatorframework.io/suggested-namespace: orchestrator
   name: orchestrator-operator.v0.0.0
-  namespace: openshift-operators
+  namespace: placeholder
 spec:
   apiservicedefinitions: {}
-  customresourcedefinitions: {}
-  description: Orchestrator helm based operator
+  customresourcedefinitions:
+    owned:
+    - description: Parodos introduces serverless asynchronous workflows to Backstage,
+        with a focus on facilitating the transition of applications to the cloud,
+        onboarding developers, and enabling users to create workflows for backstage
+        actions or external systems.
+      displayName: Orchestrator
+      kind: Orchestrator
+      name: orchestrators.orchestrator.parodos.dev
+      version: v1alpha1
+  description: |
+    Red Hat Developer Hub Orchestrator is a plugin that enables serverless asynchronous workflows to Backstage.
+
+    ## More Information
+
+    * [Red Hat Developer Hub Product Page](https://www.redhat.com/en/technologies/cloud-computing/developer-hub)
+    * [Product Documentation](https://parodos.dev)
   displayName: Orchestrator Operator
   icon:
   - base64data: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4NC44NCA5Ny40NSI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgZmlsbDogIzAwMDsKICAgICAgICBzdHJva2Utd2lkdGg6IDBweDsKICAgICAgfQogICAgPC9zdHlsZT4KICA8L2RlZnM+CiAgPGcgaWQ9IkxheWVyXzItMiIgZGF0YS1uYW1lPSJMYXllciAyIj4KICAgIDxnIGlkPSJMYXllcl81IiBkYXRhLW5hbWU9IkxheWVyIDUiPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yOC45MSw1NC45NWMuNiwwLDEuMy4yLDEuOS4yLDUuOSwwLDExLjEtNC4zLDEyLTEwLjMsMS02LjYtMy41LTEyLjktMTAuMS0xMy45LTMuMi0uNS02LjQuMy05LjEsMi4yLTIuNiwxLjktNC40LDQuNy00LjksNy45LTEsNi42LDMuNSwxMi45LDEwLjEsMTMuOWguMVoiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNODQuNjEsMzMuNDVzMC0uMS0uMS0uMkw0OS4zMS4xNWMtLjItLjItLjYtLjItLjksMC0uMi4yLS4yLjYsMCwuOWwzMS43LDM1LjNoMHMxLjEuOCwyLjQuOC44LDAsMS4yLS4zYy41LS4yLjktLjYsMS0xLjEuNC0xLjEtLjItMi4zLS4zLTIuNGgwbC4yLjFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTcxLjQxLDM0Ljc1YzAtLjItLjMtLjQtLjYtLjRoMGMtLjIsMC0uNS4yLS42LjQtMS40LDMuNC00LjksMTAuMy0xMi4yLDE4LjQtNCw0LjQtMTMuNSwxNC44LTM0LjIsMTIuNEMzLjkxLDYzLjI1LDMuMjEsMzguNjUsMy4yMSwzOC40NWMwLS4zLS4yLS42LS41LS42cy0uNi4yLS43LjRjLS4xLjUtMy44LDEzLjQtLjksMjQuMSwxLjEsNC4yLDQuNiwxMCwxMC45LDE0LjFsLTIuOCwyLjRjLS4yLjItLjMuNS0uMi43czIuOSw2LDE5LjQsMTIuM2MxMS41LDQuNCwxOC43LDUuNiwyMyw1LjZzNS41LTEsNS43LTEuMS4zLS40LjMtLjYtLjItLjQtLjUtLjVjMCwwLS4yLDAtLjUtLjItMi43LS44LTEyLjItNC4xLTIxLjItMTIuOC0uNi0uNi0xLjItMS4yLTEuOC0xLjgsMTIuOC0yLjgsMjQuNC0xNC4yLDMxLjEtMjQuMSw1LjMtNy44LDcuMi0xNC45LDcuOC0xOS41di0uM2wtLjgtMS45aDBsLS4xLjFaIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4=
@@ -28,13 +44,18 @@ spec:
   - supported: true
     type: AllNamespaces
   keywords:
-  - orchestrator
+  - Orchestrator
+  - RHDH
+  - Backstage
   links:
   - name: Orchestrator Operator
     url: https://github.com/parodos-dev/orchestrator-helm-operator
+  maintainers:
+  - email: jgil@redhat.com
+    name: Jordi Gil
   maturity: alpha
   minKubeVersion: 1.27.0
   provider:
     name: Red Hat
     url: https://parodos.dev
-  version: 0.0.1
+  version: 0.0.4

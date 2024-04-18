@@ -138,7 +138,7 @@ spec:
                     type: string
                     default: sonataflow-infra
               rhdhOperator:
-                description:
+                description: RHDH Operator contains the configuration fields for the Red Hat Developer Hub operator
                 type: object
                 properties:
                   enabled:
