@@ -1,0 +1,15 @@
+rhdhPlugins: # RHDH plugins required for the Orchestrator
+  npmRegistry: https://npm.stage.registry.redhat.com
+  scope: "@redhat"
+  orchestrator:
+    package: "backstage-plugin-orchestrator@1.0.0-rc.2-redhat-48496"
+    integrity: sha512-3SAAV0BvBFBqV+6BhGcdNTOv3VWEABf54GXDpI9FMM1lJKsVMtO6s+HC/EgN5ZShtqjacoUhG9sGA/hG1nqQiQ==
+  orchestrator_backend:
+    package: "backstage-plugin-orchestrator-backend-dynamic@1.0.0-rc.2-redhat-48496"
+    integrity: sha512-ENW/xcQ08EcOipVTDqFIEOZhFLPuvDA3W6v1lfU9WrULYKRJwDOT/G8FlJHgN/MS8y+epZZKsUdEZ3UeB5Ncxw==
+  notifications:
+    package: "plugin-notifications@1.0.0-rc.2-redhat-51359"
+    integrity: sha512-/HjplEnkqxyWAjymZ2XjX1A9wE7GE29NVbilVnWG2xQubpAjIscAIKcrXm9PJ3/mDqtBvjLhpH4qEODAnOuB+w==
+  notifications_backend:
+    package: "plugin-notifications-backend-dynamic@1.0.0-rc.2-redhat-51359"
+    integrity: sha512-2Eqi1SWIy1vIWcR0hjSCfRP2w9z+qFdpKsB3dmbssv4Pg98AFj41LYlrTLscHri7am6cd4xe1fEb7gJGqbNQiQ==

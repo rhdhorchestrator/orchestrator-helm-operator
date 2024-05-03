@@ -16,18 +16,42 @@ serverlessOperator:
 
 rhdhOperator:
   enabled: true # whether the operator should be deployed by the chart
-  github:
-    token: "" # An authentication token as expected by GitHub. Required for importing resource to the catalog, launching software templates and more.
-    clientId: "" # The client ID that you generated on GitHub, for GitHub authentication (requires GitHub App).
-    clientSecret: "" # The client secret tied to the generated client ID.
-  k8s:
-    clusterToken: "" # Kubernetes API bearer token used for authentication.
-    clusterUrl: "" # API url of the kubernetes cluster
+  secretRef:
+    name: backstage-backend-auth-secret # name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD and GitHub servers.
+    backstage:
+      backendSecret: BACKEND_SECRET # Key in the secret with name defined in the 'name' field that contains the value of the Backstage backend secret. Defaults to 'BACKEND_SECRET'. It's required.
+    github: #GitHub specific configuration fields that are injected to the backstage instance to allow the plugin to communicate with GitHub.
+      token: GITHUB_TOKEN # Key in the secret with name defined in the 'name' field that contains the value of the authentication token as expected by GitHub. Required for importing resource to the catalog, launching software templates and more. Defaults to 'GITHUB_TOKEN', empty for not available.
+      clientId: GITHUB_CLIENT_ID # Key in the secret with name defined in the 'name' field that contains the value of the client ID that you generated on GitHub, for GitHub authentication (requires GitHub App). Defaults to 'GITHUB_CLIENT_ID', empty for not available.
+      clientSecret: GITHUB_CLIENT_SECRET # Key in the secret with name defined in the 'name' field that contains the value of the client secret tied to the generated client ID. Defaults to 'GITHUB_CLIENT_SECRET', empty for not available.
+    k8s: # Kubernetes specific configuration fields that are injected to the backstage instance to allow the plugin to communicate with the Kubernetes API Server.
+      clusterToken: K8S_CLUSTER_TOKEN # Key in the secret with name defined in the 'name' field that contains the value of the API URL of the kubernetes cluster. Defaults to 'K8S_CLUSTER_TOKEN', empty for not available.
+      clusterUrl: K8S_CLUSTER_URL # Key in the secret with name defined in the 'name' field that contains the value of the Kubernetes API bearer token used for authentication. Defaults to 'K8S_CLUSTER_URL', empty for not available.
+    argocd: # ArgoCD specific configuration fields that are injected to the backstage instance to allow the plugin to communicate with ArgoCD. Note that ArgoCD must be deployed beforehand and the argocd.enabled field must be set to true as well.
+      url: ARGOCD_URL # Key in the secret with name defined in the 'name' field that contains the value of the URL of the ArgoCD API server. Defaults to 'ARGOCD_URL', empty for not available.
+      username: ARGOCD_USERNAME # Key in the secret with name defined in the 'name' field that contains the value of the username to login to ArgoCD. Defaults to 'ARGOCD_USERNAME', empty for not available.
+      password: ARGOCD_PASSWORD # Key in the secret with name  defined in the 'name' field that contains the value of the password to authenticate to ArgoCD. Defaults to 'ARGOCD_PASSWORD', empty for not available.
   subscription:
     namespace: rhdh-operator # namespace where the operator should be deployed
     channel: fast # channel of an operator package to subscribe to
     installPlanApproval: Automatic # whether the update should be installed automatically
     name: rhdh # name of the operator package
+
+rhdhPlugins: # RHDH plugins required for the Orchestrator
+  npmRegistry: ""
+  scope: "@janus-idp"
+  orchestrator:
+    package: "backstage-plugin-orchestrator@1.9.4"
+    integrity: sha512-d0kLVkdsWMxGkOOS1wB+u24mIdF0isNY4I0F3/eR/g0lI0q+uFJ8iW+8XmyaHKqa1ZMvg5pnMljJ6thJk85nSg==
+  orchestrator_backend:
+    package: "backstage-plugin-orchestrator-backend-dynamic@1.6.8"
+    integrity: sha512-Akb9digwa3b1tOXbfbm13Z+DIZV/lBaNX0HDXhaciYE4dWPPzB17/4eT74suim9e8k4THORGVIM/GC/f2HwMNQ==
+  notifications:
+    package: "plugin-notifications@1.2.0"
+    integrity: sha512-T00TKMTeLQoMTY6UnXuXpPXFN2f+w32i8qECpAe3yeZM1TJb2oe6hCNwzAdKjGGPlGPAGqc16IBpZV65rfM79Q==
+  notifications_backend:
+    package: "plugin-notifications-backend-dynamic@1.4.6"
+    integrity: sha512-40hMkr/+5GdapDUuYBIwzZQLpPRJQxFIrr0PFACS40lmG98XcWP6HZ7dQ+VvZ1gAFnWU9HscIrWMwrlvtZ237g==
 
 postgres:
   serviceName: "sonataflow-psql-postgresql" # The name of the Postgres DB service to be used by platform services. Cannot be empty.
@@ -39,7 +63,7 @@ postgres:
   database: sonataflow # existing database instance used by data index and job service
 
 orchestrator:
-  namespace: sonataflow-infra # namespace where the data index, job service and workflows are deployed
+  namespace: "sonataflow-infra" # Namespace where sonataflow's workflows run. The value is captured when running the setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `sonataflow-infra`.
   sonataPlatform:
     resources:
       requests:
@@ -54,7 +78,4 @@ tekton:
 
 argocd:
   enabled: false # whether to install the ArgoCD plugin and create the orchestrator AppProject
-  url: ""
-  namespace: orchestrator-gitops
-  username: admin
-  password: ""
+  namespace: "" # Defines the namespace where the orchestrator's instance of ArgoCD is deployed. The value is captured when running setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `orchestrator-gitops` in the setup.sh script.

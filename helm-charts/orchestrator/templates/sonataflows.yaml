@@ -1,29 +1,27 @@
-{{- if .Values.sonataFlowOperator.enabled }}
+{{- define "sonataFlowClusterPlatform-manifest" }}
+{{- $workflowNamespace := include "get-workflow-namespace" . }}
 ---
 apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowClusterPlatform
 metadata:
   name: cluster-platform
   annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": hook-fail
-    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available 
+    "meta.helm.sh/release-name": {{ .Release.Name}}
 spec:
   platformRef:
     name: sonataflow-platform
-    namespace: {{ .Values.orchestrator.namespace }}
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowclusterplatforms") }}
-{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowclusterplatforms" "resourceName" "cluster-platform") }}
+    namespace: {{ $workflowNamespace }}
+{{- end }}
+{{- define "sonataFlowPlatform-manifest" }}
+{{- $workflowNamespace := include "get-workflow-namespace" . }}
 ---
 apiVersion: sonataflow.org/v1alpha08
 kind: SonataFlowPlatform
 metadata:
   name: sonataflow-platform
-  namespace: {{ .Values.orchestrator.namespace }}
+  namespace: {{ $workflowNamespace }}
   annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": hook-fail
-    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available
+    "meta.helm.sh/release-name": {{ .Release.Name}}
 spec:
   build:
     template:
@@ -46,6 +44,9 @@ spec:
           serviceRef:
             name: {{ .Values.postgres.serviceName }}
             namespace: {{ .Values.postgres.serviceNamespace }}
+      podTemplate:
+        container:
+          image: "quay.io/kiegroup/kogito-data-index-postgresql:9.99.1.CR1"
     jobService:
       enabled: true
       persistence:
@@ -57,6 +58,8 @@ spec:
           serviceRef:
             name: {{ .Values.postgres.serviceName }}
             namespace: {{ .Values.postgres.serviceNamespace }}
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowplatforms") }}
-{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "sonataflow.org" "kind" "sonataflowplatforms" "targetNamespace" .Values.orchestrator.namespace "resourceName" "sonataflow-platform") }}
 {{- end }}
+{{- $workflowNamespace := include "get-workflow-namespace" . }}
+## Manifests
+{{ include "manage-cr-lifecycle-on-action" (dict "release" .Release "apiGroup" "sonataflow.org" "groupVersion" "v1alpha08" "kind" "SonataFlowClusterPlatform" "kinds" "sonataflowclusterplatforms" "resourceName" "cluster-platform" "isEnabled" .Values.sonataFlowOperator.enabled "hasCRDInstalled" (.Capabilities.APIVersions.Has "sonataflow.org/v1alpha08/SonataFlowClusterPlatform") "manifest" (include "sonataFlowClusterPlatform-manifest" . | b64enc )) }}
+{{ include "manage-cr-lifecycle-on-action" (dict "release" .Release "apiGroup" "sonataflow.org" "groupVersion" "v1alpha08" "kind" "SonataFlowPlatform" "kinds" "sonataflowplatforms" "targetNamespace" $workflowNamespace "resourceName" "sonataflow-platform" "isEnabled" .Values.sonataFlowOperator.enabled "hasCRDInstalled" (.Capabilities.APIVersions.Has "sonataflow.org/v1alpha08/SonataFlowClusterPlatform") "manifest" (include "sonataFlowPlatform-manifest" . | b64enc )) }}

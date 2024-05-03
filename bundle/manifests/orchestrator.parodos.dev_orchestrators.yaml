@@ -38,8 +38,372 @@ spec:
             type: object
           spec:
             description: Spec defines the desired state of Orchestrator
+            properties:
+              argocd:
+                description: ArgoCD contains the fields for the ArgoCD configuration
+                properties:
+                  enabled:
+                    default: false
+                    description: Enabled determines whether to install the ArgoCD
+                      plugin and create the orchestrator AppProject
+                    type: boolean
+                  namespace:
+                    default: orchestrator-gitops
+                    description: Namespace defines the namespace where ther ArgoCD
+                      operator is deployed and is watching for argoapp CR instances
+                    type: string
+                type: object
+              orchestrator:
+                description: Orchestrator contains the fields for the orchestrator
+                  configuration
+                properties:
+                  namespace:
+                    default: sonataflow-infra
+                    description: Namespace where sonataflow's workflows run. The value
+                      is captured when running the setup.sh script and stored as a
+                      label in the target namespace. User can override the value by
+                      populating this field. Defaults to `sonataflow-infra`. This
+                      field takes precendence over the value in the label.
+                    type: string
+                  sonataPlatform:
+                    description: SonataflowPlatform contains the pod resource configuration
+                      to be used for the data index and job services
+                    properties:
+                      resources:
+                        description: Resources contains the requests and limit of
+                          CPU and memory resources for the pod instance
+                        properties:
+                          limits:
+                            description: 'Limits describes the maximum amount of compute
+                              resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
+                            properties:
+                              cpu:
+                                default: 500m
+                                description: CPU defines the CPU resource limits
+                                type: string
+                              memory:
+                                default: 1Gi
+                                description: Memory defines the memory resource limits
+                                type: string
+                            type: object
+                          requests:
+                            description: |
+                              Requests describes the minimum amount of compute resources required. If Requests is omitted for a container,
+                              it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value.
+                              Requests cannot exceed Limits. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+                            properties:
+                              cpu:
+                                default: 250m
+                                description: CPU defines the CPU resource limits
+                                type: string
+                              memory:
+                                default: 64Mi
+                                description: Memory defines the memory resource limits
+                                type: string
+                            type: object
+                        type: object
+                    type: object
+                type: object
+              postgres:
+                description: Sonataflow operator PostgreSQL configuration details
+                properties:
+                  authSecret:
+                    description: PostgreSQL connection credentials details
+                    properties:
+                      name:
+                        default: sonataflow-psql-postgresql
+                        description: Name of existing secret to use for PostgreSQL
+                          credentials.
+                        type: string
+                      passwordKey:
+                        default: postgres-password
+                        description: name of key in existing secret to use for PostgreSQL
+                          credentials.
+                        type: string
+                      userKey:
+                        default: postgres-username
+                        description: Name of key in existing secret to use for PostgreSQL
+                          credentials.
+                        type: string
+                    type: object
+                  database:
+                    default: sonataflow
+                    description: Existing database instance used by data index and
+                      job service
+                    type: string
+                  serviceName:
+                    default: sonataflow-psql-postgresql
+                    description: The name of the Postgres DB service to be used by
+                      platform services. Cannot be empty.
+                    type: string
+                  serviceNamespace:
+                    default: sonataflow-infra
+                    description: The namespace of the Postgres DB service to be used
+                      by platform services.
+                    type: string
+                type: object
+              rhdhOperator:
+                description: RHDH Operator contains the configuration fields for the
+                  Red Hat Developer Hub operator
+                properties:
+                  enabled:
+                    default: true
+                    description: Enabled determines whether the operator should be
+                      deployed by the chart. Defaults to true
+                    type: boolean
+                  secretRef:
+                    description: Backstage secret reference information
+                    properties:
+                      argocd:
+                        description: ArgoCD specific configuration fields that are
+                          injected to the backstage instance to allow the plugin to
+                          communicate with ArgoCD. Note that ArgoCD must be deployed
+                          beforehand and the argocd.enabled field must be set to true
+                          as well.
+                        properties:
+                          password:
+                            default: ARGOCD_PASSWORD
+                            description: Key in the secret with name  defined in the
+                              'name' field that contains the value of the password
+                              to authenticate to ArgoCD. Defaults to 'ARGOCD_PASSWORD',
+                              empty for not available.
+                            type: string
+                          url:
+                            default: ARGOCD_URL
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the URL of the
+                              ArgoCD API server. Defaults to 'ARGOCD_URL', empty for
+                              not available.
+                            type: string
+                          username:
+                            default: ARGOCD_USERNAME
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the username
+                              to login to ArgoCD. Defaults to 'ARGOCD_USERNAME', empty
+                              for not available.
+                            type: string
+                        type: object
+                      github:
+                        description: GitHub specific configuration fields that are
+                          injected to the backstage instance to allow the plugin to
+                          communicate with GitHub.
+                        properties:
+                          clientId:
+                            default: GITHUB_CLIENT_ID
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the client ID
+                              that you generated on GitHub, for GitHub authentication
+                              (requires GitHub App). Defaults to 'GITHUB_CLIENT_ID',
+                              empty for not available.
+                            type: string
+                          clientSecret:
+                            default: GITHUB_CLIENT_SECRET
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the client secret
+                              tied to the generated client ID. Defaults to 'GITHUB_CLIENT_SECRET',
+                              empty for not available.
+                            type: string
+                          token:
+                            default: GITHUB_TOKEN
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the authentication
+                              token as expected by GitHub. Required for importing
+                              resource to the catalog, launching software templates
+                              and more. Defaults to 'GITHUB_TOKEN', empty for not
+                              available.
+                            type: string
+                        type: object
+                      k8s:
+                        description: Kubernetes specific configuration fields that
+                          are injected to the backstage instance to allow the plugin
+                          to communicate with the Kubernetes API Server.
+                        properties:
+                          clusterToken:
+                            default: K8S_CLUSTER_TOKEN
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the API URL
+                              of the kubernetes cluster. Defaults to 'K8S_CLUSTER_TOKEN',
+                              empty for not available.
+                            type: string
+                          clusterUrl:
+                            default: K8S_CLUSTER_URL
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the Kubernetes
+                              API bearer token used for authentication. Defaults to
+                              'K8S_CLUSTER_URL', empty for not available.
+                            type: string
+                        type: object
+                      name:
+                        default: backstage-backend-auth-secret
+                        description: Name of the secret that contains the credentials
+                          for the plugin to establish a communication channel with
+                          the Kubernetes API, ArgoCD and GitHub servers.
+                        type: string
+                    type: object
+                  subscription:
+                    description: Subscription specifies the subscription attributes
+                      to use to deploy the operator.
+                    properties:
+                      channel:
+                        default: fast
+                        description: Channel defines the channel of the operator package
+                          to subscribe to
+                        type: string
+                      installPlanApproval:
+                        default: Automatic
+                        description: InstallPlanApproval specifies the approval policy
+                          for an InstallPlan. It must be one of "Automatic" or "Manual".
+                          Defaults to Automatic.
+                        type: string
+                      name:
+                        default: rhdh
+                        description: Name defines the name of the operator package
+                        type: string
+                      namespace:
+                        default: rhdh-operator
+                        description: Namespace determines the namespace where the
+                          operator should be deployed. Defaults to rhdh-operator
+                        type: string
+                    type: object
+                type: object
+              rhdhPlugins:
+                description: Backstage plugins
+                properties:
+                  notifications:
+                    description: Notification plugin information
+                    properties:
+                      integrity:
+                        default: sha512-T00TKMTeLQoMTY6UnXuXpPXFN2f+w32i8qECpAe3yeZM1TJb2oe6hCNwzAdKjGGPlGPAGqc16IBpZV65rfM79Q==
+                        description: Package SHA integrity
+                        type: string
+                      package:
+                        default: plugin-notifications@1.2.0
+                        description: Package name
+                        type: string
+                    type: object
+                  notifications_backend:
+                    description: Notification backend plugin information
+                    properties:
+                      integrity:
+                        default: sha512-40hMkr/+5GdapDUuYBIwzZQLpPRJQxFIrr0PFACS40lmG98XcWP6HZ7dQ+VvZ1gAFnWU9HscIrWMwrlvtZ237g==
+                        description: Package SHA integrity
+                        type: string
+                      package:
+                        default: plugin-notifications-backend-dynamic@1.4.6
+                        description: Package name
+                        type: string
+                    type: object
+                  npmRegistry:
+                    default: ""
+                    description: NPM Registry
+                    type: string
+                  orchestrator:
+                    description: Orchestrator plugin information
+                    properties:
+                      integrity:
+                        default: sha512-d0kLVkdsWMxGkOOS1wB+u24mIdF0isNY4I0F3/eR/g0lI0q+uFJ8iW+8XmyaHKqa1ZMvg5pnMljJ6thJk85nSg==
+                        description: Package SHA integrity
+                        type: string
+                      package:
+                        default: backstage-plugin-orchestrator@1.9.4
+                        description: Package name
+                        type: string
+                    type: object
+                  orchestrator_backend:
+                    description: Orchestrator backend plugin information
+                    properties:
+                      integrity:
+                        default: sha512-Akb9digwa3b1tOXbfbm13Z+DIZV/lBaNX0HDXhaciYE4dWPPzB17/4eT74suim9e8k4THORGVIM/GC/f2HwMNQ==
+                        description: Package SHA integrity
+                        type: string
+                      package:
+                        default: backstage-plugin-orchestrator-backend-dynamic@1.6.8
+                        description: Package name
+                        type: string
+                    type: object
+                  scope:
+                    default: '@janus-idp'
+                    description: Scope of the plugins
+                    type: string
+                type: object
+              serverlessOperator:
+                properties:
+                  enabled:
+                    default: true
+                    description: Enabled determines whether the operator should be
+                      deployed by the chart. Defaults to true.
+                    type: boolean
+                  subscription:
+                    description: Subscription specifies the subscription attributes
+                      to use to deploy the operator.
+                    properties:
+                      channel:
+                        default: stable
+                        description: Channel defines the channel of the operator package
+                          to subscribe to
+                        type: string
+                      installPlanApproval:
+                        default: Automatic
+                        description: InstallPlanApproval specifies the approval policy
+                          for an InstallPlan. It must be one of "Automatic" or "Manual".
+                          Defaults to Automatic.
+                        type: string
+                      name:
+                        default: serverless-operator
+                        description: Name defines the name of the operator package
+                        type: string
+                      namespace:
+                        default: openshift-serverless
+                        description: Namespace determines the namespace where the
+                          operator should be deployed. Defaults to openshift-serverless
+                        type: string
+                    type: object
+                type: object
+              sonataFlowOperator:
+                description: SonatafFlowOperator contains the configuration fields
+                  for the SonataFlow Operator
+                properties:
+                  enabled:
+                    default: true
+                    description: Enabled determines whether to deploy the SonataFlow
+                      Operator operator or not. Defaults to true.
+                    type: boolean
+                  subscription:
+                    description: Subscription specifies the subscription attributes
+                      to use to deploy the operator.
+                    properties:
+                      channel:
+                        default: alpha
+                        description: Channel defines the channel of the operator package
+                          to subscribe to
+                        type: string
+                      installPlanApproval:
+                        default: Automatic
+                        description: InstallPlanApproval specifies the approval policy
+                          for an InstallPlan. It must be one of "Automatic" or "Manual".
+                          Defaults to Automatic.
+                        type: string
+                      name:
+                        default: logic-operator-rhel8
+                        description: Name defines the name of the operator package
+                        type: string
+                      namespace:
+                        default: openshift-serverless-logic
+                        description: Namespace determines the namespace where the
+                          operator should be deployed. Defaults to openshift-serverless-logic
+                        type: string
+                    type: object
+                type: object
+              tekton:
+                description: Contains the tekton configuration fields
+                properties:
+                  enabled:
+                    default: false
+                    description: Enabled determines whether to create the Tekton pipeline
+                      resources. Defaults to false.
+                    type: boolean
+                type: object
             type: object
-            x-kubernetes-preserve-unknown-fields: true
           status:
             description: Status defines the observed state of Orchestrator
             type: object

@@ -13,8 +13,20 @@ rules:
   resources:
   - namespaces
   - secrets
+  - pods
+  - services
+  - services/finalizers
+  - events
+  - configmaps
+  - serviceaccounts
   verbs:
-  - "*"
+  - list
+  - get
+  - delete
+  - update
+  - create
+  - patch
+  - watch
 # We need to create events on CRs about things happening during reconciliation
 - apiGroups:
   - ""
@@ -62,6 +74,7 @@ rules:
   - list
   - watch
   - patch
+  - update
 - apiGroups:
   - serving.knative.dev
   resources:
@@ -69,17 +82,6 @@ rules:
   verbs:
   - list
   - get
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
-  - roles
-  - rolebindings
-  verbs:
-  - get
-  - list
-  - create
-  - delete
-  - watch
 - apiGroups:
   - rhdh.redhat.com
   resources:
@@ -91,6 +93,7 @@ rules:
   - list
   - watch
   - patch
+  - update
 - apiGroups:
   - sonataflow.org
   resources:
@@ -104,6 +107,7 @@ rules:
   - delete
   - watch
   - patch
+  - update
 - apiGroups:
   - apps.openshift.io
   resources:
@@ -126,13 +130,6 @@ rules:
   - list
   - get
 - apiGroups:
-  - ""
-  resources:
-  - serviceaccounts
-  verbs:
-  - delete
-  - create
-- apiGroups:
   - rbac.authorization.k8s.io
   resources:
   - clusterroles
@@ -140,15 +137,20 @@ rules:
   verbs:
   - delete
   - create
+  - get
+  - list
+  - watch
 - apiGroups:
   - batch
   resources:
+  - cronjobs
   - jobs
   verbs:
   - delete
   - create
   - list
   - watch
+  - get
 ##
 ## Rules for orchestrator.parodos.dev/v1alpha1, Kind: Orchestrator
 ##
@@ -158,25 +160,6 @@ rules:
   - orchestrators
   - orchestrators/status
   - orchestrators/finalizers
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  - services
-  - services/finalizers
-  - endpoints
-  - persistentvolumeclaims
-  - events
-  - configmaps
-  - secrets
   verbs:
   - create
   - delete
@@ -208,4 +191,23 @@ rules:
   - get
   - create
   - list
+  - update
+  - create
+  - delete
+  - watch
+  - patch
+- apiGroups:
+  - tekton.dev
+  resources:
+  - pipelines
+  - tasks
+  verbs:
+  - get
+  - create
+  - list
+  - update
+  - create
+  - delete
+  - watch
+  - patch
 #+kubebuilder:scaffold:rules

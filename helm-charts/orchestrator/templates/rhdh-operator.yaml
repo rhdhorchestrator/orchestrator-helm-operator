@@ -1,10 +1,40 @@
-{{- if .Values.rhdhOperator.enabled }}
-{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.rhdhOperator.subscription.namespace .Release.Name .Capabilities.APIVersions ) }}
-{{- if and (eq $unmanagedNamespaceExists "false") .Values.rhdhOperator.enabled }}
-apiVersion: v1
-kind: Namespace
+{{- define "backstage-manifest" }}
+---
+apiVersion: rhdh.redhat.com/v1alpha1
+kind: Backstage
 metadata:
-  name: {{ .Values.rhdhOperator.subscription.namespace }}
+  name: backstage
+  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+  annotations:
+    "meta.helm.sh/release-name": {{ .Release.Name}}
+spec:
+  application:
+    appConfig:
+      configMaps:
+        - name: app-config-rhdh
+        - name: app-config-rhdh-auth
+        - name: app-config-rhdh-catalog
+    dynamicPluginsConfigMapName: dynamic-plugins-rhdh
+    extraEnvs:
+      secrets:
+        - name: {{ .Values.rhdhOperator.secretRef.name }}
+    replicas: 1
+{{- end }}
+
+{{- if .Values.rhdhOperator.enabled }}
+  {{- if not .Values.rhdhOperator.secretRef.name }} {
+    {{- fail "Backstage's secret name defined in 'rhdhOperator.secretRef.name' is required" }}
+  {{- end }}
+  {{- $secret := lookup "v1" "Secret" .Values.rhdhOperator.subscription.namespace .Values.rhdhOperator.secretRef.name }}
+  {{- if not $secret }}
+    {{- fail (printf "Secret %s not found in namespace %s" .Values.rhdhOperator.secretRef.name .Values.rhdhOperator.subscription.namespace ) }}
+  {{- end }}
+  {{ if not .Values.rhdhOperator.secretRef.backstage.backendSecret }}
+    {{ fail printf "Backend secret key not defined in secret '%s' for Backstage. Please ensure that the value key 'rhdhOperator.secretRef.backstage.backendSecret' has been populated and the value matches the key in the secret" .Values.rhdhOperator.secretRef.name }}
+  {{- end }}
+  {{- if not (dig "data" .Values.rhdhOperator.secretRef.backstage.backendSecret "" $secret) }}
+    {{ fail (printf "Backend secret key %s not found in secret '%s' for Backstage. Please ensure that the value key 'rhdhOperator.secretRef.backstage.backendSecret' matches the key in the secret: %s" .Values.rhdhOperator.secretRef.backstage.backendSecret .Values.rhdhOperator.secretRef.name ($secret|toPrettyJson) )}}
+  {{- end }}
 ---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
@@ -13,7 +43,6 @@ metadata:
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
 spec: {}
 ---
-{{- end }}
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
@@ -25,31 +54,18 @@ spec:
   name: {{ .Values.rhdhOperator.subscription.name }}
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+
+  {{- if .Values.rhdhPlugins.npmRegistry }}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: backstage-backend-auth-secret
+  name: dynamic-plugins-npmrc
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
+type: Opaque
 stringData:
-{{- $old_secret := lookup "v1" "Secret" .Values.rhdhOperator.subscription.namespace "backstage-backend-auth-secret" }}
-{{- $generated_secret := randAlphaNum 24 | nospace | b64enc }}
-  BACKEND_SECRET: {{ $old_secret | dig "data" "BACKEND_SECRET" $generated_secret | b64dec }}
-  {{- if ne .Values.rhdhOperator.k8s.clusterToken "" }}
-  K8S_CLUSTER_URL: {{ .Values.rhdhOperator.k8s.clusterUrl }}
-  K8S_CLUSTER_TOKEN: {{ .Values.rhdhOperator.k8s.clusterToken }}
-  {{- end }}
-{{- if .Values.argocd.enabled }}
-  ARGOCD_URL: {{ .Values.argocd.url }}
-  ARGOCD_USERNAME: {{ .Values.argocd.username }}
-  ARGOCD_PASSWORD: {{ .Values.argocd.password }}
-{{- end }}
-  {{- if ne .Values.rhdhOperator.github.token "" }}
-  GITHUB_TOKEN: {{ .Values.rhdhOperator.github.token }}
-  {{- end }}
-  {{- if ne .Values.rhdhOperator.github.clientId "" }}
-  GITHUB_CLIENT_ID: {{ .Values.rhdhOperator.github.clientId }}
-  GITHUB_CLIENT_SECRET: {{ .Values.rhdhOperator.github.clientSecret }}
+  .npmrc: |
+    registry={{ .Values.rhdhPlugins.npmRegistry }}
   {{- end }}
 ---
 kind: ConfigMap
@@ -65,11 +81,13 @@ data:
     backend:
       auth:
         keys:
-          - secret: "${BACKEND_SECRET}"
+          - secret: {{ printf "${%s}" .Values.rhdhOperator.secretRef.backstage.backendSecret }}
+
       baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.namespace }}.{{ include "cluster.domain" . }}
       csp:
-        frame-src:
-          - "https://sandbox.kie.org"
+        script-src: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
+        script-src-elem: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
+        connect-src: ["'self'", 'http:', 'https:', 'data:']
       cors:
         origin: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.namespace }}.{{ include "cluster.domain" . }}
       database:
@@ -90,7 +108,8 @@ data:
     includes:
       - dynamic-plugins.default.yaml
     plugins:
-{{- if ne .Values.rhdhOperator.k8s.clusterToken "" }}
+  {{- if and (and .Values.rhdhOperator.secretRef.k8s.clusterToken (dig "data" .Values.rhdhOperator.secretRef.k8s.clusterToken "" $secret ) )
+             (and .Values.rhdhOperator.secretRef.k8s.clusterUrl   (dig "data" .Values.rhdhOperator.secretRef.k8s.clusterUrl "" $secret ) ) }}
       - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
         disabled: false
         pluginConfig:
@@ -114,10 +133,10 @@ data:
               - type: 'config'
                 clusters:
                   - name: 'OpenShift Orchestrator Demo'
-                    url: ${K8S_CLUSTER_URL}
+                    url: {{ printf "${%s}" .Values.rhdhOperator.secretRef.k8s.clusterUrl }}
                     authProvider: 'serviceAccount'
                     skipTLSVerify: true
-                    serviceAccountToken: ${K8S_CLUSTER_TOKEN}
+                    serviceAccountToken: {{ printf "${%s}" .Values.rhdhOperator.secretRef.k8s.clusterToken }}
       - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
         disabled: false
         pluginConfig:
@@ -134,6 +153,7 @@ data:
                         anyOf:
                           - hasAnnotation: backstage.io/kubernetes-id
                           - hasAnnotation: backstage.io/kubernetes-namespace
+    {{- if .Values.tekton.enabled }}
       - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-tekton
         disabled: false
         pluginConfig:
@@ -149,8 +169,14 @@ data:
                       if:
                         allOf:
                           - isTektonCIAvailable
-{{- end }}
-{{- if .Values.argocd.enabled }}
+    {{- end }}
+  {{- end }}
+  {{- if and .Values.argocd.enabled
+        ( and
+            (and (.Values.rhdhOperator.secretRef.argocd.url) (dig "data" .Values.rhdhOperator.secretRef.argocd.url "" $secret ) )
+            (and (.Values.rhdhOperator.secretRef.argocd.username) (dig "data" .Values.rhdhOperator.secretRef.argocd.password "" $secret) )
+        )
+  }}
       - disabled: false
         package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic
         pluginConfig:
@@ -158,9 +184,9 @@ data:
             appLocatorMethods:
             - instances:
               - name: main
-                url: ${ARGOCD_URL}
-                username: ${ARGOCD_USERNAME}
-                password: ${ARGOCD_PASSWORD}
+                url: {{ printf "${%s}" .Values.rhdhOperator.secretRef.argocd.url }}
+                username: {{ printf "${%s}" .Values.rhdhOperator.secretRef.argocd.username }}
+                password: {{ printf "${%s}" .Values.rhdhOperator.secretRef.argocd.password }}
               type: config
       - disabled: false
         package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd
@@ -194,25 +220,21 @@ data:
             appLocatorMethods:
             - instances:
               - name: main
-                url: ${ARGOCD_URL}
-                username: ${ARGOCD_USERNAME}
-                password: ${ARGOCD_PASSWORD}
+                url: {{ printf "${%s}" .Values.rhdhOperator.secretRef.argocd.url }}
+                username: {{ printf "${%s}" .Values.rhdhOperator.secretRef.argocd.username }}
+                password: {{ printf "${%s}" .Values.rhdhOperator.secretRef.argocd.password }}
               type: config
-{{- end }}
+  {{- end }}
       - disabled: false
-        package: "@janus-idp/backstage-plugin-orchestrator-backend-dynamic@1.6.0"
-        integrity: >-
-          sha512-mrRbeNtmaztyDWV3wRiYTykIBwRyF7+RuXN5YbOXLgZ6GoUsfWMu4PHu6Fl4+/CLm2aGyOrGO32RNWU/txY3Wg==
+        package: "{{ .Values.rhdhPlugins.scope }}/{{ .Values.rhdhPlugins.orchestrator_backend.package }}"
+        integrity: {{ .Values.rhdhPlugins.orchestrator_backend.integrity }}
         pluginConfig:
           orchestrator:
             dataIndexService:
-              url: http://sonataflow-platform-data-index-service.{{ .Values.orchestrator.namespace }}
-            editor:
-              path: "https://sandbox.kie.org/swf-chrome-extension/0.32.0"
+              url: http://sonataflow-platform-data-index-service.{{- include "get-workflow-namespace" . }}
       - disabled: false
-        package: "@janus-idp/backstage-plugin-orchestrator@1.8.2"
-        integrity: >-
-          sha512-KmpDjaOJUrfvulC2MYkvLze8tojE4wpROUK0Bb+ICdj43ZbJtrrnFMl0YrM2zr3Lha2fTfUiHRSslpBrtS3QWA==
+        package: "{{ .Values.rhdhPlugins.scope }}/{{ .Values.rhdhPlugins.orchestrator.package }}"
+        integrity: {{ .Values.rhdhPlugins.orchestrator.integrity }}
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -229,9 +251,8 @@ data:
                     module: OrchestratorPlugin
                     path: /orchestrator
       - disabled: false
-        package: "@janus-idp/plugin-notifications@1.1.13"
-        integrity: >-
-          sha512-Vf5tbLqdK2vnJaJovaABcynDNbL4gpYwFkBfc7El2xgp6OesF0/JwdRoVwRjEGCqiXSgM4wyCjwo1v5Gl82URw==
+        package: "{{ .Values.rhdhPlugins.scope }}/{{ .Values.rhdhPlugins.notifications.package }}"
+        integrity: {{ .Values.rhdhPlugins.notifications.integrity }}
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -250,9 +271,8 @@ data:
                     config:
                       pollingIntervalMs: 5000
       - disabled: false
-        package: "@janus-idp/plugin-notifications-backend-dynamic@1.4.0"
-        integrity: >-
-          sha512-V/FQwzAAUuhjUeZiYqCVJqPz5U3TRYEZN4LfxOwtG6lEps7fdwBNax7XeEUuCJG0D8Wv7RR+CtxljOKRxn21AA==
+        package: "{{ .Values.rhdhPlugins.scope }}/{{ .Values.rhdhPlugins.notifications_backend.package }}"
+        integrity: {{ .Values.rhdhPlugins.notifications_backend.integrity }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -261,21 +281,22 @@ metadata:
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
 data:
   app-config-auth.gh.yaml: |
-{{- if ne .Values.rhdhOperator.github.token "" }}
+  {{- if and .Values.rhdhOperator.secretRef.github.token (dig "data" .Values.rhdhOperator.secretRef.github.token "" $secret) }}
     integrations:
       github:
         - host: github.com
-          token: ${GITHUB_TOKEN}
+          token: {{ printf "${%s}" .Values.rhdhOperator.secretRef.github.token }}
     auth:
       environment: development
-{{- end }}      
-{{- if ne .Values.rhdhOperator.github.clientId "" }}
+  {{- end }}
+  {{- if and (and .Values.rhdhOperator.secretRef.github.clientId (dig "data" .Values.rhdhOperator.secretRef.github.clientId "" $secret) )
+             (and .Values.rhdhOperator.secretRef.github.clientSecret  (dig "data" .Values.rhdhOperator.secretRef.github.clientSecret "" $secret  ) ) }}
       providers:
         github:
           development:
-            clientId: ${GITHUB_CLIENT_ID}
-            clientSecret: ${GITHUB_CLIENT_SECRET}
-{{- end }}
+            clientId: {{ printf "${%s}" .Values.rhdhOperator.secretRef.github.clientId }}
+            clientSecret: {{ printf "${%s}" .Values.rhdhOperator.secretRef.github.clientSecret }}
+  {{- end }}
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -307,28 +328,8 @@ data:
           target: https://github.com/parodos-dev/workflow-software-templates/blob/main/scaffolder-templates/basic-workflow/template.yaml
         - type: url
           target: https://github.com/parodos-dev/workflow-software-templates/blob/main/scaffolder-templates/complex-assessment-workflow/template.yaml
----
-apiVersion: rhdh.redhat.com/v1alpha1
-kind: Backstage
-metadata:
-  name: backstage
-  namespace: {{ .Values.rhdhOperator.subscription.namespace }}
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": hook-fail
-    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available    
-spec:
-  application:
-    appConfig:
-      configMaps:
-        - name: app-config-rhdh
-        - name: app-config-rhdh-auth
-        - name: app-config-rhdh-catalog
-    dynamicPluginsConfigMapName: dynamic-plugins-rhdh
-    extraEnvs:
-      secrets:
-        - name: backstage-backend-auth-secret
-    replicas: 1
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "rhdh.redhat.com" "kind" "backstages") }}
-{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "rhdh.redhat.com" "kind" "backstages" "targetNamespace" .Values.rhdhOperator.subscription.namespace "resourceName" "backstage") }}
+{{- end }}
+{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "rhdh.redhat.com/v1alpha1" "Backstage" .Values.rhdhOperator.subscription.namespace "backstage" .Release.Name .Capabilities.APIVersions ) }}
+{{- if eq $unmanagedNamespaceExists "false" }}
+  {{- include "manage-cr-lifecycle-on-action" (dict "release" .Release "apiGroup" "rhdh.redhat.com" "groupVersion" "v1alpha1" "kind" "Backstage" "kinds" "backstages" "targetNamespace" .Values.rhdhOperator.subscription.namespace "resourceName" "backstage" "isEnabled" .Values.rhdhOperator.enabled "hasCRDInstalled" (.Capabilities.APIVersions.Has "rhdh.redhat.com/v1alpha1/Backstage") "manifest" (include "backstage-manifest" . | b64enc )) }}
 {{- end }}

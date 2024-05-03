@@ -1,9 +1,10 @@
 {{- if eq "true" (include "install-tekton-pipeline" .) }}
+  {{- $gitopsNamespace := include "get-argocd-namespace" . }}
 apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: workflow-deployment
-  namespace: {{ .Values.argocd.namespace }}
+  namespace: {{ $gitopsNamespace }}
 spec:
   description: |
     This pipeline clones a git repo, builds a Docker image with Kaniko and
@@ -22,6 +23,12 @@ spec:
       description: Whether conversion to flat layout is needed or it's already flattened
       type: string
       default: "true"
+    - name: quayOrgName
+      description: The Quay Organization Name of the published workflow
+      type: string
+    - name: quayRepoName
+      description: The Quay Repository Name of the published workflow
+      type: string
   workspaces:
     - name: workflow-source
     - name: workflow-gitops
@@ -109,7 +116,7 @@ spec:
       runAfter: ["flatten-workflow"]
       taskRef:
         name: buildah
-        kind: ClusterTask        
+        kind: ClusterTask
       workspaces:
         - name: source
           workspace: workflow-source
@@ -117,13 +124,13 @@ spec:
           workspace: docker-credentials
       params:
         - name: IMAGE
-          value: quay.io/orchestrator/serverless-workflow-$(params.workflowId):$(tasks.fetch-workflow.results.commit)
+          value: quay.io/$(params.quayOrgName)/$(params.quayRepoName):$(tasks.fetch-workflow.results.commit)
         - name: DOCKERFILE
           value: flat/workflow-builder.Dockerfile
         - name: CONTEXT
           value: flat/$(params.workflowId)
         - name: BUILD_EXTRA_ARGS
-          value: --ulimit nofile=4096:4096             
+          value: '--authfile=/workspace/dockerconfig/.dockerconfigjson --ulimit nofile=4096:4096 --build-arg WF_RESOURCES="." --build-arg MAVEN_ARGS_APPEND="-Dkogito.persistence.type=jdbc -Dquarkus.datasource.db-kind=postgresql -Dkogito.persistence.proto.marshaller=false" --build-arg QUARKUS_EXTENSIONS=org.kie.kogito:kogito-addons-quarkus-jobs-knative-eventing:9.99.1.redhat-00003,org.kie.kogito:kogito-addons-quarkus-persistence-jdbc:9.99.1.redhat-00003,org.kie.kogito:kogito-addons-persistence-jdbc:9.99.1.redhat-00003,io.quarkus:quarkus-jdbc-postgresql:3.2.9.Final,io.quarkus:quarkus-agroal:3.2.9.Final'
     - name: push-workflow-gitops
       runAfter: ["build-gitops", "build-and-push-image"]
       taskRef:
