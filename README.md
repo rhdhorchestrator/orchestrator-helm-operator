@@ -1,6 +1,8 @@
 # orchestrator-helm-operator
 Meta Operator for deploying the Orchestrator helm charts
 
+# Pre-install requirements
+This operator is a helm operator using the helm charts from the orchestrator repository. As such, you need to fulfill the pre-install requirements defined in the [README.md](https://github.com/parodos-dev/orchestrator-helm-chart/blob/gh-pages/README.md) prior to deploying the operator in a cluster.
 
 ## Upgrading the operator
 Updating the operator requires a few manual steps due to the need of the operator's RBAC roles to be in sync with the kind of resources in the chart, so that the operator is able to manage them. Unfortunately it is not possible to leverage on the operator-sdk ability to populate the roles based on the resources generated from the chart as the generation fails because the chart contains certain constrains that prevents it from succeeding without running against an live cluster, such as the need to determine the cluster's domain name from the `ingresses.config.openshift.io` object.
