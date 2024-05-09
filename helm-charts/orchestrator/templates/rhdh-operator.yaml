@@ -82,7 +82,6 @@ data:
       auth:
         keys:
           - secret: {{ printf "${%s}" .Values.rhdhOperator.secretRef.backstage.backendSecret }}
-
       baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.namespace }}.{{ include "cluster.domain" . }}
       csp:
         script-src: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
@@ -321,7 +320,7 @@ data:
             ]
       locations:
         - type: url
-          target: https://github.com/janus-idp/backstage-plugins/blob/main/plugins/notifications-backend/users.yaml
+          target: https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/resources/users.yaml
         - type: url
           target: https://github.com/parodos-dev/workflow-software-templates/blob/main/entities/workflow-resources.yaml
         - type: url

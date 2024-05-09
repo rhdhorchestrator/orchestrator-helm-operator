@@ -135,8 +135,7 @@ spec:
                 kubectl delete cronjob -l orchestrator.rhdh.redhat.com/reconciles={{ $resourceAPIGroup }} -n {{ .release.Namespace }} # Ensure no race condition happens where a cronjob's spawned job creates the CR after the delete job is completed and while helm is processing the other delete jobs
                 kubectl get {{ if (hasKey . "targetNamespace") }} -n {{ .targetNamespace }} {{ end }} {{ $resourceAPIGroup }} {{ .resourceName }}
                 if [ $? -eq 0 ]; then
-                  kubectl delete {{ if (hasKey . "targetNamespace") }} -n {{ .targetNamespace }} {{ end }} {{ $resourceAPIGroup }} {{ .resourceName }}
-                  exit 0
+                  kubectl delete {{ if (hasKey . "targetNamespace") }} -n {{ .targetNamespace }} {{ end }} {{ $resourceAPIGroup }} {{ .resourceName }} --timeout=60s || exit 1
                 fi
               fi
               echo "Cleanup Job finished"

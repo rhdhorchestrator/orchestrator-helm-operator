@@ -13,10 +13,7 @@ metadata:
           "spec": {
             "argocd": {
               "enabled": false,
-              "namespace": "orchestrator-gitops",
-              "password": "",
-              "url": "",
-              "username": "admin"
+              "namespace": ""
             },
             "orchestrator": {
               "namespace": "sonataflow-infra",
@@ -45,14 +42,25 @@ metadata:
             },
             "rhdhOperator": {
               "enabled": true,
-              "github": {
-                "clientId": "",
-                "clientSecret": "",
-                "token": ""
-              },
-              "k8s": {
-                "clusterToken": "",
-                "clusterUrl": ""
+              "secretRef": {
+                "argocd": {
+                  "password": "ARGOCD_PASSWORD",
+                  "url": "ARGOCD_URL",
+                  "username": "ARGOCD_USERNAME"
+                },
+                "backstage": {
+                  "backendSecret": "BACKEND_SECRET"
+                },
+                "github": {
+                  "clientId": "GITHUB_CLIENT_ID",
+                  "clientSecret": "GITHUB_CLIENT_SECRET",
+                  "token": "GITHUB_TOKEN"
+                },
+                "k8s": {
+                  "clusterToken": "K8S_CLUSTER_TOKEN",
+                  "clusterUrl": "K8S_CLUSTER_URL"
+                },
+                "name": "backstage-backend-auth-secret"
               },
               "subscription": {
                 "channel": "fast",
@@ -60,6 +68,26 @@ metadata:
                 "name": "rhdh",
                 "namespace": "rhdh-operator"
               }
+            },
+            "rhdhPlugins": {
+              "notifications": {
+                "integrity": "sha512-BQ7ujmrbv2MLelNGyleC4Z8fVVywYBMYZTwmRC534WCT38QHQ0cWJbebOgeIYszFA98STW4F5tdKbVot/2gWMg==",
+                "package": "plugin-notifications@1.2.5"
+              },
+              "notifications_backend": {
+                "integrity": "sha512-5zluThJwFVKX0Wlh4E15vDKUFGu/qJ0UsxHYWoISJ+ing1R38gskvN3kukylNTgOp8B78OmUglPfNlydcYEHvA==",
+                "package": "plugin-notifications-backend-dynamic@1.4.11"
+              },
+              "npmRegistry": "",
+              "orchestrator": {
+                "integrity": "sha512-qSXQ2O7/eLBEF186PzaRfzLfutFYUq9MdiiIZbHejz+KML9rVInPJkc1tine3R3JQVuw1QBIQ2vhPNbGbHXWZg==",
+                "package": "backstage-plugin-orchestrator@1.10.6"
+              },
+              "orchestrator_backend": {
+                "integrity": "sha512-wVZE7Dak10edxh1ZEckzYKrE13GrqhzSVelURhxjZcgXEHdGPWYUFHNMEpte7hzIBE85350Ka7fpy7C4BNPvEw==",
+                "package": "backstage-plugin-orchestrator-backend-dynamic@1.8.0"
+              },
+              "scope": "@janus-idp"
             },
             "serverlessOperator": {
               "enabled": true,
@@ -75,7 +103,7 @@ metadata:
               "subscription": {
                 "channel": "alpha",
                 "installPlanApproval": "Automatic",
-                "name": "logic-operator-rhel8",
+                "name": "logicoperator-rhel8",
                 "namespace": "openshift-serverless-logic"
               }
             },
