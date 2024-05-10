@@ -13,10 +13,10 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Deployed')].status
+    - jsonPath: .status.conditions[-1:].status
       name: Ready
       type: string
-    - jsonPath: .status.conditions[?(@.type=='Deployed')].reason
+    - jsonPath: .status.conditions[-1:].reason
       name: Reason
       type: string
     name: v1alpha1
