@@ -1,3 +1,33 @@
+## Knative Serving CR
+{{- define "knativeServing-manifest" -}}
+---
+apiVersion: operator.knative.dev/v1beta1
+kind: KnativeServing
+metadata:
+  name: knative-serving
+  namespace: knative-serving
+  annotations:
+    "meta.helm.sh/release-name": {{ .Release.Name}}
+spec:
+  controller-custom-certs:
+    name: ""
+    type: ""
+  registry: {}
+{{- end }}
+## Knative Eventing CR
+{{- define "knativeEventing-manifest" -}}
+---
+apiVersion: operator.knative.dev/v1beta1
+kind: KnativeEventing
+metadata:
+  name: knative-eventing
+  namespace: knative-eventing
+  annotations:
+    "meta.helm.sh/release-name": {{ .Release.Name}}
+spec:
+  Registry:
+{{- end }}
+#### Openshift Serverless Manifests
 {{- if .Values.serverlessOperator.enabled }}
   {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" .Values.serverlessOperator.subscription.namespace .Release.Name .Capabilities.APIVersions) }}
   {{- if and (eq $unmanagedNamespaceExists "false") .Values.serverlessOperator.enabled }}
@@ -45,38 +75,12 @@ kind: Namespace
 metadata:
   name: knative-eventing
   {{- end }}
-  {{- $unmanagedKnativeEventingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeEventing" "knative-eventing" "knative-eventing" .Release.Name .Capabilities.APIVersions) }}
-  {{- if eq $unmanagedKnativeEventingExists "false" }}
----
-apiVersion: operator.knative.dev/v1beta1
-kind: KnativeEventing
-metadata:
-  name: knative-eventing
-  namespace: knative-eventing
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": hook-fail
-    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available
-spec:
-  Registry:
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "kind" "knativeeventings") }}
-{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "kind" "knativeeventings" "targetNamespace" "knative-eventing" "resourceName" "knative-eventing") }}
----
-apiVersion: operator.knative.dev/v1beta1
-kind: KnativeServing
-metadata:
-  name: knative-serving
-  namespace: knative-serving
-  annotations:
-    "helm.sh/hook": post-install
-    "helm.sh/hook-delete-policy": hook-fail
-    "helm.sh/hook-weight": "2" # Is created after the job to wait for the crd to be available
-spec:
-  controller-custom-certs:
-    name: ""
-    type: ""
-  registry: {}
-{{ include "wait-for-crd-available" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "kind" "knativeservings") }}
-{{ include "delete-cr-on-uninstall" (dict "releaseName" .Release.Name "releaseNamespace" .Release.Namespace "apiGroup" "operator.knative.dev" "kind" "knativeservings" "targetNamespace" "knative-serving" "resourceName" "knative-serving") }}
-  {{- end }}
+{{- end }}
+{{- $unmanagedKnativeEventingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeEventing" "knative-eventing" "knative-eventing" .Release.Name .Capabilities.APIVersions) }}
+{{- if eq $unmanagedKnativeEventingExists "false" }}
+  {{- include "manage-cr-lifecycle-on-action" (dict "release" .Release "apiGroup" "operator.knative.dev" "groupVersion" "v1beta1" "kind" "KnativeEventing" "kinds" "knativeeventings" "targetNamespace" "knative-eventing" "resourceName" "knative-eventing" "isEnabled" .Values.serverlessOperator.enabled  "hasCRDInstalled" (.Capabilities.APIVersions.Has "operator.knative.dev/v1beta1/KnativeEventing") "manifest" (include "knativeEventing-manifest" . | b64enc )) }}
+{{- end }}
+{{- $unmanagedKnativeEventingExists := include "unmanaged-resource-exists" (list "operator.knative.dev/v1beta1" "KnativeServing" "knative-serving" "knative-serving" .Release.Name .Capabilities.APIVersions) }}
+{{- if eq $unmanagedKnativeEventingExists "false" }}
+  {{- include "manage-cr-lifecycle-on-action" (dict "release" .Release "apiGroup" "operator.knative.dev" "groupVersion" "v1beta1" "kind" "KnativeServing" "kinds" "knativeservings" "targetNamespace" "knative-serving" "resourceName" "knative-serving" "isEnabled" .Values.serverlessOperator.enabled "hasCRDInstalled" (.Capabilities.APIVersions.Has "operator.knative.dev/v1beta1/KnativeServing") "manifest" (include "knativeServing-manifest" . | b64enc )) }}
 {{- end }}

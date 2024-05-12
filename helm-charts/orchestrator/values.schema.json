@@ -8,6 +8,7 @@
         "sonataFlowOperator",
         "serverlessOperator",
         "rhdhOperator",
+        "rhdhPlugins",
         "postgres",
         "orchestrator",
         "tekton",
@@ -178,8 +179,7 @@
             "title": "The rhdhOperator Schema",
             "required": [
                 "enabled",
-                "github",
-                "k8s",
+                "secretRef",
                 "subscription"
             ],
             "properties": {
@@ -191,78 +191,140 @@
                         true
                     ]
                 },
-                "github": {
+                "secretRef": {
                     "type": "object",
                     "default": {},
-                    "title": "The github Schema",
+                    "title": "The secretRef Schema",
                     "required": [
-                        "token",
-                        "clientId",
-                        "clientSecret"
+                        "name",
+                        "github",
+                        "k8s",
+                        "argocd"
                     ],
                     "properties": {
-                        "token": {
+                        "name": {
                             "type": "string",
-                            "default": "",
-                            "title": "The token Schema",
+                            "default": "backstage-backend-auth-secret",
+                            "title": "Name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD and GitHub servers.",
                             "examples": [
-                                ""
+                                "backstage-backend-auth-secret"
                             ]
                         },
-                        "clientId": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The clientId Schema",
-                            "examples": [
-                                ""
-                            ]
+                        "github": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The github Schema",
+                            "required": [
+                                "token",
+                                "clientId",
+                                "clientSecret"
+                            ],
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "default": "GITHUB_TOKEN",
+                                    "title": "The token Schema",
+                                    "examples": [
+                                        "GITHUB_TOKEN"
+                                    ]
+                                },
+                                "clientId": {
+                                    "type": "string",
+                                    "default": "GITHUB_CLIENT_ID",
+                                    "title": "The clientId Schema",
+                                    "examples": [
+                                        "GITHUB_CLIENT_ID"
+                                    ]
+                                },
+                                "clientSecret": {
+                                    "type": "string",
+                                    "default": "GITHUB_CLIENT_SECRET",
+                                    "title": "The clientSecret Schema",
+                                    "examples": [
+                                        "GITHUB_CLIENT_SECRET"
+                                    ]
+                                }
+                            },
+                            "examples": [{
+                                "token": "GITHUB_TOKEN",
+                                "clientId": "GITHUB_CLIENT_ID",
+                                "clientSecret": "GITHUB_CLIENT_SECRET"
+                            }]
                         },
-                        "clientSecret": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The clientSecret Schema",
-                            "examples": [
-                                ""
-                            ]
+                        "k8s": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The k8s Schema",
+                            "required": [
+                                "clusterToken",
+                                "clusterUrl"
+                            ],
+                            "properties": {
+                                "clusterToken": {
+                                    "type": "string",
+                                    "default": "K8S_CLUSTER_TOKEN",
+                                    "title": "The clusterToken Schema",
+                                    "examples": [
+                                        "K8S_CLUSTER_TOKEN"
+                                    ]
+                                },
+                                "clusterUrl": {
+                                    "type": "string",
+                                    "default": "K8S_CLUSTER_URL",
+                                    "title": "The clusterUrl Schema",
+                                    "examples": [
+                                        "K8S_CLUSTER_URL"
+                                    ]
+                                }
+                            },
+                            "examples": [{
+                                "clusterToken": "K8S_CLUSTER_TOKEN",
+                                "clusterUrl": "K8S_CLUSTER_URL"
+                            }]
+                            }
+                        },
+                        "argocd": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The argocd Schema",
+                            "required": [
+                                "url",
+                                "username",
+                                "password"
+                            ],
+                            "properties": {
+                                "url": {
+                                    "type": "string",
+                                    "default": "ARGOCD_URL",
+                                    "title": "The url Schema",
+                                    "examples": [
+                                        "ARGOCD_URL"
+                                    ]
+                                },
+                                "username": {
+                                    "type": "string",
+                                    "default": "ARGOCD_USERNAME",
+                                    "title": "The username Schema",
+                                    "examples": [
+                                        "ARGOCD_USERNAME"
+                                    ]
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "default": "ARGOCD_PASSWORD",
+                                    "title": "The password Schema",
+                                    "examples": [
+                                        "ARGOCD_PASSWORD"
+                                    ]
+                                }
+                            },
+                            "examples": [{
+                                "username":"ARGOCD_USERNAME",
+                                "password":"ARGOCD_PASSWORD",
+                                "url":"ARGOCD_URL"
+                            }]
                         }
                     },
-                    "examples": [{
-                        "token": "",
-                        "clientId": "",
-                        "clientSecret": ""
-                    }]
-                },
-                "k8s": {
-                    "type": "object",
-                    "default": {},
-                    "title": "The k8s Schema",
-                    "required": [
-                        "clusterToken",
-                        "clusterUrl"
-                    ],
-                    "properties": {
-                        "clusterToken": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The clusterToken Schema",
-                            "examples": [
-                                ""
-                            ]
-                        },
-                        "clusterUrl": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The clusterUrl Schema",
-                            "examples": [
-                                ""
-                            ]
-                        }
-                    },
-                    "examples": [{
-                        "clusterToken": "",
-                        "clusterUrl": ""
-                    }]
-                },
                 "subscription": {
                     "type": "object",
                     "default": {},
@@ -317,20 +379,203 @@
             },
             "examples": [{
                 "enabled": true,
-                "github": {
-                    "token": "",
-                    "clientId": "",
-                    "clientSecret": ""
-                },
-                "k8s": {
-                    "clusterToken": "",
-                    "clusterUrl": ""
+                "secretRef": {
+                    "name":"backstage-backend-auth-secret",
+                    "github": {
+                        "token": "GITHUB_TOKEN",
+                        "clientId": "GITHUB_CLIENT_ID",
+                        "clientSecret": "GITHUB_CLIENT_SECRET"
+                    },
+                    "k8s": {
+                        "clusterToken": "K8S_CLUSTER_TOKEN",
+                        "clusterUrl": "K8S_CLUSTER_URL"
+                    },
+                    "argocd": {
+                        "username":"ARGOCD_USERNAME",
+                        "password":"ARGOCD_PASSWORD",
+                        "url":"ARGOCD_URL"
+                    }
                 },
                 "subscription": {
                     "namespace": "rhdh-operator",
                     "channel": "fast",
                     "installPlanApproval": "Automatic",
                     "name": "rhdh"
+                }
+            }]
+        },
+        "rhdhPlugins": {
+            "type": "object",
+            "default": {},
+            "title": "The rhdhPlugins Schema",
+            "required": [
+                "npmRegistry",
+                "scope",
+                "orchestrator",
+                "orchestrator_backend",
+                "notifications",
+                "notifications_backend"
+            ],
+            "properties": {
+                "npmRegistry": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The npmRegistry Schema",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "scope": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The scope Schema",
+                    "examples": [
+                        "@janus-idp"
+                    ]
+                },
+                "orchestrator": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The orchestrator Schema",
+                    "required": [
+                        "package",
+                        "integrity"
+                    ],
+                    "properties": {
+                        "package": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The package Schema",
+                            "examples": [
+                                "backstage-plugin-orchestrator@1.8.4"
+                            ]
+                        },
+                        "integrity": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The integrity Schema",
+                            "examples": [
+                                "sha512-03SH0wAezWUZ6AJ3rqHUXrlt1vfb9corhr6TO6JigiGTCQDq1f1ZL/fvUgl+o1DcqlC/2jkBWiYNpNQ6MqcYrQ=="
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "package": "backstage-plugin-orchestrator@1.8.4",
+                        "integrity": "sha512-03SH0wAezWUZ6AJ3rqHUXrlt1vfb9corhr6TO6JigiGTCQDq1f1ZL/fvUgl+o1DcqlC/2jkBWiYNpNQ6MqcYrQ=="
+                    }]
+                },
+                "orchestrator_backend": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The orchestrator_backend Schema",
+                    "required": [
+                        "package",
+                        "integrity"
+                    ],
+                    "properties": {
+                        "package": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The package Schema",
+                            "examples": [
+                                "backstage-plugin-orchestrator-backend-dynamic@1.6.1"
+                            ]
+                        },
+                        "integrity": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The integrity Schema",
+                            "examples": [
+                                "sha512-Rt4csLDhQXNYqp9uCYeZLTrH1RfpA5HTvWd4TyZZ2nwi084UZIMso8PaF8KcD9tPdiYhaQBGxmCR/QS1X8sOVA=="
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "package": "backstage-plugin-orchestrator-backend-dynamic@1.6.1",
+                        "integrity": "sha512-Rt4csLDhQXNYqp9uCYeZLTrH1RfpA5HTvWd4TyZZ2nwi084UZIMso8PaF8KcD9tPdiYhaQBGxmCR/QS1X8sOVA=="
+                    }]
+                },
+                "notifications": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The notifications Schema",
+                    "required": [
+                        "package",
+                        "integrity"
+                    ],
+                    "properties": {
+                        "package": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The package Schema",
+                            "examples": [
+                                "plugin-notifications@1.1.14"
+                            ]
+                        },
+                        "integrity": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The integrity Schema",
+                            "examples": [
+                                "sha512-2hSWOrYn8r8A/tOb5hxJxucTfkuMNFVT315ucAwqlignYvRTRLsEp8vfxTfTY5TVVl71UO3SPrLlT99FnpKLyQ=="
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "package": "plugin-notifications@1.1.14",
+                        "integrity": "sha512-2hSWOrYn8r8A/tOb5hxJxucTfkuMNFVT315ucAwqlignYvRTRLsEp8vfxTfTY5TVVl71UO3SPrLlT99FnpKLyQ=="
+                    }]
+                },
+                "notifications_backend": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The notifications_backend Schema",
+                    "required": [
+                        "package",
+                        "integrity"
+                    ],
+                    "properties": {
+                        "package": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The package Schema",
+                            "examples": [
+                                "plugin-notifications-backend-dynamic@1.4.1"
+                            ]
+                        },
+                        "integrity": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The integrity Schema",
+                            "examples": [
+                                "sha512-QQ5rL9+88C64I7WF+b+YkfzobUrEO6j4+0AlZmUDC5AKK0uynnGJOI9bAGKZ19SluYUzCMTwAyWrxHEBIYrHbg=="
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "package": "plugin-notifications-backend-dynamic@1.4.1",
+                        "integrity": "sha512-QQ5rL9+88C64I7WF+b+YkfzobUrEO6j4+0AlZmUDC5AKK0uynnGJOI9bAGKZ19SluYUzCMTwAyWrxHEBIYrHbg=="
+                    }]
+                }
+            },
+            "examples": [{
+                "npmRegistry": "",
+                "scope": "@janus-idp",
+                "orchestrator": {
+                    "package": "backstage-plugin-orchestrator@1.8.4",
+                    "integrity": "sha512-03SH0wAezWUZ6AJ3rqHUXrlt1vfb9corhr6TO6JigiGTCQDq1f1ZL/fvUgl+o1DcqlC/2jkBWiYNpNQ6MqcYrQ=="
+                },
+                "orchestrator_backend": {
+                    "package": "backstage-plugin-orchestrator-backend-dynamic@1.6.1",
+                    "integrity": "sha512-Rt4csLDhQXNYqp9uCYeZLTrH1RfpA5HTvWd4TyZZ2nwi084UZIMso8PaF8KcD9tPdiYhaQBGxmCR/QS1X8sOVA=="
+                },
+                "notifications": {
+                    "package": "plugin-notifications@1.1.14",
+                    "integrity": "sha512-2hSWOrYn8r8A/tOb5hxJxucTfkuMNFVT315ucAwqlignYvRTRLsEp8vfxTfTY5TVVl71UO3SPrLlT99FnpKLyQ=="
+                },
+                "notifications_backend": {
+                    "package": "plugin-notifications-backend-dynamic@1.4.1",
+                    "integrity": "sha512-QQ5rL9+88C64I7WF+b+YkfzobUrEO6j4+0AlZmUDC5AKK0uynnGJOI9bAGKZ19SluYUzCMTwAyWrxHEBIYrHbg=="
                 }
             }]
         },
@@ -433,7 +678,7 @@
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "default": "",
+                    "default": "sonataflow-infra",
                     "title": "The namespace Schema",
                     "examples": [
                         "sonataflow-infra"
@@ -588,10 +833,7 @@
             "title": "The argocd Schema",
             "required": [
                 "enabled",
-                "url",
-                "namespace",
-                "username",
-                "password"
+                "namespace"
             ],
             "properties": {
                 "enabled": {
@@ -637,10 +879,7 @@
             },
             "examples": [{
                 "enabled": false,
-                "url": "",
-                "namespace": "orchestrator-gitops",
-                "username": "admin",
-                "password": ""
+                "namespace": "orchestrator-gitops"
             }]
         }
     },
@@ -665,20 +904,51 @@
         },
         "rhdhOperator": {
             "enabled": true,
-            "github": {
-                "token": "",
-                "clientId": "",
-                "clientSecret": ""
-            },
-            "k8s": {
-                "clusterToken": "",
-                "clusterUrl": ""
+            "secretRef": {
+                "name": "backstage-backend-auth-secret",
+                "backstage": {
+                    "backendSecret": "BACKEND_SECRET"
+                },
+                "github": {
+                    "token": "GITHUB_TOKEN",
+                    "clientId": "GITHUB_CLIENT_ID",
+                    "clientSecret": "GITHUB_CLIENT_SECRET"
+                },
+                "k8s": {
+                    "clusterToken": "K8S_CLUSTER_TOKEN",
+                    "clusterUrl": "K8S_CLUSTER_URL"
+                },
+                "argocd": {
+                    "url": "ARGOCD_URL",
+                    "username":"ARGOCD_USERNAME",
+                    "password":"ARGOCD_PASSWORD"
+                }
             },
             "subscription": {
                 "namespace": "rhdh-operator",
                 "channel": "fast",
                 "installPlanApproval": "Automatic",
                 "name": "rhdh"
+            }
+        },
+        "rhdhPlugins": {
+            "npmRegistry": "",
+            "scope": "@janus-idp",
+            "orchestrator": {
+                "package": "backstage-plugin-orchestrator@1.8.4",
+                "integrity": "sha512-03SH0wAezWUZ6AJ3rqHUXrlt1vfb9corhr6TO6JigiGTCQDq1f1ZL/fvUgl+o1DcqlC/2jkBWiYNpNQ6MqcYrQ=="
+            },
+            "orchestrator_backend": {
+                "package": "backstage-plugin-orchestrator-backend-dynamic@1.6.1",
+                "integrity": "sha512-Rt4csLDhQXNYqp9uCYeZLTrH1RfpA5HTvWd4TyZZ2nwi084UZIMso8PaF8KcD9tPdiYhaQBGxmCR/QS1X8sOVA=="
+            },
+            "notifications": {
+                "package": "plugin-notifications@1.1.14",
+                "integrity": "sha512-2hSWOrYn8r8A/tOb5hxJxucTfkuMNFVT315ucAwqlignYvRTRLsEp8vfxTfTY5TVVl71UO3SPrLlT99FnpKLyQ=="
+            },
+            "notifications_backend": {
+                "package": "plugin-notifications-backend-dynamic@1.4.1",
+                "integrity": "sha512-QQ5rL9+88C64I7WF+b+YkfzobUrEO6j4+0AlZmUDC5AKK0uynnGJOI9bAGKZ19SluYUzCMTwAyWrxHEBIYrHbg=="
             }
         },
         "postgres": {
