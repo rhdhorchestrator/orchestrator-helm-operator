@@ -28,8 +28,8 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.secretRef.github.token` | Key in the secret with name defined in the 'name' field that contains the value of the authentication token as expected by GitHub. Required for importing resource to the catalog, launching software templates and more. Defaults to 'GITHUB_TOKEN', empty for not available. | `"GITHUB_TOKEN"` |
 | `rhdhOperator.secretRef.github.clientId` | Key in the secret with name defined in the 'name' field that contains the value of the client ID that you generated on GitHub, for GitHub authentication (requires GitHub App). Defaults to 'GITHUB_CLIENT_ID', empty for not available. | `"GITHUB_CLIENT_ID"` |
 | `rhdhOperator.secretRef.github.clientSecret` | Key in the secret with name defined in the 'name' field that contains the value of the client secret tied to the generated client ID. Defaults to 'GITHUB_CLIENT_SECRET', empty for not available. | `"GITHUB_CLIENT_SECRET"` |
-| `rhdhOperator.secretRef.k8s.clusterToken` | Key in the secret with name defined in the 'name' field that contains the value of the Kubernetes API bearer token used for authentication. Defaults to 'K8S_CLUSTER_URL', empty for not available. | `"K8S_CLUSTER_URL"` |
-| `rhdhOperator.secretRef.k8s.clusterUrl` | Key in the secret with name defined in the 'name' field that contains the value of the API URL of the kubernetes cluster. Defaults to 'K8S_CLUSTER_TOKEN', empty for not available. | `"K8S_CLUSTER_TOKEN"` |
+| `rhdhOperator.secretRef.k8s.clusterToken` | Key in the secret with name defined in the 'name' field that contains the value of the Kubernetes API bearer token used for authentication. Defaults to 'K8S_CLUSTER_TOKEN', empty for not available. | `"K8S_CLUSTER_TOKEN"` |
+| `rhdhOperator.secretRef.k8s.clusterUrl` | Key in the secret with name defined in the 'name' field that contains the value of the API URL of the kubernetes cluster. Defaults to 'K8S_CLUSTER_URL', empty for not available. | `"K8S_CLUSTER_URL"` |
 | `rhdhOperator.secretRef.argocd.url` | Key in the secret with name defined in the 'name' field that contains the value of the URL of the ArgoCD API server. Defaults to 'ARGOCD_URL', empty for not available. | `"ARGOCD_URL"` |
 | `rhdhOperator.secretRef.argocd.username` | Key in the secret with name defined in the 'name' field that contains the value of the username to login to ArgoCD. Defaults to 'ARGOCD_USERNAME', empty for not available. | `"ARGOCD_USERNAME"` |
 | `rhdhOperator.secretRef.argocd.password` | Key in the secret with name  defined in the 'name' field that contains the value of the password to authenticate to ArgoCD. Defaults to 'ARGOCD_PASSWORD', empty for not available. | `"ARGOCD_PASSWORD"` |
@@ -39,28 +39,28 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.subscription.name` | name of the operator package | `"rhdh"` |
 | `rhdhPlugins.npmRegistry` |  | `""` |
 | `rhdhPlugins.scope` |  | `"@janus-idp"` |
-| `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.9.4"` |
-| `rhdhPlugins.orchestrator.integrity` |  | `"sha512-d0kLVkdsWMxGkOOS1wB+u24mIdF0isNY4I0F3/eR/g0lI0q+uFJ8iW+8XmyaHKqa1ZMvg5pnMljJ6thJk85nSg=="` |
-| `rhdhPlugins.orchestrator_backend.package` |  | `"backstage-plugin-orchestrator-backend-dynamic@1.6.8"` |
-| `rhdhPlugins.orchestrator_backend.integrity` |  | `"sha512-Akb9digwa3b1tOXbfbm13Z+DIZV/lBaNX0HDXhaciYE4dWPPzB17/4eT74suim9e8k4THORGVIM/GC/f2HwMNQ=="` |
-| `rhdhPlugins.notifications.package` |  | `"plugin-notifications@1.2.0"` |
-| `rhdhPlugins.notifications.integrity` |  | `"sha512-T00TKMTeLQoMTY6UnXuXpPXFN2f+w32i8qECpAe3yeZM1TJb2oe6hCNwzAdKjGGPlGPAGqc16IBpZV65rfM79Q=="` |
-| `rhdhPlugins.notifications_backend.package` |  | `"plugin-notifications-backend-dynamic@1.4.6"` |
-| `rhdhPlugins.notifications_backend.integrity` |  | `"sha512-40hMkr/+5GdapDUuYBIwzZQLpPRJQxFIrr0PFACS40lmG98XcWP6HZ7dQ+VvZ1gAFnWU9HscIrWMwrlvtZ237g=="` |
+| `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.10.6"` |
+| `rhdhPlugins.orchestrator.integrity` |  | `"sha512-qSXQ2O7/eLBEF186PzaRfzLfutFYUq9MdiiIZbHejz+KML9rVInPJkc1tine3R3JQVuw1QBIQ2vhPNbGbHXWZg=="` |
+| `rhdhPlugins.orchestrator_backend.package` |  | `"backstage-plugin-orchestrator-backend-dynamic@1.8.0"` |
+| `rhdhPlugins.orchestrator_backend.integrity` |  | `"sha512-wVZE7Dak10edxh1ZEckzYKrE13GrqhzSVelURhxjZcgXEHdGPWYUFHNMEpte7hzIBE85350Ka7fpy7C4BNPvEw=="` |
+| `rhdhPlugins.notifications.package` |  | `"plugin-notifications@1.2.5"` |
+| `rhdhPlugins.notifications.integrity` |  | `"sha512-BQ7ujmrbv2MLelNGyleC4Z8fVVywYBMYZTwmRC534WCT38QHQ0cWJbebOgeIYszFA98STW4F5tdKbVot/2gWMg=="` |
+| `rhdhPlugins.notifications_backend.package` |  | `"plugin-notifications-backend-dynamic@1.4.11"` |
+| `rhdhPlugins.notifications_backend.integrity` |  | `"sha512-5zluThJwFVKX0Wlh4E15vDKUFGu/qJ0UsxHYWoISJ+ing1R38gskvN3kukylNTgOp8B78OmUglPfNlydcYEHvA=="` |
 | `postgres.serviceName` | The name of the Postgres DB service to be used by platform services. Cannot be empty. | `"sonataflow-psql-postgresql"` |
 | `postgres.serviceNamespace` | The namespace of the Postgres DB service to be used by platform services. | `"sonataflow-infra"` |
 | `postgres.authSecret.name` | name of existing secret to use for PostgreSQL credentials. | `"sonataflow-psql-postgresql"` |
 | `postgres.authSecret.userKey` | name of key in existing secret to use for PostgreSQL credentials. | `"postgres-username"` |
 | `postgres.authSecret.passwordKey` | name of key in existing secret to use for PostgreSQL credentials. | `"postgres-password"` |
 | `postgres.database` | existing database instance used by data index and job service | `"sonataflow"` |
-| `orchestrator.namespace` | namespace where the data index, job service and workflows are deployed | `"sonataflow-infra"` |
+| `orchestrator.namespace` | Namespace where sonataflow's workflows run. The value is captured when running the setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `sonataflow-infra`. | `"sonataflow-infra"` |
 | `orchestrator.sonataPlatform.resources.requests.memory` |  | `"64Mi"` |
 | `orchestrator.sonataPlatform.resources.requests.cpu` |  | `"250m"` |
 | `orchestrator.sonataPlatform.resources.limits.memory` |  | `"1Gi"` |
 | `orchestrator.sonataPlatform.resources.limits.cpu` |  | `"500m"` |
 | `tekton.enabled` | whether to create the Tekton pipeline resources | `false` |
 | `argocd.enabled` | whether to install the ArgoCD plugin and create the orchestrator AppProject | `false` |
-| `argocd.namespace` |  | `"orchestrator-gitops"` |
+| `argocd.namespace` | Defines the namespace where the orchestrator's instance of ArgoCD is deployed. The value is captured when running setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `orchestrator-gitops` in the setup.sh script. | `""` |
 
 
 
