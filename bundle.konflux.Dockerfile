@@ -2,7 +2,6 @@ FROM registry.access.redhat.com/ubi9:latest as builder
 
 WORKDIR /operator
 COPY . .
-RUN
 RUN dnf install make -y && make bundle
 
 
