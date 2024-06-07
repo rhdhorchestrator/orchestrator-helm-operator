@@ -10,7 +10,7 @@ metadata:
       == "main"
   creationTimestamp: null
   labels:
-    appstudio.openshift.io/application: orchestrator-helm-operator
+    appstudio.openshift.io/application: helm-operator
     appstudio.openshift.io/component: bundle
     pipelines.appstudio.openshift.io/type: build
   name: bundle-on-push
@@ -22,7 +22,7 @@ spec:
   - name: git-url
     value: '{{source_url}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/orchestrator-releng-tenant/orchestrator-helm-operator/bundle:{{revision}}
+    value: quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/bundle:{{revision}}
   - name: revision
     value: '{{revision}}'
   pipelineSpec:
