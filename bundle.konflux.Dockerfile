@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi9:latest as builder
 ARG IMG=quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/controller@sha256:3b0a41d9e01bc357bf6b6c2804aab0d94a03c4fe38102728ee9e144b6100eced
 WORKDIR /operator
 COPY . .
-RUN dnf install make && make bundle IMG=${IMG}
+RUN dnf install make -y && make bundle IMG=${IMG}
 
 FROM scratch
 
