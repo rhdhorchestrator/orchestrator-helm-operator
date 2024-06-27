@@ -36,6 +36,7 @@ rhdhOperator:
     channel: fast # channel of an operator package to subscribe to
     installPlanApproval: Automatic # whether the update should be installed automatically
     name: rhdh # name of the operator package
+    source: redhat-operators # name of the catalog that advertises the operator
 
 rhdhPlugins: # RHDH plugins required for the Orchestrator
   npmRegistry: ""
