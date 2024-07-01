@@ -16,11 +16,11 @@ metadata:
     features.operators.openshift.io/token-auth-aws: "false"
     features.operators.openshift.io/token-auth-azure: "false"
     features.operators.openshift.io/token-auth-gcp: "false"
-    repository: https://github.com/parodos-dev/orchestrator-helm-operator
-    operators.openshift.io/valid-subscription: '["Red Hat Developer Hub"]'
     operator.openshift.io/uninstall-message: This action won't automatically delete
       managed resources (operands). To prevent data loss or disruption, you'll need
       to manually delete them.
+    operators.openshift.io/valid-subscription: '["Red Hat Developer Hub"]'
+    repository: https://github.com/parodos-dev/orchestrator-helm-operator
   labels:
     operatorframework.io/arch.amd64: supported
     operatorframework.io/arch.arm64: unsupported
