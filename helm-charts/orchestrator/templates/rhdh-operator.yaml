@@ -22,7 +22,7 @@ spec:
 {{- end }}
 
 {{- if .Values.rhdhOperator.enabled }}
-  {{- if not .Values.rhdhOperator.secretRef.name }} {
+  {{- if not .Values.rhdhOperator.secretRef.name }}
     {{- fail "Backstage's secret name defined in 'rhdhOperator.secretRef.name' is required" }}
   {{- end }}
   {{- $secret := lookup "v1" "Secret" .Values.rhdhOperator.subscription.namespace .Values.rhdhOperator.secretRef.name }}
@@ -46,7 +46,7 @@ spec: {}
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: rhdh-operator
+  name: {{ .Values.rhdhOperator.subscription.name }}
   namespace: {{ .Values.rhdhOperator.subscription.namespace }}
 spec:
   channel: {{ .Values.rhdhOperator.subscription.channel }}
@@ -54,7 +54,9 @@ spec:
   name: {{ .Values.rhdhOperator.subscription.name }}
   source: {{ .Values.rhdhOperator.subscription.source }}
   sourceNamespace: openshift-marketplace
-
+  {{- if not .Values.rhdhOperator.subscription.startingCSV }}
+  startingCSV: {{ .Values.rhdhOperator.subscription.startingCSV }}
+  {{- end }}
   {{- if .Values.rhdhPlugins.npmRegistry }}
 ---
 apiVersion: v1
@@ -80,8 +82,11 @@ data:
       baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.namespace }}.{{ include "cluster.domain" . }}
     backend:
       auth:
-        keys:
-          - secret: {{ printf "${%s}" .Values.rhdhOperator.secretRef.backstage.backendSecret }}
+        externalAccess:
+          - type: static
+            options:
+              token: {{ printf "${%s}" .Values.rhdhOperator.secretRef.backstage.backendSecret }}
+              subject: orchestrator
       baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.namespace }}.{{ include "cluster.domain" . }}
       csp:
         script-src: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
@@ -255,23 +260,51 @@ data:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              janus-idp.backstage-plugin-notifications:
-                appIcons:
-                  - name: notificationsIcon
-                    module: NotificationsPlugin
-                    importName: NotificationsActiveIcon
+              redhat.plugin-notifications:
                 dynamicRoutes:
-                  - path: /notifications
-                    importName: NotificationsPage
-                    module: NotificationsPlugin
+                  - importName: NotificationsPage
                     menuItem:
-                      icon: notificationsIcon
-                      text: Notifications
-                    config:
-                      pollingIntervalMs: 5000
+                      config:
+                        props:
+                          titleCounterEnabled: true
+                          webNotificationsEnabled: false
+                      importName: NotificationsSidebarItem
+                    path: /notifications
+      - disabled: false
+        package: "{{ .Values.rhdhPlugins.scope }}/{{ .Values.rhdhPlugins.signals.package }}"
+        integrity: {{ .Values.rhdhPlugins.signals.integrity }}
+        pluginConfig:
+          dynamicPlugins:
+            frontend:
+              redhat.plugin-signals: {}
       - disabled: false
         package: "{{ .Values.rhdhPlugins.scope }}/{{ .Values.rhdhPlugins.notifications_backend.package }}"
         integrity: {{ .Values.rhdhPlugins.notifications_backend.integrity }}
+      - disabled: false
+        package: "{{ .Values.rhdhPlugins.scope }}/{{ .Values.rhdhPlugins.signals_backend.package }}"
+        integrity: {{ .Values.rhdhPlugins.signals_backend.integrity }}
+      - disabled: false
+        package: "{{ .Values.rhdhPlugins.scope }}/{{ .Values.rhdhPlugins.notifications_email.package }}"
+        integrity: {{ .Values.rhdhPlugins.notifications_email.integrity }}
+        pluginConfig:
+          notifications:
+             processors:
+               email:
+                 transportConfig:
+                   transport: smtp
+                   hostname: my-smtp-server
+                   port: 587
+                   secure: false
+                   username: my-username
+                   password: my-password
+                 sender: sender@mycompany.com
+                 replyTo: no-reply@mycompany.com
+                 broadcastConfig:
+                   receiver: users
+                 concurrencyLimit: 10
+                 cache:
+                   ttl:
+                     days: 1
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -288,13 +321,17 @@ data:
     auth:
       environment: development
   {{- end }}
+      providers:
   {{- if and (and .Values.rhdhOperator.secretRef.github.clientId (dig "data" .Values.rhdhOperator.secretRef.github.clientId "" $secret) )
              (and .Values.rhdhOperator.secretRef.github.clientSecret  (dig "data" .Values.rhdhOperator.secretRef.github.clientSecret "" $secret  ) ) }}
-      providers:
         github:
           development:
             clientId: {{ printf "${%s}" .Values.rhdhOperator.secretRef.github.clientId }}
             clientSecret: {{ printf "${%s}" .Values.rhdhOperator.secretRef.github.clientSecret }}
+  {{- end }}
+  {{- if .Values.rhdhOperator.enableGuestProvider }}
+        guest:
+          dangerouslyAllowOutsideDevelopment: true
   {{- end }}
 ---
 kind: ConfigMap
@@ -320,7 +357,7 @@ data:
             ]
       locations:
         - type: url
-          target: https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/resources/users.yaml
+          target: https://github.com/parodos-dev/orchestrator-helm-chart/blob/staging-rc/resources/users.yaml
         - type: url
           target: https://github.com/parodos-dev/workflow-software-templates/blob/main/entities/workflow-resources.yaml
         - type: url
