@@ -1,0 +1,41 @@
+sonataFlowOperator:
+  isReleaseCandidate: true # Indicates RC builds should be used by the chart to install Sonataflow
+  enabled: true # whether the operator should be deployed by the chart
+  subscription:
+    namespace: openshift-serverless-logic # namespace where the operator should be deployed
+    channel: alpha # channel of an operator package to subscribe to
+    name: logic-operator-rhel8 # name of the operator package
+    sourceName: sonataflow-brew # name of the catalog source
+    startingCSV: logic-operator-rhel8.v1.33.0 # The initial version of the operator
+
+# rhdhOperator:
+#   isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
+#   enabled: true # whether the operator should be deployed by the chart
+#   subscription:
+#     namespace: rhdh-operator # namespace where the operator should be deployed
+#     channel: fast # channel of an operator package to subscribe to
+#     name: rhdh # name of the operator package
+#     source: rhdh-brew # name of the catalog source
+#     startingCSV: rhdh-operator.v1.2.0 # The initial version of the operator
+
+sonataflow:
+  images:
+    4.12: brew.registry.redhat.io/rh-osbs/iib:747438
+    4.13: brew.registry.redhat.io/rh-osbs/iib:747442
+    4.14: brew.registry.redhat.io/rh-osbs/iib:747447
+    4.15: brew.registry.redhat.io/rh-osbs/iib:747453
+    4.16: brew.registry.redhat.io/rh-osbs/iib:747466
+
+rhdh:
+  images:
+    4.12: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.12-x86_64
+    4.13: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.13-x86_64
+    4.14: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.14-x86_64
+    4.15: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.15-x86_64
+    4.16: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.16-x86_64
+
+orchestrator:
+  namespace: "sonataflow-infra" # Namespace where sonataflow's workflows run. The value is captured when running the setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `sonataflow-infra`.
+  sonataflowPlatform:
+    dataIndexImage: brew.registry.redhat.io/rh-osbs/openshift-serverless-1-logic-data-index-postgresql-rhel8@sha256:e5c4bad2b467958839475cc9086cb48b0f11286d843d85d230b9efb1a56673d5
+    jobServiceImage: brew.registry.redhat.io/rh-osbs/openshift-serverless-1-logic-jobs-service-postgresql-rhel8@sha256:f69d466f0984ed620d68adb9c4b09a1e8a3a0f40412ca624ec6b41fd333b0f8a
