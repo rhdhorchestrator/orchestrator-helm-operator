@@ -243,7 +243,6 @@ spec:
                     type: object
                   orchestrator_backend:
                     description: Orchestrator backend plugin information
-                    type: object
                     properties:
                       package:
                         description: Package name
@@ -253,9 +252,9 @@ spec:
                         description: Package SHA integrity
                         type: string
                         default: sha512-NIIGpwH/uJaMknTdORdnqsHfPeI/OrAl2biqELal1e9tK2r6PrVWfIWr9XoH5AfOjtQjbeAe7joiLwhM+uyVAw==
+                    type: object
                   notifications:
                     description: Notification plugin information
-                    type: object
                     properties:
                       package:
                         description: Package name
@@ -265,9 +264,9 @@ spec:
                         description: Package SHA integrity
                         type: string
                         default: sha512-wmISWN02G4OiBF7y8Jpl5KCbDfhzl70s+r0h2tdVh1IIwYmojH5pqXFQAhDd3FTlqYc8yqDG8gEAQ8v66qbU1g==
+                    type: object
                   notifications_backend:
                     description: Notification backend plugin information
-                    type: object
                     properties:
                       package:
                         description: Package name
@@ -277,9 +276,9 @@ spec:
                         description: Package SHA integrity
                         type: string
                         default: sha512-2Eqi1SWIy1vIWcR0hjSCfRP2w9z+qFdpKsB3dmbssv4Pg98AFj41LYlrTLscHri7am6cd4xe1fEb7gJGqbNQiQ==
+                    type: object
                   signals:
                     description: Signals plugin information
-                    type: object
                     properties:
                       package:
                         description: Package name
@@ -289,6 +288,7 @@ spec:
                         description: Package SHA integrity
                         type: string
                         default: sha512-5Iwp9gF6VPiMLJ5NUw5s5Z17AuJ5XYS97wghNTfcmah/OFxTmgZHWxvhcRoXDRQvyj4nc/gOZes74kp6kZ9XDg==
+                    type: object
                   signals_backend:
                     description: Signals backend plugin information
                     properties:
@@ -300,6 +300,7 @@ spec:
                         description: Package SHA integrity
                         type: string
                         default: sha512-LlkM2Mf2QTndsS6eBzyXDhJmRTHLpAku3hhlvWhtQChSLTFCtNGRTIQA5WHG7NqLH0QqBz+UcEjX7Vca82QKKg==
+                    type: object
                   notifications_email:
                     description: Notification email plugin information
                     properties:
@@ -311,6 +312,7 @@ spec:
                         description: Package SHA integrity
                         type: string
                         default: sha512-TikxFBxBHKJYZy8go+Mw+7yjfSJILgXjr4K0C0+tnKyMOn+OqIX6K8c1fq7IdXto3fftQ+mmCrBqJem25JjVnA==
+                    type: object
                 type: object
               postgres:
                 description: Sonataflow operator PostgreSQL configuration details
