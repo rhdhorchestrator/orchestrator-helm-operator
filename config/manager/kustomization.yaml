@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: quay.io/orchestrator/orchestrator-operator
-  newTag: 1.2.0-rc1
+  newTag: 1.2.0-rc2
