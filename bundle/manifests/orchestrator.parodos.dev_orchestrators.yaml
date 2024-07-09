@@ -70,13 +70,11 @@ spec:
                       to be used for the data index and job services
                     properties:
                       dataIndexImage:
-                        default: brew.registry.redhat.io/rh-osbs/openshift-serverless-1-logic-data-index-postgresql-rhel8@sha256:e5c4bad2b467958839475cc9086cb48b0f11286d843d85d230b9efb1a56673d5
                         description: This field contains the location of a custom
                           DataIndex service container image to be used instead of
                           the provided one by SonataFlow
                         type: string
                       jobServiceImage:
-                        default: brew.registry.redhat.io/rh-osbs/openshift-serverless-1-logic-jobs-service-postgresql-rhel8@sha256:f69d466f0984ed620d68adb9c4b09a1e8a3a0f40412ca624ec6b41fd333b0f8a
                         description: This field contains the location of a custom
                           Job Service container image to be used instead of the provided
                           one by SonataFlow
