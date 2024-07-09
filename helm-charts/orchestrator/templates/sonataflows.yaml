@@ -27,11 +27,11 @@ spec:
     template:
       resources:
         requests:
-          memory: {{ .Values.orchestrator.sonataPlatform.resources.requests.memory }}
-          cpu: {{ .Values.orchestrator.sonataPlatform.resources.requests.cpu }}
+          memory: {{ .Values.orchestrator.sonataflowPlatform.resources.requests.memory }}
+          cpu: {{ .Values.orchestrator.sonataflowPlatform.resources.requests.cpu }}
         limits:
-          memory: {{ .Values.orchestrator.sonataPlatform.resources.limits.memory }}
-          cpu: {{ .Values.orchestrator.sonataPlatform.resources.limits.cpu }}
+          memory: {{ .Values.orchestrator.sonataflowPlatform.resources.limits.memory }}
+          cpu: {{ .Values.orchestrator.sonataflowPlatform.resources.limits.cpu }}
   services:
     dataIndex:
       enabled: true

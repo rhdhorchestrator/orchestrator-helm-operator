@@ -304,7 +304,7 @@ data:
                  concurrencyLimit: 10
                  cache:
                    ttl:
-                     days: 1
+                     days: 1        
 ---
 apiVersion: v1
 kind: ConfigMap

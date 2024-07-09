@@ -68,10 +68,10 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `postgres.authSecret.passwordKey` | name of key in existing secret to use for PostgreSQL credentials. | `"postgres-password"` |
 | `postgres.database` | existing database instance used by data index and job service | `"sonataflow"` |
 | `orchestrator.namespace` | Namespace where sonataflow's workflows run. The value is captured when running the setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `sonataflow-infra`. | `"sonataflow-infra"` |
-| `orchestrator.sonataPlatform.resources.requests.memory` |  | `"64Mi"` |
-| `orchestrator.sonataPlatform.resources.requests.cpu` |  | `"250m"` |
-| `orchestrator.sonataPlatform.resources.limits.memory` |  | `"1Gi"` |
-| `orchestrator.sonataPlatform.resources.limits.cpu` |  | `"500m"` |
+| `orchestrator.sonataflowPlatform.resources.requests.memory` |  | `"64Mi"` |
+| `orchestrator.sonataflowPlatform.resources.requests.cpu` |  | `"250m"` |
+| `orchestrator.sonataflowPlatform.resources.limits.memory` |  | `"1Gi"` |
+| `orchestrator.sonataflowPlatform.resources.limits.cpu` |  | `"500m"` |
 | `tekton.enabled` | whether to create the Tekton pipeline resources | `false` |
 | `argocd.enabled` | whether to install the ArgoCD plugin and create the orchestrator AppProject | `false` |
 | `argocd.namespace` | Defines the namespace where the orchestrator's instance of ArgoCD is deployed. The value is captured when running setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `orchestrator-gitops` in the setup.sh script. | `""` |
