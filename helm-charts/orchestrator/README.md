@@ -54,7 +54,7 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhPlugins.notifications.package` |  | `"plugin-notifications-dynamic@0.2.0-rc.0-0"` |
 | `rhdhPlugins.notifications.integrity` |  | `"sha512-wmISWN02G4OiBF7y8Jpl5KCbDfhzl70s+r0h2tdVh1IIwYmojH5pqXFQAhDd3FTlqYc8yqDG8gEAQ8v66qbU1g=="` |
 | `rhdhPlugins.notifications_backend.package` |  | `"plugin-notifications-backend-dynamic@0.2.0-rc.0-0"` |
-| `rhdhPlugins.notifications_backend.integrity` |  | `"sha512-2Eqi1SWIy1vIWcR0hjSCfRP2w9z+qFdpKsB3dmbssv4Pg98AFj41LYlrTLscHri7am6cd4xe1fEb7gJGqbNQiQ=="` |
+| `rhdhPlugins.notifications_backend.integrity` |  | `"sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ=="` |
 | `rhdhPlugins.signals.package` |  | `"plugin-signals-dynamic@0.0.5-rc.0-0"` |
 | `rhdhPlugins.signals.integrity` |  | `"sha512-5Iwp9gF6VPiMLJ5NUw5s5Z17AuJ5XYS97wghNTfcmah/OFxTmgZHWxvhcRoXDRQvyj4nc/gOZes74kp6kZ9XDg=="` |
 | `rhdhPlugins.signals_backend.package` |  | `"plugin-signals-backend-dynamic@0.1.3-rc.0-0"` |
@@ -68,10 +68,10 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `postgres.authSecret.passwordKey` | name of key in existing secret to use for PostgreSQL credentials. | `"postgres-password"` |
 | `postgres.database` | existing database instance used by data index and job service | `"sonataflow"` |
 | `orchestrator.namespace` | Namespace where sonataflow's workflows run. The value is captured when running the setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `sonataflow-infra`. | `"sonataflow-infra"` |
-| `orchestrator.sonataPlatform.resources.requests.memory` |  | `"64Mi"` |
-| `orchestrator.sonataPlatform.resources.requests.cpu` |  | `"250m"` |
-| `orchestrator.sonataPlatform.resources.limits.memory` |  | `"1Gi"` |
-| `orchestrator.sonataPlatform.resources.limits.cpu` |  | `"500m"` |
+| `orchestrator.sonataflowPlatform.resources.requests.memory` |  | `"64Mi"` |
+| `orchestrator.sonataflowPlatform.resources.requests.cpu` |  | `"250m"` |
+| `orchestrator.sonataflowPlatform.resources.limits.memory` |  | `"1Gi"` |
+| `orchestrator.sonataflowPlatform.resources.limits.cpu` |  | `"500m"` |
 | `tekton.enabled` | whether to create the Tekton pipeline resources | `false` |
 | `argocd.enabled` | whether to install the ArgoCD plugin and create the orchestrator AppProject | `false` |
 | `argocd.namespace` | Defines the namespace where the orchestrator's instance of ArgoCD is deployed. The value is captured when running setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `orchestrator-gitops` in the setup.sh script. | `""` |

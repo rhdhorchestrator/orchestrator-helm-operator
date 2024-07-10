@@ -911,7 +911,7 @@
             "title": "The orchestrator Schema",
             "required": [
                 "namespace",
-                "sonataPlatform"
+                "sonataflowPlatform"
             ],
             "properties": {
                 "namespace": {
@@ -922,10 +922,10 @@
                         "sonataflow-infra"
                     ]
                 },
-                "sonataPlatform": {
+                "sonataflowPlatform": {
                     "type": "object",
                     "default": {},
-                    "title": "The sonataPlatform Schema",
+                    "title": "The sonataflowPlatform Schema",
                     "required": [
                         "resources"
                     ],
@@ -1030,7 +1030,7 @@
             },
             "examples": [{
                 "namespace": "sonataflow-infra",
-                "sonataPlatform": {
+                "sonataflowPlatform": {
                     "resources": {
                         "requests": {
                             "memory": "64Mi",
@@ -1197,7 +1197,7 @@
         },
         "orchestrator": {
             "namespace": "sonataflow-infra",
-            "sonataPlatform": {
+            "sonataflowPlatform": {
                 "resources": {
                     "requests": {
                         "memory": "64Mi",

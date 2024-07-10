@@ -64,7 +64,7 @@ spec:
     database: sonataflow # existing database instance used by data index and job service
   orchestrator:
     namespace: "sonataflow-infra" # Namespace where sonataflow's workflows run. The value is captured when running the setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `sonataflow-infra`.
-    sonataPlatform:
+    sonataflowPlatform:
       resources:
         requests:
           memory: "64Mi"
