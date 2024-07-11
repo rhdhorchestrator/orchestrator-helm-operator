@@ -76,7 +76,7 @@ spec:
   - email: jgil@redhat.com
     name: Jordi Gil
   maturity: alpha
-  minKubeVersion: 1.25.0
+  minKubeVersion: 1.26.0
   provider:
     name: Red Hat
     url: https://www.redhat.com

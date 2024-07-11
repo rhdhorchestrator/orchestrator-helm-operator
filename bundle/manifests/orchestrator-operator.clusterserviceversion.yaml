@@ -116,7 +116,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2024-07-15T14:58:21Z"
+    createdAt: "2024-07-11T19:22:12Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
@@ -518,7 +518,7 @@ spec:
   - email: jgil@redhat.com
     name: Jordi Gil
   maturity: alpha
-  minKubeVersion: 1.25.0
+  minKubeVersion: 1.26.0
   provider:
     name: Red Hat
     url: https://www.redhat.com
