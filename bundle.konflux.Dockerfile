@@ -6,6 +6,28 @@ RUN dnf install make -y && make bundle IMG=${IMG}
 
 FROM scratch
 
+LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
+LABEL distribution-scope="public"
+LABEL name="rhdh-orchestrator-helm-operator-bundle"
+LABEL release="1.2.0"
+LABEL version="1.2.0"
+LABEL url="https://github.com/parodos-dev/orchestrator-helm-operator"
+LABEL vendor="Red Hat, Inc."
+LABEL description="RHDH Orchestrator introduces serverless asynchronous workflows to Backstage, \
+				  with a focus on facilitating the transition of applications to the cloud, \
+				  onboarding developers, and enabling users to create workflows for backstage \
+				  actions or external systems."
+LABEL io.k8s.description="RHDH Orchestrator introduces serverless asynchronous workflows to Backstage, \
+				  with a focus on facilitating the transition of applications to the cloud, \
+				  onboarding developers, and enabling users to create workflows for backstage \
+				  actions or external systems."
+LABEL summary="RHDH Orchestrator introduces serverless asynchronous workflows to Backstage, \
+				  with a focus on facilitating the transition of applications to the cloud, \
+				  onboarding developers, and enabling users to create workflows for backstage \
+				  actions or external systems."
+LABEL io.k8s.display-name="RHDH Orchestrator Helm Operator"
+LABEL io.openshift.tags="openshift,operator,rhdh,orchestrator"
+
 # Core bundle labels.
 LABEL operators.operatorframework.io.bundle.mediatype.v1=registry+v1
 LABEL operators.operatorframework.io.bundle.manifests.v1=manifests/
