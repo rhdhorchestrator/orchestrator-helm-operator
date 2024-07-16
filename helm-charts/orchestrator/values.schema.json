@@ -99,7 +99,7 @@
                             "default": "",
                             "title": "The startingCSV Schema",
                             "examples": [
-                                ""
+                                "logic-operator-rhel8.v1.33.0"
                             ]
                         }
                     },
@@ -109,7 +109,7 @@
                         "installPlanApproval": "Automatic",
                         "name": "logic-operator-rhel8",
                         "sourceName": "redhat-operators",
-                        "startingCSV": ""
+                        "startingCSV": "logic-operator-rhel8.v1.33.0"
                     }]
                 }
             },
@@ -122,7 +122,7 @@
                     "installPlanApproval": "Automatic",
                     "name": "logic-operator-rhel8",
                     "sourceName": "redhat-operators",
-                    "startingCSV": ""
+                    "startingCSV": "logic-operator-rhel8.v1.33.0"
                 }
             }]
         },
@@ -486,7 +486,7 @@
                             "default": "",
                             "title": "The startingCSV Schema",
                             "examples": [
-                                ""
+                                "rhdh-operator.v1.2.0"
                             ]
                         }
                     },
@@ -496,14 +496,14 @@
                         "installPlanApproval": "Automatic",
                         "name": "rhdh",
                         "source": "redhat-operators",
-                        "startingCSV": ""
+                        "startingCSV": "rhdh-operator.v1.2.0"
                     }]
                 }
             },
             "examples": [{
                 "isReleaseCandidate": false,
                 "enabled": true,
-                "enableGuestProvider": true,
+                "enableGuestProvider": false,
                 "secretRef": {
                     "name": "backstage-backend-auth-secret",
                     "backstage": {
@@ -530,7 +530,7 @@
                     "installPlanApproval": "Automatic",
                     "name": "rhdh",
                     "source": "redhat-operators",
-                    "startingCSV": ""
+                    "startingCSV": "rhdh-operator.v1.2.0"
                 }
             }]
         },
@@ -681,13 +681,13 @@
                             "default": "",
                             "title": "The integrity Schema",
                             "examples": [
-                                "sha512-2Eqi1SWIy1vIWcR0hjSCfRP2w9z+qFdpKsB3dmbssv4Pg98AFj41LYlrTLscHri7am6cd4xe1fEb7gJGqbNQiQ=="
+                                "sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ=="
                             ]
                         }
                     },
                     "examples": [{
                         "package": "plugin-notifications-backend-dynamic@0.2.0-rc.0-0",
-                        "integrity": "sha512-2Eqi1SWIy1vIWcR0hjSCfRP2w9z+qFdpKsB3dmbssv4Pg98AFj41LYlrTLscHri7am6cd4xe1fEb7gJGqbNQiQ=="
+                        "integrity": "sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ=="
                     }]
                 },
                 "signals": {
@@ -801,7 +801,7 @@
                 },
                 "notifications_backend": {
                     "package": "plugin-notifications-backend-dynamic@0.2.0-rc.0-0",
-                    "integrity": "sha512-2Eqi1SWIy1vIWcR0hjSCfRP2w9z+qFdpKsB3dmbssv4Pg98AFj41LYlrTLscHri7am6cd4xe1fEb7gJGqbNQiQ=="
+                    "integrity": "sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ=="
                 },
                 "signals": {
                     "package": "plugin-signals-dynamic@0.0.5-rc.0-0",
@@ -1107,7 +1107,7 @@
                 "installPlanApproval": "Automatic",
                 "name": "logic-operator-rhel8",
                 "sourceName": "redhat-operators",
-                "startingCSV": ""
+                "startingCSV": "logic-operator-rhel8.v1.33.0"
             }
         },
         "serverlessOperator": {
@@ -1123,7 +1123,7 @@
         "rhdhOperator": {
             "isReleaseCandidate": false,
             "enabled": true,
-            "enableGuestProvider": true,
+            "enableGuestProvider": false,
             "secretRef": {
                 "name": "backstage-backend-auth-secret",
                 "backstage": {
@@ -1150,7 +1150,7 @@
                 "installPlanApproval": "Automatic",
                 "name": "rhdh",
                 "source": "redhat-operators",
-                "startingCSV": ""
+                "startingCSV": "rhdh-operator.v1.2.0"
             }
         },
         "rhdhPlugins": {
@@ -1170,7 +1170,7 @@
             },
             "notifications_backend": {
                 "package": "plugin-notifications-backend-dynamic@0.2.0-rc.0-0",
-                "integrity": "sha512-2Eqi1SWIy1vIWcR0hjSCfRP2w9z+qFdpKsB3dmbssv4Pg98AFj41LYlrTLscHri7am6cd4xe1fEb7gJGqbNQiQ=="
+                "integrity": "sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ=="
             },
             "signals": {
                 "package": "plugin-signals-dynamic@0.0.5-rc.0-0",

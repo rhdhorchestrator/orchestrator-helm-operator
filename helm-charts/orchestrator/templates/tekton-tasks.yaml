@@ -179,17 +179,21 @@ spec:
         ROOT=/workspace/workflow
         TARGET=flat
         mkdir -p flat
-        if [ "$(params.convertToFlat)" == "true" ]; then
-          if [ -d "workflow/$(params.workflowId)" ]; then
-            cp -r workflow/$(params.workflowId)/src/main/resources flat/$(params.workflowId)
-            cp workflow/$(params.workflowId)/LICENSE flat/$(params.workflowId)
-          else
-            cp -r workflow/src/main/resources flat/$(params.workflowId)
-            cp workflow/LICENSE flat/$(params.workflowId)
-          fi
+
+        if [ -d "workflow/$(params.workflowId)" ]; then
+          cp -r workflow/$(params.workflowId)/src/main/resources flat/$(params.workflowId)
+          cp workflow/$(params.workflowId)/LICENSE flat/$(params.workflowId)
         else
-          cp -r workflow/$(params.workflowId) flat/$(params.workflowId)
+          cp -r workflow/src/main/resources flat/$(params.workflowId)
+          cp workflow/LICENSE flat/$(params.workflowId)
         fi
+
+        if [ "$(params.convertToFlat)" == "false" ]; then
+          rm -rf workflow/src/main/resources
+          mv workflow/src flat/$(params.workflowId)/
+        fi
+
+        ls flat/$(params.workflowId)
 
         curl -L https://raw.githubusercontent.com/parodos-dev/serverless-workflows/main/pipeline/workflow-builder.Dockerfile -o flat/workflow-builder.Dockerfile
 ---
