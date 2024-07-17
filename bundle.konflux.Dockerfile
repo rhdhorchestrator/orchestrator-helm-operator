@@ -57,4 +57,4 @@ LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 COPY --from=builder /operator/bundle/manifests /manifests/
 COPY --from=builder /operator/bundle/metadata /metadata/
 COPY --from=builder /operator/bundle/tests/scorecard /tests/scorecard/
-COPY --from=builder /operator/bundle/LICENSE /license/
+COPY --from=builder /operator/LICENSE /license/
