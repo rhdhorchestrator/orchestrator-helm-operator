@@ -6,6 +6,7 @@ RUN dnf install make -y && make bundle IMG=${IMG}
 
 FROM scratch
 
+USER 1001
 LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
 LABEL distribution-scope="public"
 LABEL name="rhdh-orchestrator-helm-operator-bundle"
@@ -56,3 +57,4 @@ LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 COPY --from=builder /operator/bundle/manifests /manifests/
 COPY --from=builder /operator/bundle/metadata /metadata/
 COPY --from=builder /operator/bundle/tests/scorecard /tests/scorecard/
+COPY --from=builder /operator/bundle/LICENSE /license/
