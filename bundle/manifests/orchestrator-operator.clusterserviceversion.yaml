@@ -116,7 +116,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2024-07-10T20:42:15Z"
+    createdAt: "2024-07-15T14:58:21Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
@@ -140,7 +140,7 @@ metadata:
     operatorframework.io/arch.ppc64le: unsupported
     operatorframework.io/arch.s390x: unsupported
     operatorframework.io/suggested-namespace: orchestrator
-  name: orchestrator-operator.v1.2.0-rc3
+  name: orchestrator-operator.v1.2.0-rc4
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -410,7 +410,7 @@ spec:
                 - --upstream=http://127.0.0.1:8080/
                 - --logtostderr=true
                 - --v=0
-                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.14.1
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.14.4@sha256:fcca9269424da38cfd216f4731de9fe5dea9f98e32c00da767b8e6e1ce9613cb
                 name: kube-rbac-proxy
                 ports:
                 - containerPort: 8443
@@ -433,7 +433,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=orchestrator-operator
-                image: quay.io/orchestrator/orchestrator-operator:1.2.0-rc3
+                image: quay.io/orchestrator/orchestrator-operator:1.2.0-rc4
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -522,4 +522,4 @@ spec:
   provider:
     name: Red Hat
     url: https://www.redhat.com
-  version: 1.2.0-rc3
+  version: 1.2.0-rc4
