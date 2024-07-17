@@ -1,4 +1,4 @@
-FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:rhel_9_1.22@sha256:c9026d81fa65b99db3e0c5a48c70bf19aecd85016640ea113a5fe04d82075728 as builder
+FROM registry.redhat.io/rhel8/go-toolset:1.21 as builder
 ARG IMG=quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/operator-controller@sha256:62bca57fb8ec84460c3b927f17691e483651d57813b60266cc6140dd19c22349
 WORKDIR /operator
 COPY . .
