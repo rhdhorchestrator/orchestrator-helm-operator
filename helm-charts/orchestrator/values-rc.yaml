@@ -1,3 +1,4 @@
+# This file should be used for testing CR operators
 sonataFlowOperator:
   isReleaseCandidate: true # Indicates RC builds should be used by the chart to install Sonataflow
   enabled: true # whether the operator should be deployed by the chart
@@ -8,19 +9,18 @@ sonataFlowOperator:
     sourceName: sonataflow-brew # name of the catalog source
     startingCSV: logic-operator-rhel8.v1.33.0 # The initial version of the operator
 
-# rhdhOperator:
-#   isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
-#   enabled: true # whether the operator should be deployed by the chart
-#   subscription:
-#     namespace: rhdh-operator # namespace where the operator should be deployed
-#     channel: fast # channel of an operator package to subscribe to
-#     name: rhdh # name of the operator package
-#     source: rhdh-brew # name of the catalog source
-#     startingCSV: rhdh-operator.v1.2.0 # The initial version of the operator
+rhdhOperator:
+  isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
+  enabled: true # whether the operator should be deployed by the chart
+  subscription:
+    namespace: rhdh-operator # namespace where the operator should be deployed
+    channel: fast # channel of an operator package to subscribe to
+    name: rhdh # name of the operator package
+    source: rhdh-brew # name of the catalog source
+    startingCSV: rhdh-operator.v1.2.0 # The initial version of the operator
 
 sonataflow:
   images:
-    4.12: brew.registry.redhat.io/rh-osbs/iib:747438
     4.13: brew.registry.redhat.io/rh-osbs/iib:747442
     4.14: brew.registry.redhat.io/rh-osbs/iib:747447
     4.15: brew.registry.redhat.io/rh-osbs/iib:747453
@@ -28,7 +28,6 @@ sonataflow:
 
 rhdh:
   images:
-    4.12: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.12-x86_64
     4.13: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.13-x86_64
     4.14: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.14-x86_64
     4.15: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.15-x86_64

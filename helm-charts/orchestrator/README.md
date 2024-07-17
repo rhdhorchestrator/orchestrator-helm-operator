@@ -19,7 +19,7 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `sonataFlowOperator.subscription.installPlanApproval` | whether the update should be installed automatically | `"Automatic"` |
 | `sonataFlowOperator.subscription.name` | name of the operator package | `"logic-operator-rhel8"` |
 | `sonataFlowOperator.subscription.sourceName` | name of the catalog source | `"redhat-operators"` |
-| `sonataFlowOperator.subscription.startingCSV` | The initial version of the operator | `""` |
+| `sonataFlowOperator.subscription.startingCSV` | The initial version of the operator | `"logic-operator-rhel8.v1.33.0"` |
 | `serverlessOperator.enabled` | whether the operator should be deployed by the chart | `true` |
 | `serverlessOperator.subscription.namespace` | namespace where the operator should be deployed | `"openshift-serverless"` |
 | `serverlessOperator.subscription.channel` | channel of an operator package to subscribe to | `"stable"` |
@@ -28,7 +28,7 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `serverlessOperator.subscription.sourceName` | name of the catalog source | `"redhat-operators"` |
 | `rhdhOperator.isReleaseCandidate` | Indicates RC builds should be used by the chart to install RHDH | `false` |
 | `rhdhOperator.enabled` | whether the operator should be deployed by the chart | `true` |
-| `rhdhOperator.enableGuestProvider` | whether to enable guest provider | `true` |
+| `rhdhOperator.enableGuestProvider` | whether to enable guest provider | `false` |
 | `rhdhOperator.secretRef.name` | name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD and GitHub servers. | `"backstage-backend-auth-secret"` |
 | `rhdhOperator.secretRef.backstage.backendSecret` | Key in the secret with name defined in the 'name' field that contains the value of the Backstage backend secret. Defaults to 'BACKEND_SECRET'. It's required. | `"BACKEND_SECRET"` |
 | `rhdhOperator.secretRef.github.token` | Key in the secret with name defined in the 'name' field that contains the value of the authentication token as expected by GitHub. Required for importing resource to the catalog, launching software templates and more. Defaults to 'GITHUB_TOKEN', empty for not available. | `"GITHUB_TOKEN"` |
@@ -44,8 +44,8 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.subscription.installPlanApproval` | whether the update should be installed automatically | `"Automatic"` |
 | `rhdhOperator.subscription.name` | name of the operator package | `"rhdh"` |
 | `rhdhOperator.subscription.source` | name of the catalog source | `"redhat-operators"` |
-| `rhdhOperator.subscription.startingCSV` | The initial version of the operator | `""` |
-| `rhdhPlugins.npmRegistry` |  | `"https://npm.stage.registry.redhat.com"` |
+| `rhdhOperator.subscription.startingCSV` | The initial version of the operator | `"rhdh-operator.v1.2.0"` |
+| `rhdhPlugins.npmRegistry` | NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories | `"https://npm.stage.registry.redhat.com"` |
 | `rhdhPlugins.scope` |  | `"@redhat"` |
 | `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.1.0-rc.0-0"` |
 | `rhdhPlugins.orchestrator.integrity` |  | `"sha512-uxkNFS/4nkVM6FRq0Uvnznvxcm/3MNdh11R6sRsbmKCP4KF4N9T2GF4lgfD7J+p7EuGMD4UFnjKjaR77v0NGaQ=="` |
