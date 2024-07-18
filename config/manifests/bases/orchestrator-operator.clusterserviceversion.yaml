@@ -74,7 +74,7 @@ spec:
     url: https://github.com/parodos-dev/orchestrator-helm-operator
   maintainers:
   - email: jgil@redhat.com
-    name: Jordi Gil
+    name: Red Hat
   maturity: alpha
   minKubeVersion: 1.26.0
   provider:
