@@ -6,11 +6,13 @@ RUN dnf install make -y && make bundle IMG=${IMG}
 
 FROM scratch
 
+USER 1001
 LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
 LABEL distribution-scope="public"
 LABEL name="rhdh-orchestrator-helm-operator-bundle"
 LABEL release="1.2.0"
 LABEL version="1.2.0"
+LABEL maintainer="Red Hat jgil@redhat.com"
 LABEL url="https://github.com/parodos-dev/orchestrator-helm-operator"
 LABEL vendor="Red Hat, Inc."
 LABEL description="RHDH Orchestrator introduces serverless asynchronous workflows to Backstage, \
@@ -46,7 +48,7 @@ LABEL com.redhat.delivery.operator.bundle=true
 #
 # See EOL schedule: https://docs.engineering.redhat.com/display/SP/Shipping+Operators+to+EOL+OCP+versions
 #
-LABEL com.redhat.openshift.versions="v4.14"
+LABEL com.redhat.openshift.versions="v4.13"
 
 # Labels for testing.
 LABEL operators.operatorframework.io.test.mediatype.v1=scorecard+v1
@@ -56,3 +58,4 @@ LABEL operators.operatorframework.io.test.config.v1=tests/scorecard/
 COPY --from=builder /operator/bundle/manifests /manifests/
 COPY --from=builder /operator/bundle/metadata /metadata/
 COPY --from=builder /operator/bundle/tests/scorecard /tests/scorecard/
+COPY --from=builder /operator/LICENSE /license/

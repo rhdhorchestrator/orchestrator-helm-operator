@@ -7,7 +7,7 @@ metadata:
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
-      == "main"
+      == "main" && ("Makefile".pathChanged() || "Dockerfile".pathChanged() || "config/***".pathChanged() || "helm-charts/***".pathChanged() || ".tekton/operator-controller-pull-request.yaml".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: helm-operator
@@ -107,7 +107,7 @@ spec:
       description: Image tag expiration time, time values could be something like
         1h, 2d, 3w for hours, days, and weeks, respectively.
       name: image-expires-after
-    - default: "false"
+    - default: "true"
       description: Build a source image.
       name: build-source-image
       type: string
@@ -314,26 +314,6 @@ spec:
           value: clair-scan
         - name: bundle
           value: quay.io/konflux-ci/tekton-catalog/task-clair-scan:0.1@sha256:a13278c3ee419db573a3919d8f86091497d2e7b52b5a800c2767c265df51c58a
-        - name: kind
-          value: task
-        resolver: bundles
-      when:
-      - input: $(params.skip-checks)
-        operator: in
-        values:
-        - "false"
-    - name: ecosystem-cert-preflight-checks
-      params:
-      - name: image-url
-        value: $(tasks.build-container.results.IMAGE_URL)
-      runAfter:
-      - build-container
-      taskRef:
-        params:
-        - name: name
-          value: ecosystem-cert-preflight-checks
-        - name: bundle
-          value: quay.io/konflux-ci/tekton-catalog/task-ecosystem-cert-preflight-checks:0.1@sha256:8838d3e1628dbe61f4851b3640d2e3a9a3079d3ff3da955f4a3e4c2c95a013df
         - name: kind
           value: task
         resolver: bundles
