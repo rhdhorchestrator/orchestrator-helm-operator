@@ -7,6 +7,7 @@ LABEL distribution-scope="public"
 LABEL name="rhdh-orchestrator-helm-operator-bundle"
 LABEL release="1.2.0"
 LABEL version="1.2.0"
+LABEL maintainer="Red Hat jgil@redhat.com"
 LABEL url="https://github.com/parodos-dev/orchestrator-helm-operator"
 LABEL vendor="Red Hat, Inc."
 LABEL description="RHDH Orchestrator introduces serverless asynchronous workflows to Backstage, \
