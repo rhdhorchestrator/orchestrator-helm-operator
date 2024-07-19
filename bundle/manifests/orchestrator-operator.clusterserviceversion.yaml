@@ -116,7 +116,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2024-07-11T19:22:12Z"
+    createdAt: "2024-07-19T20:46:51Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
@@ -516,7 +516,7 @@ spec:
     url: https://github.com/parodos-dev/orchestrator-helm-operator
   maintainers:
   - email: jgil@redhat.com
-    name: Jordi Gil
+    name: Red Hat
   maturity: alpha
   minKubeVersion: 1.26.0
   provider:

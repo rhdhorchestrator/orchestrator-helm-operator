@@ -300,7 +300,7 @@ spec:
                         description: SourceName captures the name of the catalog source
                         type: string
                       startingCSV:
-                        default: ""
+                        default: rhdh-operator.v1.2.0
                         description: The initial version of the operator
                         type: string
                     type: object
@@ -324,7 +324,7 @@ spec:
                     description: Notification backend plugin information
                     properties:
                       integrity:
-                        default: sha512-2Eqi1SWIy1vIWcR0hjSCfRP2w9z+qFdpKsB3dmbssv4Pg98AFj41LYlrTLscHri7am6cd4xe1fEb7gJGqbNQiQ==
+                        default: sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ==
                         description: Package SHA integrity
                         type: string
                       package:
@@ -346,7 +346,10 @@ spec:
                     type: object
                   npmRegistry:
                     default: https://npm.stage.registry.redhat.com
-                    description: NPM Registry
+                    description: NPM registry is defined already in the container,
+                      but sometimes the registry need to be modified to use different
+                      versions of the plugin, for example staging (https://npm.stage.registry.redhat.com)
+                      or development repositories
                     type: string
                   orchestrator:
                     description: Orchestrator plugin information
@@ -481,7 +484,7 @@ spec:
                         description: SourceName captures the name of the catalog source
                         type: string
                       startingCSV:
-                        default: ""
+                        default: logic-operator-rhel8.v1.33.0
                         description: The initial version of the operator
                         type: string
                     type: object
