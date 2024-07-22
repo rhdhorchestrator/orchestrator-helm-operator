@@ -8,7 +8,7 @@ metadata:
     pipelinesascode.tekton.dev/max-keep-runs: "3"
     build.appstudio.openshift.io/build-nudge-files: bundle.konflux.Dockerfile, .*.yaml
     pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
-      == "main" && ("Makefile".pathChanged() || "Dockerfile".pathChanged() || "config/***".pathChanged() || "helm-charts/***".pathChanged() || ".tekton/operator-controller-pull-request.yaml".pathChanged())
+      == "main" && ("Makefile".pathChanged() || "Dockerfile".pathChanged() || "config/***".pathChanged() || "helm-charts/***".pathChanged() || ".tekton/operator-controller-push.yaml".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: helm-operator
