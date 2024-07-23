@@ -7,6 +7,10 @@ RUN dnf install make -y && make bundle IMG=${IMG}
 FROM scratch
 
 USER 1001
+# Expose controller's container image with digest so that we can retrieve it with skopeo when creating the FBC catalog
+LABEL controller="quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/operator-controller@sha256:9dac2331109ce3df242c3c452a300e4fcec4631fbf14939dca2fcb4a9e281d22"
+
+# Required labels
 LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
 LABEL distribution-scope="public"
 LABEL name="rhdh-orchestrator-helm-operator-bundle"
@@ -39,6 +43,7 @@ LABEL operators.operatorframework.io.bundle.channels.v1=alpha
 LABEL operators.operatorframework.io.metrics.builder=operator-sdk-v1.35.0
 LABEL operators.operatorframework.io.metrics.mediatype.v1=metrics+v1
 LABEL operators.operatorframework.io.metrics.project_layout=helm.sdk.operatorframework.io/v1
+
 
 # Labels for operator certification https://redhat-connect.gitbook.io/certified-operator-guide/ocp-deployment/operator-metadata/bundle-directory
 LABEL com.redhat.delivery.operator.bundle=true
