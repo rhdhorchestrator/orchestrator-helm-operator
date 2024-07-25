@@ -249,7 +249,7 @@
                     "default": false,
                     "title": "The enableGuestProvider Schema",
                     "examples": [
-                        true
+                        false
                     ]
                 },
                 "secretRef": {
@@ -454,7 +454,7 @@
                             "default": "",
                             "title": "The channel Schema",
                             "examples": [
-                                "fast"
+                                "fast-1.2"
                             ]
                         },
                         "installPlanApproval": {
@@ -486,17 +486,17 @@
                             "default": "",
                             "title": "The startingCSV Schema",
                             "examples": [
-                                "rhdh-operator.v1.2.0"
+                                ""
                             ]
                         }
                     },
                     "examples": [{
                         "namespace": "rhdh-operator",
-                        "channel": "fast",
+                        "channel": "fast-1.2",
                         "installPlanApproval": "Automatic",
                         "name": "rhdh",
                         "source": "redhat-operators",
-                        "startingCSV": "rhdh-operator.v1.2.0"
+                        "startingCSV": ""
                     }]
                 }
             },
@@ -526,11 +526,11 @@
                 },
                 "subscription": {
                     "namespace": "rhdh-operator",
-                    "channel": "fast",
+                    "channel": "fast-1.2",
                     "installPlanApproval": "Automatic",
                     "name": "rhdh",
                     "source": "redhat-operators",
-                    "startingCSV": "rhdh-operator.v1.2.0"
+                    "startingCSV": ""
                 }
             }]
         },
@@ -1146,11 +1146,11 @@
             },
             "subscription": {
                 "namespace": "rhdh-operator",
-                "channel": "fast",
+                "channel": "fast-1.2",
                 "installPlanApproval": "Automatic",
                 "name": "rhdh",
                 "source": "redhat-operators",
-                "startingCSV": "rhdh-operator.v1.2.0"
+                "startingCSV": ""
             }
         },
         "rhdhPlugins": {

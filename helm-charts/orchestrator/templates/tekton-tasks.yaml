@@ -194,7 +194,7 @@ spec:
         fi
 
         ls flat/$(params.workflowId)
-
+        
         curl -L https://raw.githubusercontent.com/parodos-dev/serverless-workflows/main/pipeline/workflow-builder.Dockerfile -o flat/workflow-builder.Dockerfile
 ---
 apiVersion: tekton.dev/v1
