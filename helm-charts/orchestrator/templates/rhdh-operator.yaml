@@ -54,7 +54,7 @@ spec:
   name: {{ .Values.rhdhOperator.subscription.name }}
   source: {{ .Values.rhdhOperator.subscription.source }}
   sourceNamespace: openshift-marketplace
-  {{- if not .Values.rhdhOperator.subscription.startingCSV }}
+  {{- if .Values.rhdhOperator.subscription.startingCSV }}
   startingCSV: {{ .Values.rhdhOperator.subscription.startingCSV }}
   {{- end }}
   {{- if .Values.rhdhPlugins.npmRegistry }}
@@ -304,7 +304,7 @@ data:
                  concurrencyLimit: 10
                  cache:
                    ttl:
-                     days: 1
+                     days: 1        
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -332,6 +332,7 @@ data:
   {{- if .Values.rhdhOperator.enableGuestProvider }}
         guest:
           dangerouslyAllowOutsideDevelopment: true
+          userEntityRef: user:default/guest
   {{- end }}
 ---
 kind: ConfigMap

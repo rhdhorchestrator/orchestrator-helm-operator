@@ -191,7 +191,7 @@ spec:
                     description: Subscription specifies the subscription attributes to use to deploy the operator.
                     properties:
                       channel:
-                        default: fast
+                        default: fast-1.2
                         description: Channel defines the channel of the operator package to subscribe to
                         type: string
                       installPlanApproval:
@@ -213,7 +213,7 @@ spec:
                         description: SourceName captures the name of the catalog source
                         type: string
                       startingCSV:
-                        default: "rhdh-operator.v1.2.0"
+                        default: ""
                         description: The initial version of the operator
                         type: string
                     type: object

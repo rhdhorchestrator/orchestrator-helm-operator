@@ -40,11 +40,11 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.secretRef.argocd.username` | Key in the secret with name defined in the 'name' field that contains the value of the username to login to ArgoCD. Defaults to 'ARGOCD_USERNAME', empty for not available. | `"ARGOCD_USERNAME"` |
 | `rhdhOperator.secretRef.argocd.password` | Key in the secret with name  defined in the 'name' field that contains the value of the password to authenticate to ArgoCD. Defaults to 'ARGOCD_PASSWORD', empty for not available. | `"ARGOCD_PASSWORD"` |
 | `rhdhOperator.subscription.namespace` | namespace where the operator should be deployed | `"rhdh-operator"` |
-| `rhdhOperator.subscription.channel` | channel of an operator package to subscribe to | `"fast"` |
+| `rhdhOperator.subscription.channel` | channel of an operator package to subscribe to | `"fast-1.2"` |
 | `rhdhOperator.subscription.installPlanApproval` | whether the update should be installed automatically | `"Automatic"` |
 | `rhdhOperator.subscription.name` | name of the operator package | `"rhdh"` |
 | `rhdhOperator.subscription.source` | name of the catalog source | `"redhat-operators"` |
-| `rhdhOperator.subscription.startingCSV` | The initial version of the operator | `"rhdh-operator.v1.2.0"` |
+| `rhdhOperator.subscription.startingCSV` | The initial version of the operator | `""` |
 | `rhdhPlugins.npmRegistry` | NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories | `"https://npm.stage.registry.redhat.com"` |
 | `rhdhPlugins.scope` |  | `"@redhat"` |
 | `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.1.0-rc.0-0"` |
