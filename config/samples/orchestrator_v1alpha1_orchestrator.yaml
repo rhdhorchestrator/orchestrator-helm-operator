@@ -9,7 +9,7 @@ spec:
       namespace: openshift-serverless-logic # namespace where the operator should be deployed
       channel: alpha # channel of an operator package to subscribe to
       installPlanApproval: Automatic # whether the update should be installed automatically
-      name: logicoperator-rhel8 # name of the operator package
+      name: logic-operator-rhel8 # name of the operator package
   serverlessOperator:
     enabled: true # whether the operator should be deployed by the chart
     subscription:
@@ -40,19 +40,19 @@ spec:
       installPlanApproval: Automatic # whether the update should be installed automatically
       name: rhdh # name of the operator package
   rhdhPlugins: # RHDH plugins required for the Orchestrator
-    npmRegistry: ""
-    scope: "@janus-idp"
+    npmRegistry: "" # set npm registry. If left empty, defaults to https://registry.npmjs.org. Can be set to https://npm.stage.registry.redhat.com
+    scope: "" # set appropriate scope based on npm registry set above. Can be set to @redhat if using registry https://npm.stage.registry.redhat.com above.
     orchestrator:
-      package: "backstage-plugin-orchestrator@1.10.6"
+      package: "backstage-plugin-orchestrator@1.10.6" # verify the package and version exist in the registry set in npmRegistry field
       integrity: sha512-qSXQ2O7/eLBEF186PzaRfzLfutFYUq9MdiiIZbHejz+KML9rVInPJkc1tine3R3JQVuw1QBIQ2vhPNbGbHXWZg==
     orchestrator_backend:
-      package: "backstage-plugin-orchestrator-backend-dynamic@1.8.0"
+      package: "backstage-plugin-orchestrator-backend-dynamic@1.8.0" # verify the package and version exist in the registry set in npmRegistry field
       integrity: sha512-wVZE7Dak10edxh1ZEckzYKrE13GrqhzSVelURhxjZcgXEHdGPWYUFHNMEpte7hzIBE85350Ka7fpy7C4BNPvEw==
     notifications:
-      package: "plugin-notifications@1.2.5"
+      package: "plugin-notifications@1.2.5" # verify the package and version exist in the registry set in npmRegistry field
       integrity: sha512-BQ7ujmrbv2MLelNGyleC4Z8fVVywYBMYZTwmRC534WCT38QHQ0cWJbebOgeIYszFA98STW4F5tdKbVot/2gWMg==
     notifications_backend:
-      package: "plugin-notifications-backend-dynamic@1.4.11"
+      package: "plugin-notifications-backend-dynamic@1.4.11" # verify the package and version exist in the registry set in npmRegistry field
       integrity: sha512-5zluThJwFVKX0Wlh4E15vDKUFGu/qJ0UsxHYWoISJ+ing1R38gskvN3kukylNTgOp8B78OmUglPfNlydcYEHvA==
   postgres:
     serviceName: "sonataflow-psql-postgresql" # The name of the Postgres DB service to be used by platform services. Cannot be empty.
