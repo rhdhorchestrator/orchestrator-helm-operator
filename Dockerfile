@@ -1,6 +1,6 @@
 # Build the manager binary
-FROM quay.io/orchestrator/helm-operator:v1.35.0-helm-fix
-
+#FROM quay.io/orchestrator/helm-operator:v1.35.0-helm-fix
+FROM quay.io/jordigilh/helm-operator:dev
 
 LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
 LABEL distribution-scope="public"
