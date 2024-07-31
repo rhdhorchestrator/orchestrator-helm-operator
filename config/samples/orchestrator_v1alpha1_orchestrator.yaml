@@ -40,8 +40,8 @@ spec:
       installPlanApproval: Automatic # whether the update should be installed automatically
       name: rhdh # name of the operator package
   rhdhPlugins: # RHDH plugins required for the Orchestrator
-    npmRegistry: "https://registry.npmjs.org" # Can also be set to https://npm.stage.registry.redhat.com if plugins are not available in public registry.
-    scope: "@janus-idp" # set appropriate scope based on npm registry set above. Can also be set to @redhat if using registry https://npm.stage.registry.redhat.com above.
+    npmRegistry: "" # set npm registry. If left empty, defaults to https://registry.npmjs.org. Can be set to https://npm.stage.registry.redhat.com
+    scope: "" # set appropriate scope based on npm registry set above. Can be set to @redhat if using registry https://npm.stage.registry.redhat.com above.
     orchestrator:
       package: "backstage-plugin-orchestrator@1.10.6" # verify the package and version exist in the registry set in npmRegistry field
       integrity: sha512-qSXQ2O7/eLBEF186PzaRfzLfutFYUq9MdiiIZbHejz+KML9rVInPJkc1tine3R3JQVuw1QBIQ2vhPNbGbHXWZg==
