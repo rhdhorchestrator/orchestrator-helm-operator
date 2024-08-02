@@ -320,7 +320,7 @@ spec:
                         description: Package name
                         type: string
                     type: object
-                  notifications_backend:
+                  notificationsBackend:
                     description: Notification backend plugin information
                     properties:
                       integrity:
@@ -360,7 +360,7 @@ spec:
                         description: Package name
                         type: string
                     type: object
-                  orchestrator_backend:
+                  orchestratorBackend:
                     description: Orchestrator backend plugin information
                     properties:
                       integrity:
@@ -388,7 +388,7 @@ spec:
                         description: Package name
                         type: string
                     type: object
-                  signals_backend:
+                  signalsBackend:
                     description: Signals backend plugin information
                     properties:
                       integrity:
