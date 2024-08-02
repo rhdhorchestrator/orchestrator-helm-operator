@@ -74,7 +74,7 @@ metadata:
                 "integrity": "sha512-BQ7ujmrbv2MLelNGyleC4Z8fVVywYBMYZTwmRC534WCT38QHQ0cWJbebOgeIYszFA98STW4F5tdKbVot/2gWMg==",
                 "package": "plugin-notifications@1.2.5"
               },
-              "notifications_backend": {
+              "notificationsBackend": {
                 "integrity": "sha512-5zluThJwFVKX0Wlh4E15vDKUFGu/qJ0UsxHYWoISJ+ing1R38gskvN3kukylNTgOp8B78OmUglPfNlydcYEHvA==",
                 "package": "plugin-notifications-backend-dynamic@1.4.11"
               },
@@ -83,7 +83,7 @@ metadata:
                 "integrity": "sha512-qSXQ2O7/eLBEF186PzaRfzLfutFYUq9MdiiIZbHejz+KML9rVInPJkc1tine3R3JQVuw1QBIQ2vhPNbGbHXWZg==",
                 "package": "backstage-plugin-orchestrator@1.10.6"
               },
-              "orchestrator_backend": {
+              "orchestratorBackend": {
                 "integrity": "sha512-wVZE7Dak10edxh1ZEckzYKrE13GrqhzSVelURhxjZcgXEHdGPWYUFHNMEpte7hzIBE85350Ka7fpy7C4BNPvEw==",
                 "package": "backstage-plugin-orchestrator-backend-dynamic@1.8.0"
               },
