@@ -224,6 +224,7 @@
                 "isReleaseCandidate",
                 "enabled",
                 "enableGuestProvider",
+                "catalogBranch",
                 "secretRef",
                 "subscription"
             ],
@@ -250,6 +251,14 @@
                     "title": "The enableGuestProvider Schema",
                     "examples": [
                         false
+                    ]
+                },
+                "catalogBranch": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The catalogBranch Schema",
+                    "examples": [
+                        "main"
                     ]
                 },
                 "secretRef": {
@@ -485,7 +494,8 @@
                         "installPlanApproval",
                         "name",
                         "source",
-                        "startingCSV"
+                        "startingCSV",
+                        "targetNamespace"
                     ],
                     "properties": {
                         "namespace": {
@@ -535,6 +545,14 @@
                             "examples": [
                                 ""
                             ]
+                        },
+                        "targetNamespace": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The targetNamespace Schema",
+                            "examples": [
+                                "rhdh-operator"
+                            ]
                         }
                     },
                     "examples": [{
@@ -543,7 +561,8 @@
                         "installPlanApproval": "Automatic",
                         "name": "rhdh",
                         "source": "redhat-operators",
-                        "startingCSV": ""
+                        "startingCSV": "",
+                        "targetNamespace": "rhdh-operator"
                     }]
                 }
             },
@@ -551,6 +570,7 @@
                 "isReleaseCandidate": false,
                 "enabled": true,
                 "enableGuestProvider": false,
+                "catalogBranch": "main",
                 "secretRef": {
                     "name": "backstage-backend-auth-secret",
                     "backstage": {
@@ -582,7 +602,8 @@
                     "installPlanApproval": "Automatic",
                     "name": "rhdh",
                     "source": "redhat-operators",
-                    "startingCSV": ""
+                    "startingCSV": "",
+                    "targetNamespace": "rhdh-operator"
                 }
             }]
         },
@@ -1220,6 +1241,7 @@
             "isReleaseCandidate": false,
             "enabled": true,
             "enableGuestProvider": false,
+            "catalogBranch": "main",
             "secretRef": {
                 "name": "backstage-backend-auth-secret",
                 "backstage": {
@@ -1251,7 +1273,8 @@
                 "installPlanApproval": "Automatic",
                 "name": "rhdh",
                 "source": "redhat-operators",
-                "startingCSV": ""
+                "startingCSV": "",
+                "targetNamespace": "rhdh-operator"
             }
         },
         "rhdhPlugins": {

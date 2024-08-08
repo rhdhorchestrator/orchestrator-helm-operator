@@ -152,6 +152,18 @@ rules:
   - watch
   - get
   - patch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - networkpolicies
+  verbs:
+  - get
+  - create
+  - delete
+  - list
+  - watch
+  - patch
+  - update
 ##
 ## Rules for orchestrator.parodos.dev/v1alpha1, Kind: Orchestrator
 ##

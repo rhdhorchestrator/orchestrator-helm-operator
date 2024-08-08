@@ -29,6 +29,7 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.isReleaseCandidate` | Indicates RC builds should be used by the chart to install RHDH | `false` |
 | `rhdhOperator.enabled` | whether the operator should be deployed by the chart | `true` |
 | `rhdhOperator.enableGuestProvider` | whether to enable guest provider | `false` |
+| `rhdhOperator.catalogBranch` | The branch for https://github.com/parodos-dev/workflow-software-templates used to import software templates resources | `"main"` |
 | `rhdhOperator.secretRef.name` | name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD, GitHub servers and SMTP mail server. | `"backstage-backend-auth-secret"` |
 | `rhdhOperator.secretRef.backstage.backendSecret` | Key in the secret with name defined in the 'name' field that contains the value of the Backstage backend secret. Defaults to 'BACKEND_SECRET'. It's required. | `"BACKEND_SECRET"` |
 | `rhdhOperator.secretRef.github.token` | Key in the secret with name defined in the 'name' field that contains the value of the authentication token as expected by GitHub. Required for importing resource to the catalog, launching software templates and more. Defaults to 'GITHUB_TOKEN', empty for not available. | `"GITHUB_TOKEN"` |
@@ -48,6 +49,7 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.subscription.name` | name of the operator package | `"rhdh"` |
 | `rhdhOperator.subscription.source` | name of the catalog source | `"redhat-operators"` |
 | `rhdhOperator.subscription.startingCSV` | The initial version of the operator | `""` |
+| `rhdhOperator.subscription.targetNamespace` | the target namespace for the backstage CR in which RHDH instance is created | `"rhdh-operator"` |
 | `rhdhPlugins.npmRegistry` | NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories | `"https://npm.stage.registry.redhat.com"` |
 | `rhdhPlugins.scope` |  | `"@redhat"` |
 | `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.1.0-rc.0-0"` |
