@@ -232,6 +232,10 @@ spec:
                         default: ""
                         description: The initial version of the operator
                         type: string
+                      targetNamespace:
+                        default: rhdh-operator
+                        description: The target namespace for the backstage CR in which RHDH instance is created
+                        type: string
                     type: object
                 type: object
               rhdhPlugins:
