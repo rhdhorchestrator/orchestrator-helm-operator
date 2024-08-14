@@ -15,7 +15,7 @@ spec:
           capabilities:
             drop:
               - "ALL"
-        image: registry.redhat.io/openshift4/ose-kube-rbac-proxy-rhel9:latest
+        image: registry.redhat.io/openshift4/ose-kube-rbac-proxy-rhel9@sha256:29201e85bd41642b72c7c0ce915e40aad90823d0efc3e7bbab9c351c92c74341
         args:
         - "--secure-listen-address=0.0.0.0:8443"
         - "--upstream=http://127.0.0.1:8080/"
