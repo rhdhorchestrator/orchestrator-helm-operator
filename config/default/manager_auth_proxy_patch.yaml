@@ -15,7 +15,7 @@ spec:
           capabilities:
             drop:
               - "ALL"
-        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.14.4@sha256:fcca9269424da38cfd216f4731de9fe5dea9f98e32c00da767b8e6e1ce9613cb
+        image: registry.redhat.io/openshift4/ose-kube-rbac-proxy-rhel9:latest
         args:
         - "--secure-listen-address=0.0.0.0:8443"
         - "--upstream=http://127.0.0.1:8080/"
