@@ -22,7 +22,7 @@ rhdhOperator:
   isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
   enabled: true # whether the operator should be deployed by the chart
   enableGuestProvider: false # whether to enable guest provider
-  catalogBranch: main # The branch for https://github.com/parodos-dev/workflow-software-templates used to import software templates resources
+  catalogBranch: v1.2.x # The branch for https://github.com/parodos-dev/workflow-software-templates used to import software templates resources
   secretRef:
     name: backstage-backend-auth-secret # name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD, GitHub servers and SMTP mail server.
     backstage:
@@ -56,27 +56,27 @@ rhdhPlugins: # RHDH plugins required for the Orchestrator
   npmRegistry: "https://npm.stage.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
   scope: "@redhat"
   orchestrator:
-    package: "backstage-plugin-orchestrator@1.1.0-rc.0-0"
-    integrity: sha512-uxkNFS/4nkVM6FRq0Uvnznvxcm/3MNdh11R6sRsbmKCP4KF4N9T2GF4lgfD7J+p7EuGMD4UFnjKjaR77v0NGaQ==
+    package: "backstage-plugin-orchestrator@1.2.0-rc.1"
+    integrity: sha512-4C3ZeaGeJdrDWRlWGm1sxiZrfn5cIYynlIsKCcKq+aGpZKJABaKesuvGScBX++jmTbCUMDwPXZmWF20ZzSCuxg==
   orchestratorBackend:
-    package: "backstage-plugin-orchestrator-backend-dynamic@1.1.0-rc.0-0"
-    integrity: sha512-NIIGpwH/uJaMknTdORdnqsHfPeI/OrAl2biqELal1e9tK2r6PrVWfIWr9XoH5AfOjtQjbeAe7joiLwhM+uyVAw==
+    package: "backstage-plugin-orchestrator-backend-dynamic@1.2.0-rc.1"
+    integrity: sha512-uF7BVOTQEofTyKGvEW7ipPhbHCjsXw8wvSx1YyAQDSsVgq7l6FckUZN2jT0kXmiGqH2f7C7+xKIAoi/ETn3Kdw==
   notifications:
-    package: "plugin-notifications-dynamic@0.2.0-rc.0-0"
-    integrity: sha512-wmISWN02G4OiBF7y8Jpl5KCbDfhzl70s+r0h2tdVh1IIwYmojH5pqXFQAhDd3FTlqYc8yqDG8gEAQ8v66qbU1g==
+    package: "plugin-notifications-dynamic@1.2.0-rc.1"
+    integrity: sha512-3sKvF+sMzx1dPzSGHlbeePmUTrFKztSRcOQGsP60GHgEfg/g4NHQi2nZMlaYYG4+2/ChMl/CrA0vv481s5bgHg==
   notificationsBackend:
-    package: "plugin-notifications-backend-dynamic@0.2.0-rc.0-0"
-    integrity: sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ==
+    package: "plugin-notifications-backend-dynamic@1.2.0-rc.1"
+    integrity: sha512-LgW8Jq5a0fxPymQoH99ssvwUz0mZLb3dmUx53LtImdT5+B/cKQ/VKa+iLDe7bMZepwqA0yJmjf/tDwKi8qzNqg==
   signals:
-    package: "plugin-signals-dynamic@0.0.5-rc.0-0"
-    integrity: sha512-5Iwp9gF6VPiMLJ5NUw5s5Z17AuJ5XYS97wghNTfcmah/OFxTmgZHWxvhcRoXDRQvyj4nc/gOZes74kp6kZ9XDg==
+    package: "plugin-signals-dynamic@1.2.0-rc.1"
+    integrity: sha512-ESZJiXPL5hbE3w0oenBy/iY50V/QS5udqfdY0EggCLz7McsjYuBgz9zyowi87oxt8Sscu/Er9gquqi8gGAo4Dw==
   signalsBackend:
-    package: "plugin-signals-backend-dynamic@0.1.3-rc.0-0"
-    integrity: sha512-LlkM2Mf2QTndsS6eBzyXDhJmRTHLpAku3hhlvWhtQChSLTFCtNGRTIQA5WHG7NqLH0QqBz+UcEjX7Vca82QKKg==
+    package: "plugin-signals-backend-dynamic@1.2.0-rc.1"
+    integrity: sha512-yFSHfkvq9RTzeWTb+V0mMCxShrbHdad6AhNKZ0wU6ywbjw5N9CaedmD0eG+A7f7XEy3dLsmTxIlYbshdct4TiQ==
   notificationsEmail:
     enabled: false # whether to install the notifications email plugin. requires setting of hostname and credentials in backstage secret to enable. See value backstage-backend-auth-secret. See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts
-    package: "plugin-notifications-backend-module-email-dynamic@0.0.0-rc.0-0"
-    integrity: sha512-TikxFBxBHKJYZy8go+Mw+7yjfSJILgXjr4K0C0+tnKyMOn+OqIX6K8c1fq7IdXto3fftQ+mmCrBqJem25JjVnA==
+    package: "plugin-notifications-backend-module-email-dynamic@1.2.0-rc.1"
+    integrity: sha512-S2+gNOoEyQMPATdfIIB4XvZPLGWqyCiAHsOgfgW3qxjM8paSYoxbhHtGP2m+1BePLSbm9PBjVv54xOWTPyL25A==
     port: 587 # SMTP server port
     sender: "" # the email sender address
     replyTo: "" # reply-to address
