@@ -29,7 +29,7 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.isReleaseCandidate` | Indicates RC builds should be used by the chart to install RHDH | `false` |
 | `rhdhOperator.enabled` | whether the operator should be deployed by the chart | `true` |
 | `rhdhOperator.enableGuestProvider` | whether to enable guest provider | `false` |
-| `rhdhOperator.catalogBranch` | The branch for https://github.com/parodos-dev/workflow-software-templates used to import software templates resources | `"main"` |
+| `rhdhOperator.catalogBranch` | The branch for https://github.com/parodos-dev/workflow-software-templates used to import software templates resources | `"v1.2.x"` |
 | `rhdhOperator.secretRef.name` | name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD, GitHub servers and SMTP mail server. | `"backstage-backend-auth-secret"` |
 | `rhdhOperator.secretRef.backstage.backendSecret` | Key in the secret with name defined in the 'name' field that contains the value of the Backstage backend secret. Defaults to 'BACKEND_SECRET'. It's required. | `"BACKEND_SECRET"` |
 | `rhdhOperator.secretRef.github.token` | Key in the secret with name defined in the 'name' field that contains the value of the authentication token as expected by GitHub. Required for importing resource to the catalog, launching software templates and more. Defaults to 'GITHUB_TOKEN', empty for not available. | `"GITHUB_TOKEN"` |
@@ -52,21 +52,21 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.subscription.targetNamespace` | the target namespace for the backstage CR in which RHDH instance is created | `"rhdh-operator"` |
 | `rhdhPlugins.npmRegistry` | NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories | `"https://npm.stage.registry.redhat.com"` |
 | `rhdhPlugins.scope` |  | `"@redhat"` |
-| `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.1.0-rc.0-0"` |
-| `rhdhPlugins.orchestrator.integrity` |  | `"sha512-uxkNFS/4nkVM6FRq0Uvnznvxcm/3MNdh11R6sRsbmKCP4KF4N9T2GF4lgfD7J+p7EuGMD4UFnjKjaR77v0NGaQ=="` |
-| `rhdhPlugins.orchestratorBackend.package` |  | `"backstage-plugin-orchestrator-backend-dynamic@1.1.0-rc.0-0"` |
-| `rhdhPlugins.orchestratorBackend.integrity` |  | `"sha512-NIIGpwH/uJaMknTdORdnqsHfPeI/OrAl2biqELal1e9tK2r6PrVWfIWr9XoH5AfOjtQjbeAe7joiLwhM+uyVAw=="` |
-| `rhdhPlugins.notifications.package` |  | `"plugin-notifications-dynamic@0.2.0-rc.0-0"` |
-| `rhdhPlugins.notifications.integrity` |  | `"sha512-wmISWN02G4OiBF7y8Jpl5KCbDfhzl70s+r0h2tdVh1IIwYmojH5pqXFQAhDd3FTlqYc8yqDG8gEAQ8v66qbU1g=="` |
-| `rhdhPlugins.notificationsBackend.package` |  | `"plugin-notifications-backend-dynamic@0.2.0-rc.0-0"` |
-| `rhdhPlugins.notificationsBackend.integrity` |  | `"sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ=="` |
-| `rhdhPlugins.signals.package` |  | `"plugin-signals-dynamic@0.0.5-rc.0-0"` |
-| `rhdhPlugins.signals.integrity` |  | `"sha512-5Iwp9gF6VPiMLJ5NUw5s5Z17AuJ5XYS97wghNTfcmah/OFxTmgZHWxvhcRoXDRQvyj4nc/gOZes74kp6kZ9XDg=="` |
-| `rhdhPlugins.signalsBackend.package` |  | `"plugin-signals-backend-dynamic@0.1.3-rc.0-0"` |
-| `rhdhPlugins.signalsBackend.integrity` |  | `"sha512-LlkM2Mf2QTndsS6eBzyXDhJmRTHLpAku3hhlvWhtQChSLTFCtNGRTIQA5WHG7NqLH0QqBz+UcEjX7Vca82QKKg=="` |
+| `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.2.0-rc.1"` |
+| `rhdhPlugins.orchestrator.integrity` |  | `"sha512-4C3ZeaGeJdrDWRlWGm1sxiZrfn5cIYynlIsKCcKq+aGpZKJABaKesuvGScBX++jmTbCUMDwPXZmWF20ZzSCuxg=="` |
+| `rhdhPlugins.orchestratorBackend.package` |  | `"backstage-plugin-orchestrator-backend-dynamic@1.2.0-rc.1"` |
+| `rhdhPlugins.orchestratorBackend.integrity` |  | `"sha512-uF7BVOTQEofTyKGvEW7ipPhbHCjsXw8wvSx1YyAQDSsVgq7l6FckUZN2jT0kXmiGqH2f7C7+xKIAoi/ETn3Kdw=="` |
+| `rhdhPlugins.notifications.package` |  | `"plugin-notifications-dynamic@1.2.0-rc.1"` |
+| `rhdhPlugins.notifications.integrity` |  | `"sha512-3sKvF+sMzx1dPzSGHlbeePmUTrFKztSRcOQGsP60GHgEfg/g4NHQi2nZMlaYYG4+2/ChMl/CrA0vv481s5bgHg=="` |
+| `rhdhPlugins.notificationsBackend.package` |  | `"plugin-notifications-backend-dynamic@1.2.0-rc.1"` |
+| `rhdhPlugins.notificationsBackend.integrity` |  | `"sha512-LgW8Jq5a0fxPymQoH99ssvwUz0mZLb3dmUx53LtImdT5+B/cKQ/VKa+iLDe7bMZepwqA0yJmjf/tDwKi8qzNqg=="` |
+| `rhdhPlugins.signals.package` |  | `"plugin-signals-dynamic@1.2.0-rc.1"` |
+| `rhdhPlugins.signals.integrity` |  | `"sha512-ESZJiXPL5hbE3w0oenBy/iY50V/QS5udqfdY0EggCLz7McsjYuBgz9zyowi87oxt8Sscu/Er9gquqi8gGAo4Dw=="` |
+| `rhdhPlugins.signalsBackend.package` |  | `"plugin-signals-backend-dynamic@1.2.0-rc.1"` |
+| `rhdhPlugins.signalsBackend.integrity` |  | `"sha512-yFSHfkvq9RTzeWTb+V0mMCxShrbHdad6AhNKZ0wU6ywbjw5N9CaedmD0eG+A7f7XEy3dLsmTxIlYbshdct4TiQ=="` |
 | `rhdhPlugins.notificationsEmail.enabled` | whether to install the notifications email plugin. requires setting of hostname and credentials in backstage secret to enable. See value backstage-backend-auth-secret. See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts | `false` |
-| `rhdhPlugins.notificationsEmail.package` |  | `"plugin-notifications-backend-module-email-dynamic@0.0.0-rc.0-0"` |
-| `rhdhPlugins.notificationsEmail.integrity` |  | `"sha512-TikxFBxBHKJYZy8go+Mw+7yjfSJILgXjr4K0C0+tnKyMOn+OqIX6K8c1fq7IdXto3fftQ+mmCrBqJem25JjVnA=="` |
+| `rhdhPlugins.notificationsEmail.package` |  | `"plugin-notifications-backend-module-email-dynamic@1.2.0-rc.1"` |
+| `rhdhPlugins.notificationsEmail.integrity` |  | `"sha512-S2+gNOoEyQMPATdfIIB4XvZPLGWqyCiAHsOgfgW3qxjM8paSYoxbhHtGP2m+1BePLSbm9PBjVv54xOWTPyL25A=="` |
 | `rhdhPlugins.notificationsEmail.port` | SMTP server port | `587` |
 | `rhdhPlugins.notificationsEmail.sender` | the email sender address | `""` |
 | `rhdhPlugins.notificationsEmail.replyTo` | reply-to address | `""` |
