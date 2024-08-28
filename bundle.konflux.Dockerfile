@@ -1,5 +1,5 @@
 FROM registry.access.redhat.com/ubi9:latest as builder
-ARG IMG=quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/operator-controller@sha256:e8c1739e3cb80fe6be34603976d1102c9bf9b37e0e78b2cb11f4f91594284275
+ARG IMG=quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/operator-controller@sha256:1a8e9c632770447bba6267e1e7d986b990cec16bb18c9c894518d6113b361889
 WORKDIR /operator
 COPY . .
 RUN dnf install make -y && make bundle IMG=${IMG}
@@ -8,7 +8,7 @@ FROM scratch
 
 USER 1001
 # Expose controller's container image with digest so that we can retrieve it with skopeo when creating the FBC catalog
-LABEL controller="quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/operator-controller@sha256:e8c1739e3cb80fe6be34603976d1102c9bf9b37e0e78b2cb11f4f91594284275"
+LABEL controller="quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/operator-controller@sha256:1a8e9c632770447bba6267e1e7d986b990cec16bb18c9c894518d6113b361889"
 
 # Required labels
 LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
