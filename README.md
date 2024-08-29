@@ -185,12 +185,3 @@ If you want to remove *knative* related resources, you may also run:
 ```console
 oc get crd -o name | grep -e knative | xargs oc delete
 ```
-
-## Troubleshooting
-
-### Timeout or errors during `oc wait` commands
-
-If you encounter errors or timeouts while executing `oc wait` commands, follow these steps to troubleshoot and resolve the issue:
-
-1. **Check Deployment Status**: Review the output of the `oc wait` commands to identify which deployments met the condition and which ones encountered errors or timeouts.
-   For example, if you see `error: timed out waiting for the condition on deployments/sonataflow-platform-data-index-service`, investigate further using `oc describe deployment sonataflow-platform-data-index-service -n sonataflow-infra` and `oc logs sonataflow-platform-data-index-service -n sonataflow-infra `
