@@ -8,6 +8,9 @@ FROM scratch
 
 USER 1001
 
+# Expose controller's container image with digest so that we can retrieve it with skopeo when creating the FBC catalog
+LABEL controller="quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/operator-controller@sha256:b1a88644ad07f3717fb00f1db0c8a20d8cadfc434e9e07a0c9cbf7be47c40783"
+
 # Required labels
 LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
 LABEL distribution-scope="public"
