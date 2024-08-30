@@ -1,5 +1,5 @@
 FROM registry.access.redhat.com/ubi9:latest as builder
-ARG IMG=quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/controller-rhel9-operator@sha256:b1a88644ad07f3717fb00f1db0c8a20d8cadfc434e9e07a0c9cbf7be47c40783
+ARG IMG=quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/controller-rhel9-operator@sha256:b50704a43fc84e0347ac6d600a842e7614da1fb1c7991385a6f5c1ebeeb08b5c
 WORKDIR /operator
 COPY . .
 RUN dnf install make -y && make bundle IMG=${IMG}
