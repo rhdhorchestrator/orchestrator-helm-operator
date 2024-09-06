@@ -2,7 +2,7 @@
 Meta Operator for deploying the Orchestrator helm charts
 
 # Installing the operator
-Please visit the [README.md](https://github.com/parodos-dev/orchestrator-helm-orchestrator/blob/gh-pages/README.md) page and follow the guide to install the operator in your cluster.
+Please visit the [README.md](https://github.com/parodos-dev/orchestrator-helm-operator/blob/gh-pages/README.md) page and follow the guide to install the operator in your cluster.
 
 ## Release
 
