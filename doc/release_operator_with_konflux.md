@@ -1,22 +1,48 @@
 # Release the operator (for OCP) with Konflux
 
+## Table of contents
+* [Introductino](#introduction)
+* [Audience](#audience)
+* [Prerequisites](#prerequisites)
+* [Releasing](#releasing)
+  * [Staging](#staging-release)
+      * [Releasing the container images to the staging registry](#releasing-the-container-images-to-the-staging-registry)
+      * [Releasing a new FBC index to staging](#releasing-a-new-fbc-index-to-staging)
+  * [Production](#production-release)
+      * [Releasing the container images to the production registry](#releasing-the-container-images-to-the-production-registry)
+      * [Releasing a new FBC index to production](#releasing-a-new-fbc-index-to-production)
+* [Troubleshooting](#troubleshooting)
+* [Command tips](#command-tips)
+
+## Introduction
+This document captures the steps required to release a new version of the Orchestrator Operator interacting with Konflux's resources using the CLI, as opposed to the Konflux UI which can also achieve the same goals. The purposse of this document is to allow users to benefit from a CLI approach on releasing the operator, with the end goal of achieving as much automation as possible to reduce the manual effort required to release it with Konflux. Note that everything that is describe here can be achieved as well using the [Konflux UI](https://console.redhat.com/application-pipeline/workspaces).
+
+## Audience
+This document is aimed for those who need to release a new version of the Orchestrator operator using Konflux pipelines. This guide assumes that the user has some knowledge on Konflux and its types of resources and that the release process has already been introduced by someone else with understanding, otherwise the document might seem confusing and not clear on the goals.
+
+For further reading on Konflux, visit their [documentation website](https://konflux-ci.dev/docs/advanced-how-tos/releasing/) to get acquainted with it and understand the release process as described in it.
+
 ## Prerequisites:
-To be able to release the operator, you will need first to have access to the orchestrator-releng workspace in konflux via the [Red Hat Console](https://console.redhat.com). If you don't, please reach out to @jordigilh, @masayag, @rgolangh or @pkliczewski to request access. You'll also need to be able to create PRs to the [orchestrator-helm-operator](https://github.com/parodos-dev/orchestrator-helm-operator) and [orchestrator-fbc](https://github.com/parodos-dev/orchestrator-fbc) repositories.
+To be able to release the operator, you will need first to have access to the orchestrator-releng workspace in konflux via the [Red Hat Console](https://console.redhat.com/application-pipeline/workspaces/orchestrator-releng/applications). If you don't, please reach out to @jordigilh, @masayag, @rgolangh or @pkliczewski to request access. You'll also need to be able to create PRs to the [orchestrator-helm-operator](https://github.com/parodos-dev/orchestrator-helm-operator) and [orchestrator-fbc](https://github.com/parodos-dev/orchestrator-fbc) repositories.
 
 Accessing the Konflux cluster via oc CLI requires an auth token from the OCP. Once you've been added to the `orchestrator-releng` workspace, head to [this URL](https://oauth-openshift.apps.stone-prd-rh01.pg1f.p1.openshiftapps.com/oauth/token/request) to obtain a new token and login to the
 Konflux cluster.
 
-## Introduction
+## Releasing
 Releasing the operator is a 3 stage operation:
-* Build the images using Konflux's pipelines to your workspace environment
+* Build the container images using Konflux's pipelines as part of a Pull Request or a merge.
 * Release these images to the staging repository. The images are basically inspected based on predefined rules by Konflux and deposited to the staging repository upon success.
 * Release the [FBC](https://docs.openshift.com/container-platform/4.17/extensions/catalogs/fbc.html) (File Based Catalog) fragment to the RH catalog staging index using the pullspec of the images pushed to the staging registry.
 
 Production releases builds on top of the staging releases to do more or less the same, except that in this case it goes though a more detailed scrutity, ending up in the production registry. Past this step, it's the same FBC graph generation using the image pullspec in production.
 
-## Staging release
+* Release these images to the production repository based on the same snapshot used to release to staging.
+* Release the [FBC](https://docs.openshift.com/container-platform/4.17/extensions/catalogs/fbc.html) (File Based Catalog) fragment to the RH catalog index in production after updating the FBC graph file to include the new fragment like it was done in staging, but using the production image pullspec.
 
-### Releasing container images to the staging registry
+### Staging release
+Initiating a staging release requires both a successful build and subsequent integration tests for all components of the application. The result of this is a snapshot object generated by Konflux. Think of a snapshot as a tag in git, but in Konflux it is an object that contains the pullspect of all components of an application, in our case the controller and bundle.
+
+#### Releasing the container images to the staging registry
 * Filter the latest snapshot. Keep in mind that we need to filter based on the bundle push event since that will most probably contain the nudged update from the controller. The following commands sorts all the snapshots for the helm-operator application by timestamp in ascending order and displays the name, integration tests success status and the merge PR number and remote branch used in the commit:
 ```console
 oc get snapshots --sort-by .metadata.creationTimestamp -l pac.test.appstudio.openshift.io/event-type=push,appstudio.openshift.io/component=orchestrator-operator-bundle -ojsonpath='{range .items[*]}{@.metadata.name}{"\t"}{@.status.conditions[?(@.type=="AppStudioTestSucceeded")].status}{"\t"}{@.metadata.annotations.pac\.test\.appstudio\.openshift\.io/sha-title}{"\n"}{end}'
@@ -89,7 +115,7 @@ skopeo inspect docker://$bundlePullSpec >/dev/null && echo "Bundle image found i
 
 At this point we can confirm that we have a successful release of the images and that they are ready to be used to release a new FBC version.
 
-### Releasing a new FBC Index
+#### Releasing a new FBC index to staging
 To release a new version of the operator in the Red Hat Catalog, you'll have to release an updated FBC graph of the IIB catalog. For staging, this means you'll end upd having to add a new IIB catalog source to your cluster so that your
 new operator is available for consumption. In production however, this is not necessary as the release is published directly to the production index.
 
@@ -245,9 +271,10 @@ schema: olm.bundle
   ```
 
 
-## Production release
+### Production release
+A pre-requisite to release to production is for the controller and bundle images to have been released to the staging registry. There is no shortcut that bypasses staging for this. However, releasing the image to the production registry does not deviate much from releasing to staging, even though its required to release to staging before production.
 
-### Releasing images to the production registry
+#### Releasing the container images to the production registry
 Releasing to production requires the images to be processed in staging first. Once that's successful, the process resolves in taking the staging snapshots from the helm-operator application and creating a new release using the production RPA. The FBC follows a similar step in that it needs a release aiming at the production RPA for each OCP release using the same snapshot. Let's start with the helm-operator application and then move on to the FBC release:
 
 * Identify the snapshot used in the stage release. List all the releases for staging and extract the snapshot used for that release. We will be using this snapshot for the production release. The next command will list all releases in staging that were successful sorted by `creationTimestamp` in ascending order (latest are the newest releases).
@@ -282,6 +309,9 @@ EOF" | awk '{print $1}')
 ```
 
 * Wait for the release to be validated:
+
+You can also use the [UI](https://console.redhat.com/application-pipeline/workspaces/orchestrator-releng/applications/helm-operator/releases) to view the status of the release as it is being processed in the pipeline.
+
 ```console
 while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Progressing" ];do sleep 5;done
 [[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].message}') || echo "Release successful"
@@ -292,7 +322,7 @@ If the release fails, follow the [troubleshooting](#release-pipeline-failed) gui
 * Validate that the container images are in the production registry by inspecting them with skopeo. The pullspec of the images are defined in the advisory manifest:
 
 ```console
-advisoryURL=$(oc get $releaseName -n rhtap-releng-tenant -ojsonpath='{.status.artifacts.advisory.url}' | sed  's/blob/raw/')
+advisoryURL=$(oc get $releaseName -ojsonpath='{.status.artifacts.advisory.url}' | sed  's/blob/raw/')
 controllerPullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("controller-rhel9-operator$") ))| .[].containerImage')
 bundlePullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("orchestrator-operator-bundle$") ))| .[].containerImage')
 skopeo inspect docker://$controllerPullSpec >/dev/null && echo "Controller image found in $controllerPullSpec" || echo "Controller image not found in $controllerPullSpec"
@@ -302,7 +332,7 @@ skopeo inspect docker://$bundlePullSpec >/dev/null && echo "Bundle image found i
 At this point, the container images have been pushed to the production registry. What's left is to update the FBC graph to aim for production registry, with no changes to the digest.
 
 
-### Releasing a new FBC index
+#### Releasing a new FBC index to production
 Releasing the fragment is a simple step to update the FBC graph manifest to point to the production registry and run the command to generate the catalog. The lastest commit in the repo should reflect the bundle's container image pullspec being the same as the one in the snapshot we retrieved from the stage build.
 
 ```console
@@ -382,7 +412,7 @@ schema: olm.bundle
   apiVersion: appstudio.redhat.com/v1alpha1
   kind: Release
   metadata:
-    generateName: fbc-$componentName-
+    generateName: $componentName-
     namespace: orchestrator-releng-tenant
   spec:
     releasePlan: $componentName-release-as-production-fbc
@@ -391,6 +421,8 @@ schema: olm.bundle
   ```
 
   * Wait for the release to be validated:
+
+  You can also use the [UI](https://console.redhat.com/application-pipeline/workspaces/orchestrator-releng/applications/helm-operator/releases) to view the status of the release as it is being processed in the pipeline.
   ```console
   while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Progressing" ];do sleep 5;done
   [[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].message}') || echo "Release successful"
@@ -400,9 +432,10 @@ schema: olm.bundle
 
   And that's all: the operator FBC's fragment has been added to the Red Hat Catalog. It will take some minutes for clusters to pull the new image and make the operator available.
 
-# Troubleshooting:
+## Troubleshooting
+This section is meant to grow as more experience is gained in Konflux. For now, the main goal is to describe the steps to identify which tasks and capture the error message generated by Konflux. If you need help on Konflux, open an "Ask for support" ticket in #konflux-users.
 
-## <a name="release-pipeline-failed"></a> Release pipeline failed
+### Release pipeline failed
 
 If the release fails, you'll need to indentify which task failed and why. This gets a bit tricky as you'll have to jump over different objects until you get the information you seek. First, you'll need to get the pipelinerun from the status in the release. The following command will list the failed tasksrun objects for the pipelinerun
 
@@ -455,9 +488,7 @@ Results:
   configuration] to include additional registry prefixes.
 ```
 
-
-
-# Command tips:
+## Command tips
 * Retrieve the components for a given application:
 ```console
 oc get components -ojsonpath='{range .items[?(@.spec.application=="helm-operator")]}{.metadata.name}{"\n"}{end}}'
