@@ -18,4 +18,13 @@ spec:
             # Allow any other namespace the has workflows deployed because this is where
             # this namespace contains the sonataflow services
             rhdh.redhat.com/workflow-namespace: ""
+      - namespaceSelector:
+          matchLabels:
+            # Allow knative events to be delivered to workflows.
+            kubernetes.io/metadata.name: knative-eventing
+      - namespaceSelector:
+          matchLabels:
+            # Allow auxiliary knative function for workflow (such as m2k-save-transformation)
+            kubernetes.io/metadata.name: knative-serving
+
 {{- end }}
