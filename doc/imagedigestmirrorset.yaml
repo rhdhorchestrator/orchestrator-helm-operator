@@ -1,0 +1,12 @@
+kind: ImageDigestMirrorSet
+apiVersion: config.openshift.io/v1
+metadata:
+  name: orchestrator-operator-fbc-staging-index
+spec:
+  imageDigestMirrors:
+    - source: registry.redhat.io/rhdh-orchestrator-dev-preview-beta/orchestrator-operator-bundle
+      mirrors:
+        - registry.stage.redhat.io/rhdh-orchestrator-dev-preview-beta/orchestrator-operator-bundle
+    - source: registry.redhat.io/rhdh-orchestrator-dev-preview-beta/controller-rhel9-operator
+      mirrors:
+        - registry.stage.redhat.io/rhdh-orchestrator-dev-preview-beta/controller-rhel9-operator
