@@ -30,11 +30,11 @@ Konflux cluster.
 
 ## Releasing
 Releasing the operator is a 3 stage operation:
-* Build the container images using Konflux's pipelines as part of a Pull Request or a merge.
+* Build the container images using Konflux's pipelines as part of a PR merge. The bundle image needs to be built with the latest controller image so that they are matched. This is usually handled via Konflux's nudges that trigger PRs with an updated digest of the controller to the bundle after a successful controller PR is merged.
 * Release these images to the staging repository. The images are basically inspected based on predefined rules by Konflux and deposited to the staging repository upon success.
 * Release the [FBC](https://docs.openshift.com/container-platform/4.17/extensions/catalogs/fbc.html) (File Based Catalog) fragment to the RH catalog staging index using the pullspec of the images pushed to the staging registry.
 
-Production releases builds on top of the staging releases to do more or less the same, except that in this case it goes though a more detailed scrutity, ending up in the production registry. Past this step, it's the same FBC graph generation using the image pullspec in production.
+Production releases builds on top of the staging releases to do more or less the same, except that in this case it goes though a more detailed scrutiny, ending up in the production registry. Past this step, it's the same FBC graph generation using the image pullspec in production.
 
 * Release these images to the production repository based on the same snapshot used to release to staging.
 * Release the [FBC](https://docs.openshift.com/container-platform/4.17/extensions/catalogs/fbc.html) (File Based Catalog) fragment to the RH catalog index in production after updating the FBC graph file to include the new fragment like it was done in staging, but using the production image pullspec.
