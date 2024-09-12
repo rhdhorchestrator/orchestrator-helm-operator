@@ -140,6 +140,13 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 
     > **Note:** that every minute on the clock a job is triggered to reconcile the CRs with the chart values. These cronjobs are deleted when their respective features (e.g. `rhdhOperator.enabled=false`) are removed or when the chart is removed. This is required because the CRs are not managed by helm due to the CRD dependency pre availability to the deployment of the CR.
 
+### Using Knative kafka broker
+If you want to use a Knative broker for communication between the different componenets (Data Index, Job Service and Workflows), you should use a reliable broker, i.e: not in-memory.
+
+Kafka perfectly fullfil this reliability need.
+
+Follow these [instructions](https://github.com/parodos-dev/orchestrator-helm-operator/blob/gh-pages/kafka-knative-broker/README.md) to setup the a kafka broker.
+
 
 ## Additional information
 
