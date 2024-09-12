@@ -1,5 +1,5 @@
 FROM registry.access.redhat.com/ubi9:latest as builder
-ARG IMG=registry.redhat.io/rhdh-orchestrator-dev-preview-beta/controller-rhel9-operator@sha256:25b7f4806d4735278546b75d9d5a1c46d82ceac2909162c04fe2cf29e205e106
+ARG IMG=registry.redhat.io/rhdh-orchestrator-dev-preview-beta/controller-rhel9-operator@sha256:f1f9b1e2364f8c8be624af38034f0a3193eb01725d7d871b5cb5f4c8fd08aea8
 WORKDIR /operator
 COPY . .
 RUN dnf install make -y && make bundle IMG=${IMG}
@@ -9,7 +9,7 @@ FROM scratch
 USER 1001
 
 # Expose controller's container image with digest so that we can retrieve it with skopeo when creating the FBC catalog
-LABEL controller="registry.redhat.io/rhdh-orchestrator-dev-preview-beta/controller-rhel9-operator@sha256:25b7f4806d4735278546b75d9d5a1c46d82ceac2909162c04fe2cf29e205e106"
+LABEL controller="registry.redhat.io/rhdh-orchestrator-dev-preview-beta/controller-rhel9-operator@sha256:f1f9b1e2364f8c8be624af38034f0a3193eb01725d7d871b5cb5f4c8fd08aea8"
 
 # Required labels
 LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
