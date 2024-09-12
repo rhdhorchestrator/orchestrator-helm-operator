@@ -1,4 +1,4 @@
-apiVersion: orchestrator.parodos.dev/v1alpha1
+apiVersion: rhdh.redhat.com/v1alpha1
 kind: Orchestrator
 metadata:
   name: orchestrator-sample
