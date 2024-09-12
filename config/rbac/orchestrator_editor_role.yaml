@@ -12,7 +12,7 @@ metadata:
   name: orchestrator-editor-role
 rules:
 - apiGroups:
-  - orchestrator.parodos.dev
+  - rhdh.redhat.com
   resources:
   - orchestrators
   verbs:
@@ -24,7 +24,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - orchestrator.parodos.dev
+  - rhdh.redhat.com
   resources:
   - orchestrators/status
   verbs:

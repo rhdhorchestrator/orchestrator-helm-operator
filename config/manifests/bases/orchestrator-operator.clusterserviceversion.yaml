@@ -39,7 +39,7 @@ spec:
         actions or external systems.
       displayName: Orchestrator
       kind: Orchestrator
-      name: orchestrators.orchestrator.parodos.dev
+      name: orchestrators.rhdh.redhat.com
       version: v1alpha1
   description: |
     Red Hat Developer Hub Orchestrator is a plugin that enables serverless asynchronous workflows to Backstage.

@@ -165,10 +165,10 @@ rules:
   - patch
   - update
 ##
-## Rules for orchestrator.parodos.dev/v1alpha1, Kind: Orchestrator
+## Rules for orchestrator.rhdh.redhat.com/v1alpha1, Kind: Orchestrator
 ##
 - apiGroups:
-  - orchestrator.parodos.dev
+  - rhdh.redhat.com
   resources:
   - orchestrators
   - orchestrators/status
