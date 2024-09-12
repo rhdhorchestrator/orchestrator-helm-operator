@@ -1,7 +1,7 @@
 # Release the operator (for OCP) with Konflux
 
 ## Table of contents
-* [Introductino](#introduction)
+* [Introduction](#introduction)
 * [Audience](#audience)
 * [Prerequisites](#prerequisites)
 * [Releasing](#releasing)
@@ -106,7 +106,7 @@ If the release fails, follow the [troubleshooting](#release-pipeline-failed) gui
 * Validate that the container images are in the staging registry by inspecting them with skopeo. The pullspec of the images are defined in the advisory manifest:
 
 ```console
-advisoryURL=$(oc get $releaseName -n rhtap-releng-tenant -ojsonpath='{.status.artifacts.advisory.url}' | sed  's/blob/raw/')
+advisoryURL=$(oc get $releaseName -ojsonpath='{.status.artifacts.advisory.url}' | sed  's/blob/raw/')
 controllerPullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("controller-rhel9-operator$") ))| .[].containerImage')
 bundlePullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("orchestrator-operator-bundle$") ))| .[].containerImage')
 skopeo inspect docker://$controllerPullSpec >/dev/null && echo "Controller image found in $controllerPullSpec" || echo "Controller image not found in $controllerPullSpec"
