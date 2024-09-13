@@ -48,7 +48,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
   - Validated APIs are `tekton.dev/v1beta1/Task` and `tekton.dev/v1/Pipeline`
   - Requires ArgoCD installed since the manifests are deployed in the same namespace as the ArgoCD instance.
 
-  Remember to enable [argocd](https://github.com/parodos-dev/orchestrator-helm-operator/blob/af6be52072bff3d15587430df5919e4d46ab59ab/config/crd/bases/orchestrator.parodos.dev_orchestrators.yaml#L451) and [tekton](https://github.com/parodos-dev/orchestrator-helm-operator/blob/af6be52072bff3d15587430df5919e4d46ab59ab/config/crd/bases/orchestrator.parodos.dev_orchestrators.yaml#L443) in your CR instance.
+  Remember to enable [argocd](https://github.com/parodos-dev/orchestrator-helm-operator/blob/c577e95e063e2bf8119b2b23890df04792f9424c/config/crd/bases/rhdh.redhat.com_orchestrators.yaml#L451) and [tekton](https://github.com/parodos-dev/orchestrator-helm-operator/blob/c577e95e063e2bf8119b2b23890df04792f9424c/config/crd/bases/rhdh.redhat.com_orchestrators.yaml#L443) in your CR instance.
 
 ## Installation
 
