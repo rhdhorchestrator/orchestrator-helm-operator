@@ -1,5 +1,5 @@
 # Use the 'create api' subcommand to add watches to this file.
-- group: orchestrator.parodos.dev
+- group: rhdh.redhat.com
   version: v1alpha1
   kind: Orchestrator
   chart: helm-charts/orchestrator
