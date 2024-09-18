@@ -208,7 +208,7 @@ schema: olm.bundle
   apiVersion: appstudio.redhat.com/v1alpha1
   kind: Release
   metadata:
-    generateName: fbc-$componentName-
+    generateName: $componentName-
     namespace: orchestrator-releng-tenant
   spec:
     releasePlan: $componentName-release-as-staging-fbc
