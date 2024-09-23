@@ -53,30 +53,30 @@ rhdhOperator:
     targetNamespace: rhdh-operator # the target namespace for the backstage CR in which RHDH instance is created
 
 rhdhPlugins: # RHDH plugins required for the Orchestrator
-  npmRegistry: "https://npm.stage.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
+  npmRegistry: "https://npm.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
   scope: "@redhat"
   orchestrator:
-    package: "backstage-plugin-orchestrator@1.2.0-rc.4"
-    integrity: sha512-qlTNkri7LMRLE1/QH6CXMvdVWdjnatJyH5pu4f4y/a9WLyMG/AZX1xuvJDeArk0Gy2G7HHl19maHpblcvCWUVg==
+    package: "backstage-plugin-orchestrator@1.2.0"
+    integrity: sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA==
   orchestratorBackend:
-    package: "backstage-plugin-orchestrator-backend-dynamic@1.2.0-rc.4"
-    integrity: sha512-xRzEbcrVLls5M3BV4Ck0jy9amTwS+mW7l5RhE2DKNyb8rKjTmK3INUvE2Z6fvyEEN9iubNqi48SF7A29ZC5knA==
+    package: "backstage-plugin-orchestrator-backend-dynamic@1.2.0"
+    integrity: sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg==
   notifications:
-    package: "plugin-notifications-dynamic@1.2.0-rc.1"
-    integrity: sha512-3sKvF+sMzx1dPzSGHlbeePmUTrFKztSRcOQGsP60GHgEfg/g4NHQi2nZMlaYYG4+2/ChMl/CrA0vv481s5bgHg==
+    package: "plugin-notifications-dynamic@1.2.0"
+    integrity: sha512-1mhUl14v+x0Ta1o8Sp4KBa02izGXHd+wsiCVsDP/th6yWDFJsfSMf/DyMIn1Uhat1rQgVFRUMg8QgrvbgZCR/w==
   notificationsBackend:
-    package: "plugin-notifications-backend-dynamic@1.2.0-rc.1"
-    integrity: sha512-LgW8Jq5a0fxPymQoH99ssvwUz0mZLb3dmUx53LtImdT5+B/cKQ/VKa+iLDe7bMZepwqA0yJmjf/tDwKi8qzNqg==
+    package: "plugin-notifications-backend-dynamic@1.2.0"
+    integrity: sha512-pCFB/jZIG/Ip1wp67G0ZDJPp63E+aw66TX1rPiuSAbGSn+Mcnl8g+XlHLOMMTz+NPloHwj2/Tp4fSf59w/IOSw==
   signals:
-    package: "plugin-signals-dynamic@1.2.0-rc.1"
-    integrity: sha512-ESZJiXPL5hbE3w0oenBy/iY50V/QS5udqfdY0EggCLz7McsjYuBgz9zyowi87oxt8Sscu/Er9gquqi8gGAo4Dw==
+    package: "plugin-signals-dynamic@1.2.0"
+    integrity: sha512-5tbZyRob0JDdrI97HXb7JqFIzNho1l7JuIkob66J+ZMAPCit+pjN1CUuPbpcglKyyIzULxq63jMBWONxcqNSXw==
   signalsBackend:
-    package: "plugin-signals-backend-dynamic@1.2.0-rc.1"
-    integrity: sha512-yFSHfkvq9RTzeWTb+V0mMCxShrbHdad6AhNKZ0wU6ywbjw5N9CaedmD0eG+A7f7XEy3dLsmTxIlYbshdct4TiQ==
+    package: "plugin-signals-backend-dynamic@1.2.0"
+    integrity: sha512-DIISzxtjeJ4a9mX3TLcuGcavRHbCtQ5b52wHn+9+uENUL2IDbFoqmB4/9BQASaKIUSFkRKLYpc5doIkrnTVyrA==
   notificationsEmail:
     enabled: false # whether to install the notifications email plugin. requires setting of hostname and credentials in backstage secret to enable. See value backstage-backend-auth-secret. See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts
-    package: "plugin-notifications-backend-module-email-dynamic@1.2.0-rc.1"
-    integrity: sha512-S2+gNOoEyQMPATdfIIB4XvZPLGWqyCiAHsOgfgW3qxjM8paSYoxbhHtGP2m+1BePLSbm9PBjVv54xOWTPyL25A==
+    package: "plugin-notifications-backend-module-email-dynamic@1.2.0"
+    integrity: sha512-dtmliahV5+xtqvwdxP2jvyzd5oXTbv6lvS3c9nR8suqxTullxxj0GFg1uU2SQ2uKBQWhOz8YhSmrRwxxLa9Zqg==
     port: 587 # SMTP server port
     sender: "" # the email sender address
     replyTo: "" # reply-to address

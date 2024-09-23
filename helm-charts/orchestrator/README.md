@@ -50,23 +50,23 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.subscription.source` | name of the catalog source | `"redhat-operators"` |
 | `rhdhOperator.subscription.startingCSV` | The initial version of the operator | `""` |
 | `rhdhOperator.subscription.targetNamespace` | the target namespace for the backstage CR in which RHDH instance is created | `"rhdh-operator"` |
-| `rhdhPlugins.npmRegistry` | NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories | `"https://npm.stage.registry.redhat.com"` |
+| `rhdhPlugins.npmRegistry` | NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories | `"https://npm.registry.redhat.com"` |
 | `rhdhPlugins.scope` |  | `"@redhat"` |
-| `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.2.0-rc.4"` |
-| `rhdhPlugins.orchestrator.integrity` |  | `"sha512-qlTNkri7LMRLE1/QH6CXMvdVWdjnatJyH5pu4f4y/a9WLyMG/AZX1xuvJDeArk0Gy2G7HHl19maHpblcvCWUVg=="` |
-| `rhdhPlugins.orchestratorBackend.package` |  | `"backstage-plugin-orchestrator-backend-dynamic@1.2.0-rc.4"` |
-| `rhdhPlugins.orchestratorBackend.integrity` |  | `"sha512-xRzEbcrVLls5M3BV4Ck0jy9amTwS+mW7l5RhE2DKNyb8rKjTmK3INUvE2Z6fvyEEN9iubNqi48SF7A29ZC5knA=="` |
-| `rhdhPlugins.notifications.package` |  | `"plugin-notifications-dynamic@1.2.0-rc.1"` |
-| `rhdhPlugins.notifications.integrity` |  | `"sha512-3sKvF+sMzx1dPzSGHlbeePmUTrFKztSRcOQGsP60GHgEfg/g4NHQi2nZMlaYYG4+2/ChMl/CrA0vv481s5bgHg=="` |
-| `rhdhPlugins.notificationsBackend.package` |  | `"plugin-notifications-backend-dynamic@1.2.0-rc.1"` |
-| `rhdhPlugins.notificationsBackend.integrity` |  | `"sha512-LgW8Jq5a0fxPymQoH99ssvwUz0mZLb3dmUx53LtImdT5+B/cKQ/VKa+iLDe7bMZepwqA0yJmjf/tDwKi8qzNqg=="` |
-| `rhdhPlugins.signals.package` |  | `"plugin-signals-dynamic@1.2.0-rc.1"` |
-| `rhdhPlugins.signals.integrity` |  | `"sha512-ESZJiXPL5hbE3w0oenBy/iY50V/QS5udqfdY0EggCLz7McsjYuBgz9zyowi87oxt8Sscu/Er9gquqi8gGAo4Dw=="` |
-| `rhdhPlugins.signalsBackend.package` |  | `"plugin-signals-backend-dynamic@1.2.0-rc.1"` |
-| `rhdhPlugins.signalsBackend.integrity` |  | `"sha512-yFSHfkvq9RTzeWTb+V0mMCxShrbHdad6AhNKZ0wU6ywbjw5N9CaedmD0eG+A7f7XEy3dLsmTxIlYbshdct4TiQ=="` |
+| `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.2.0"` |
+| `rhdhPlugins.orchestrator.integrity` |  | `"sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA=="` |
+| `rhdhPlugins.orchestratorBackend.package` |  | `"backstage-plugin-orchestrator-backend-dynamic@1.2.0"` |
+| `rhdhPlugins.orchestratorBackend.integrity` |  | `"sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg=="` |
+| `rhdhPlugins.notifications.package` |  | `"plugin-notifications-dynamic@1.2.0"` |
+| `rhdhPlugins.notifications.integrity` |  | `"sha512-1mhUl14v+x0Ta1o8Sp4KBa02izGXHd+wsiCVsDP/th6yWDFJsfSMf/DyMIn1Uhat1rQgVFRUMg8QgrvbgZCR/w=="` |
+| `rhdhPlugins.notificationsBackend.package` |  | `"plugin-notifications-backend-dynamic@1.2.0"` |
+| `rhdhPlugins.notificationsBackend.integrity` |  | `"sha512-pCFB/jZIG/Ip1wp67G0ZDJPp63E+aw66TX1rPiuSAbGSn+Mcnl8g+XlHLOMMTz+NPloHwj2/Tp4fSf59w/IOSw=="` |
+| `rhdhPlugins.signals.package` |  | `"plugin-signals-dynamic@1.2.0"` |
+| `rhdhPlugins.signals.integrity` |  | `"sha512-5tbZyRob0JDdrI97HXb7JqFIzNho1l7JuIkob66J+ZMAPCit+pjN1CUuPbpcglKyyIzULxq63jMBWONxcqNSXw=="` |
+| `rhdhPlugins.signalsBackend.package` |  | `"plugin-signals-backend-dynamic@1.2.0"` |
+| `rhdhPlugins.signalsBackend.integrity` |  | `"sha512-DIISzxtjeJ4a9mX3TLcuGcavRHbCtQ5b52wHn+9+uENUL2IDbFoqmB4/9BQASaKIUSFkRKLYpc5doIkrnTVyrA=="` |
 | `rhdhPlugins.notificationsEmail.enabled` | whether to install the notifications email plugin. requires setting of hostname and credentials in backstage secret to enable. See value backstage-backend-auth-secret. See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts | `false` |
-| `rhdhPlugins.notificationsEmail.package` |  | `"plugin-notifications-backend-module-email-dynamic@1.2.0-rc.1"` |
-| `rhdhPlugins.notificationsEmail.integrity` |  | `"sha512-S2+gNOoEyQMPATdfIIB4XvZPLGWqyCiAHsOgfgW3qxjM8paSYoxbhHtGP2m+1BePLSbm9PBjVv54xOWTPyL25A=="` |
+| `rhdhPlugins.notificationsEmail.package` |  | `"plugin-notifications-backend-module-email-dynamic@1.2.0"` |
+| `rhdhPlugins.notificationsEmail.integrity` |  | `"sha512-dtmliahV5+xtqvwdxP2jvyzd5oXTbv6lvS3c9nR8suqxTullxxj0GFg1uU2SQ2uKBQWhOz8YhSmrRwxxLa9Zqg=="` |
 | `rhdhPlugins.notificationsEmail.port` | SMTP server port | `587` |
 | `rhdhPlugins.notificationsEmail.sender` | the email sender address | `""` |
 | `rhdhPlugins.notificationsEmail.replyTo` | reply-to address | `""` |
