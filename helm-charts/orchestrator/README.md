@@ -52,10 +52,10 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.subscription.targetNamespace` | the target namespace for the backstage CR in which RHDH instance is created | `"rhdh-operator"` |
 | `rhdhPlugins.npmRegistry` | NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories | `"https://npm.stage.registry.redhat.com"` |
 | `rhdhPlugins.scope` |  | `"@redhat"` |
-| `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.2.0-rc.4"` |
-| `rhdhPlugins.orchestrator.integrity` |  | `"sha512-qlTNkri7LMRLE1/QH6CXMvdVWdjnatJyH5pu4f4y/a9WLyMG/AZX1xuvJDeArk0Gy2G7HHl19maHpblcvCWUVg=="` |
-| `rhdhPlugins.orchestratorBackend.package` |  | `"backstage-plugin-orchestrator-backend-dynamic@1.2.0-rc.4"` |
-| `rhdhPlugins.orchestratorBackend.integrity` |  | `"sha512-xRzEbcrVLls5M3BV4Ck0jy9amTwS+mW7l5RhE2DKNyb8rKjTmK3INUvE2Z6fvyEEN9iubNqi48SF7A29ZC5knA=="` |
+| `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.2.0"` |
+| `rhdhPlugins.orchestrator.integrity` |  | `"sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA=="` |
+| `rhdhPlugins.orchestratorBackend.package` |  | `"backstage-plugin-orchestrator-backend-dynamic@1.2.0"` |
+| `rhdhPlugins.orchestratorBackend.integrity` |  | `"sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg=="` |
 | `rhdhPlugins.notifications.package` |  | `"plugin-notifications-dynamic@1.2.0-rc.1"` |
 | `rhdhPlugins.notifications.integrity` |  | `"sha512-3sKvF+sMzx1dPzSGHlbeePmUTrFKztSRcOQGsP60GHgEfg/g4NHQi2nZMlaYYG4+2/ChMl/CrA0vv481s5bgHg=="` |
 | `rhdhPlugins.notificationsBackend.package` |  | `"plugin-notifications-backend-dynamic@1.2.0-rc.1"` |

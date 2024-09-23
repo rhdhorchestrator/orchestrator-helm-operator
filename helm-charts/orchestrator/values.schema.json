@@ -653,7 +653,7 @@
                             "default": "",
                             "title": "The package Schema",
                             "examples": [
-                                "backstage-plugin-orchestrator@1.2.0-rc.4"
+                                "backstage-plugin-orchestrator@1.2.0"
                             ]
                         },
                         "integrity": {
@@ -661,13 +661,13 @@
                             "default": "",
                             "title": "The integrity Schema",
                             "examples": [
-                                "sha512-qlTNkri7LMRLE1/QH6CXMvdVWdjnatJyH5pu4f4y/a9WLyMG/AZX1xuvJDeArk0Gy2G7HHl19maHpblcvCWUVg=="
+                                "sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA=="
                             ]
                         }
                     },
                     "examples": [{
-                        "package": "backstage-plugin-orchestrator@1.2.0-rc.4",
-                        "integrity": "sha512-qlTNkri7LMRLE1/QH6CXMvdVWdjnatJyH5pu4f4y/a9WLyMG/AZX1xuvJDeArk0Gy2G7HHl19maHpblcvCWUVg=="
+                        "package": "backstage-plugin-orchestrator@1.2.0",
+                        "integrity": "sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA=="
                     }]
                 },
                 "orchestratorBackend": {
@@ -684,7 +684,7 @@
                             "default": "",
                             "title": "The package Schema",
                             "examples": [
-                                "backstage-plugin-orchestrator-backend-dynamic@1.2.0-rc.4"
+                                "backstage-plugin-orchestrator-backend-dynamic@1.2.0"
                             ]
                         },
                         "integrity": {
@@ -692,13 +692,13 @@
                             "default": "",
                             "title": "The integrity Schema",
                             "examples": [
-                                "sha512-xRzEbcrVLls5M3BV4Ck0jy9amTwS+mW7l5RhE2DKNyb8rKjTmK3INUvE2Z6fvyEEN9iubNqi48SF7A29ZC5knA=="
+                                "sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg=="
                             ]
                         }
                     },
                     "examples": [{
-                        "package": "backstage-plugin-orchestrator-backend-dynamic@1.2.0-rc.4",
-                        "integrity": "sha512-xRzEbcrVLls5M3BV4Ck0jy9amTwS+mW7l5RhE2DKNyb8rKjTmK3INUvE2Z6fvyEEN9iubNqi48SF7A29ZC5knA=="
+                        "package": "backstage-plugin-orchestrator-backend-dynamic@1.2.0",
+                        "integrity": "sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg=="
                     }]
                 },
                 "notifications": {
@@ -901,12 +901,12 @@
                 "npmRegistry": "https://npm.stage.registry.redhat.com",
                 "scope": "@redhat",
                 "orchestrator": {
-                    "package": "backstage-plugin-orchestrator@1.2.0-rc.4",
-                    "integrity": "sha512-qlTNkri7LMRLE1/QH6CXMvdVWdjnatJyH5pu4f4y/a9WLyMG/AZX1xuvJDeArk0Gy2G7HHl19maHpblcvCWUVg=="
+                    "package": "backstage-plugin-orchestrator@1.2.0",
+                    "integrity": "sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA=="
                 },
                 "orchestratorBackend": {
-                    "package": "backstage-plugin-orchestrator-backend-dynamic@1.2.0-rc.4",
-                    "integrity": "sha512-xRzEbcrVLls5M3BV4Ck0jy9amTwS+mW7l5RhE2DKNyb8rKjTmK3INUvE2Z6fvyEEN9iubNqi48SF7A29ZC5knA=="
+                    "package": "backstage-plugin-orchestrator-backend-dynamic@1.2.0",
+                    "integrity": "sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg=="
                 },
                 "notifications": {
                     "package": "plugin-notifications-dynamic@1.2.0-rc.1",
@@ -1281,12 +1281,12 @@
             "npmRegistry": "https://npm.stage.registry.redhat.com",
             "scope": "@redhat",
             "orchestrator": {
-                "package": "backstage-plugin-orchestrator@1.2.0-rc.4",
-                "integrity": "sha512-qlTNkri7LMRLE1/QH6CXMvdVWdjnatJyH5pu4f4y/a9WLyMG/AZX1xuvJDeArk0Gy2G7HHl19maHpblcvCWUVg=="
+                "package": "backstage-plugin-orchestrator@1.2.0",
+                "integrity": "sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA=="
             },
             "orchestratorBackend": {
-                "package": "backstage-plugin-orchestrator-backend-dynamic@1.2.0-rc.4",
-                "integrity": "sha512-xRzEbcrVLls5M3BV4Ck0jy9amTwS+mW7l5RhE2DKNyb8rKjTmK3INUvE2Z6fvyEEN9iubNqi48SF7A29ZC5knA=="
+                "package": "backstage-plugin-orchestrator-backend-dynamic@1.2.0",
+                "integrity": "sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg=="
             },
             "notifications": {
                 "package": "plugin-notifications-dynamic@1.2.0-rc.1",
