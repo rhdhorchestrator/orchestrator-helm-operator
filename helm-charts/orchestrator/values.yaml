@@ -53,7 +53,7 @@ rhdhOperator:
     targetNamespace: rhdh-operator # the target namespace for the backstage CR in which RHDH instance is created
 
 rhdhPlugins: # RHDH plugins required for the Orchestrator
-  npmRegistry: "https://npm.stage.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
+  npmRegistry: "https://npm.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
   scope: "@redhat"
   orchestrator:
     package: "backstage-plugin-orchestrator@1.2.0"

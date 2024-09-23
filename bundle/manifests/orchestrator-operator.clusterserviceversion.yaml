@@ -96,7 +96,7 @@ metadata:
                 "replyTo": "",
                 "sender": ""
               },
-              "npmRegistry": "https://npm.stage.registry.redhat.com",
+              "npmRegistry": "https://npm.registry.redhat.com",
               "orchestrator": {
                 "integrity": "sha512-uxkNFS/4nkVM6FRq0Uvnznvxcm/3MNdh11R6sRsbmKCP4KF4N9T2GF4lgfD7J+p7EuGMD4UFnjKjaR77v0NGaQ==",
                 "package": "backstage-plugin-orchestrator@1.1.0-rc.0-0"

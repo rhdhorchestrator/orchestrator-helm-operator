@@ -402,7 +402,7 @@ spec:
                         type: string
                     type: object
                   npmRegistry:
-                    default: https://npm.stage.registry.redhat.com
+                    default: https://npm.registry.redhat.com
                     description: NPM registry is defined already in the container,
                       but sometimes the registry need to be modified to use different
                       versions of the plugin, for example staging (https://npm.stage.registry.redhat.com)

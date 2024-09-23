@@ -628,7 +628,7 @@
                     "default": "",
                     "title": "The npmRegistry Schema",
                     "examples": [
-                        "https://npm.stage.registry.redhat.com"
+                        "https://npm.registry.redhat.com"
                     ]
                 },
                 "scope": {
@@ -898,7 +898,7 @@
                 }
             },
             "examples": [{
-                "npmRegistry": "https://npm.stage.registry.redhat.com",
+                "npmRegistry": "https://npm.registry.redhat.com",
                 "scope": "@redhat",
                 "orchestrator": {
                     "package": "backstage-plugin-orchestrator@1.2.0",
@@ -1278,7 +1278,7 @@
             }
         },
         "rhdhPlugins": {
-            "npmRegistry": "https://npm.stage.registry.redhat.com",
+            "npmRegistry": "https://npm.registry.redhat.com",
             "scope": "@redhat",
             "orchestrator": {
                 "package": "backstage-plugin-orchestrator@1.2.0",

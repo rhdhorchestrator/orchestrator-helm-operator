@@ -50,7 +50,7 @@ The following table lists the configurable parameters of the Orchestrator chart 
 | `rhdhOperator.subscription.source` | name of the catalog source | `"redhat-operators"` |
 | `rhdhOperator.subscription.startingCSV` | The initial version of the operator | `""` |
 | `rhdhOperator.subscription.targetNamespace` | the target namespace for the backstage CR in which RHDH instance is created | `"rhdh-operator"` |
-| `rhdhPlugins.npmRegistry` | NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories | `"https://npm.stage.registry.redhat.com"` |
+| `rhdhPlugins.npmRegistry` | NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories | `"https://npm.registry.redhat.com"` |
 | `rhdhPlugins.scope` |  | `"@redhat"` |
 | `rhdhPlugins.orchestrator.package` |  | `"backstage-plugin-orchestrator@1.2.0"` |
 | `rhdhPlugins.orchestrator.integrity` |  | `"sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA=="` |
