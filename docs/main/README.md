@@ -5,7 +5,7 @@ For comprehensive documentation on the Orchestrator, please visit [https://www.p
 ## Installing the Orchestrator Helm Operator
 
 Deploy the Orchestrator solution suite in an OCP cluster using the Orchestrator operator.\
-The chart installs the following components onto the target OpenShift cluster:
+The operator installs the following components onto the target OpenShift cluster:
 
 - RHDH (Red Hat Developer Hub) Backstage
 - OpenShift Serverless Logic Operator (with Data-Index and Job Service)
@@ -17,7 +17,7 @@ The chart installs the following components onto the target OpenShift cluster:
 
 ## Important Note for ARM64 Architecture Users
 
-Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL 8 images which are not supported on the ARM64 architecture. Consequently, deployment of this helm chart on an [OpenShift Local](https://www.redhat.com/sysadmin/install-openshift-local) cluster on MacBook laptops with M1/M2 chips is not supported.
+Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL 8 images which are not supported on the ARM64 architecture. Consequently, deployment of this operator on an [OpenShift Local](https://www.redhat.com/sysadmin/install-openshift-local) cluster on MacBook laptops with M1/M2 chips is not supported.
 
 ## Prerequisites
 
@@ -25,7 +25,6 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 - [OpenShift CLI (oc)](https://docs.openshift.com/container-platform/4.13/cli_reference/openshift_cli/getting-started-cli.html) is installed.
 - [Operator Lifecycle Manager (OLM)](https://olm.operatorframework.io/docs/getting-started/) has been installed in your cluster.
 - Your cluster has a [default storage class](https://docs.openshift.com/container-platform/4.13/storage/container_storage_interface/persistent-storage-csi-sc-manage.html) provisioned.
-- [Helm](https://helm.sh/docs/intro/install/) v3.9+ is installed.
 - A GitHub API Token - to import items into the catalog, ensure you have a `GITHUB_TOKEN` with the necessary permissions as detailed [here](https://backstage.io/docs/integrations/github/locations/).
   -  For classic token, include the following permissions:
       - repo (all)
@@ -132,14 +131,19 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 1.  Run the following commands to determine when the installation is completed:
 
     ```console
-    wget https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/main/hack/wait_for_operator_installed.sh -O /tmp/wait_for_operator_installed.sh && chmod u+x /tmp/wait_for_operator_installed.sh
+    wget https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/main/hack/wait_for_operator_installed.sh -O /tmp/wait_for_operator_installed.sh && chmod u+x /tmp/wait_for_operator_installed.sh && /tmp/wait_for_operator_installed.sh
     ```
 
-    During the installation process, Kubernetes cronjobs are created by the chart to monitor the lifecycle of the CRs managed by the chart: rhdh operator, serverless operator and sonataflow operator. When deleting one of the previously mentioned CRs, a job is triggered that ensures the CR is removed before the operator is.
+    During the installation process, Kubernetes cronjobs are created by the operator to monitor the lifecycle of the CRs managed by the operator: RHDH operator, OpenShift Serverless operator and OpenShift Serverless Logic operator. When deleting one of the previously mentioned CRs, a job is triggered that ensures the CR is removed before the operator is.
     In case of any failure at this stage, these jobs remain active, facilitating administrators in retrieving detailed diagnostic information to identify and address the cause of the failure.
 
-    > **Note:** that every minute on the clock a job is triggered to reconcile the CRs with the chart values. These cronjobs are deleted when their respective features (e.g. `rhdhOperator.enabled=false`) are removed or when the chart is removed. This is required because the CRs are not managed by helm due to the CRD dependency pre availability to the deployment of the CR.
+    > **Note:** that every minute on the clock a job is triggered to reconcile the CRs with the orchestrator resource values. These cronjobs are deleted when their respective features (e.g. `rhdhOperator.enabled=false`) are removed or when the orchestrator resource is removed. This is required because the CRs are not managed by helm due to the CRD dependency pre availability to the deployment of the CR.
 
+1. Apply the Orchestrator custom resource (CR) on the cluster to create an instance of RHDH and resources of OpenShift Serverless Operator and OpenShift Serverless Operator Logic.
+   Make any changes to the [CR](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/config/samples/_v1alpha1_orchestrator.yaml) before applying it, or test the default Orchestrator CR:
+    ```console
+    oc apply -n orchestrator -f https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/refs/heads/main/config/samples/_v1alpha1_orchestrator.yaml
+    ```
 
 ## Additional information
 
@@ -157,7 +161,7 @@ When deploying a workflow in a namespace different from where Sonataflow service
    ```console
       oc get backstage -A
    ```
-   Store the namespace value in RHDH_NAMESPACE.
+   Store the namespace value in RHDH_NAMESPACE in the Network Policy manifest below.
 3. **Identify the Sonataflow Services Namespace:**
    Check the namespace where Sonataflow services are deployed:
    ```console
@@ -169,8 +173,8 @@ When deploying a workflow in a namespace different from where Sonataflow service
    ```
    Store the namespace value in SONATAFLOW_PLATFORM_NAMESPACE.
 
-4. **Set Up Network Policy:**
-   Configure a network policy to allow traffic only between RHDH, Sonataflow services, and the workflows. The policy can be derived from the charts/orchestrator/templates/network-policy.yaml file:
+4. **Set Up a Network Policy:**
+   Configure a network policy to allow traffic only between RHDH, Sonataflow services, and the workflows. The policy can be derived from [here](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/helm-charts/orchestrator/templates/network-policies.yaml)
 
    ```console
    oc create -f <<EOF
@@ -238,7 +242,7 @@ See [here](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/d
 
 ### ArgoCD and workflow namespace
 
-If you manually created the workflow namespaces (e.g., `$WORKFLOW_NAMESPACE`), run this command to add the required label that allows ArgoCD deploying instances there:
+If you manually created the workflow namespaces (e.g., `$WORKFLOW_NAMESPACE`), run this command to add the required label that allows ArgoCD to deploy instances there:
 
 ```console
 oc label ns $WORKFLOW_NAMESPACE argocd.argoproj.io/managed-by=$ARGOCD_NAMESPACE
@@ -250,7 +254,7 @@ Follow [Workflows Installation](https://www.parodos.dev/serverless-workflows-con
 
 ## Cleanup
 
-**\/!\\ Before removing the orchestrator, make sure you first removed installed workflows. Otherwise the deletion may hung in termination state**
+**\/!\\ Before removing the orchestrator, make sure you have first removed any installed workflows. Otherwise the deletion may become hung in a terminating state.**
 
 To remove the operator from the cluster, delete the subscription:
 
