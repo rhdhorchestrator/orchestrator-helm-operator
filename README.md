@@ -2,7 +2,7 @@
 Meta Operator for deploying the Orchestrator helm charts
 
 # Pre-install requirements
-This operator is a helm operator using the helm charts from the orchestrator repository. As such, you need to fulfill the pre-install requirements defined in the [README.md](https://github.com/parodos-dev/orchestrator-helm-chart/blob/gh-pages/README.md) prior to deploying the operator in a cluster.
+This operator is a helm operator using the helm charts from the orchestrator repository. As such, you need to fulfill the pre-install requirements defined in the [README.md](https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/docs/release-1.2/README.md) prior to deploying the operator in a cluster.
 
 ## Release
 
