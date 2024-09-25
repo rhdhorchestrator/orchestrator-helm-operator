@@ -24,7 +24,7 @@ At this point releasing the operator can branch into 2 scenarios:
 
 ## Konflux release (for downstream)
 
-Follow the [konflux release documentation](docs/release_operator_with_konflux.md) for staging and production releases using Konflux.
+Follow the [konflux release documentation](docs/konflux/release_operator_with_konflux.md) for staging and production releases using Konflux.
 
 ## Manual release (for upstream only)
 1. Switch to the main branch and pull the changes so that your fork and upstream are in sync and contain the new additions.

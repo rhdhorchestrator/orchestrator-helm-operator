@@ -72,9 +72,13 @@ If you're releasing from a controller's update nudge, which is the most probable
 helm-operator-6mhqg		True	Merge pull request #195 from parodos-dev/konflux/component-updates/controller-rhel9-operator
 ```
 
-* Ensure that the bundle's controller pullspec matches the one in the snapshot. The bundle's container image contains a label with the image pullspec of the controller used in the bundle. Use the following commands to extract the controler from the bundle of the snapshot `helm-operator-6mhqg`:
+* Ensure that the bundle's controller pullspec matches the one in the snapshot.
 ```console
 snapshot=helm-operator-6mhqg
+```
+
+The bundle's container image contains a label with the image pullspec of the controller used in the bundle. Use the following commands to extract the controler from the bundle of the snapshot `helm-operator-6mhqg`:
+```console
 bundle=$(oc get snapshot $snapshot -ojsonpath='{.spec.components[?(@.name=="orchestrator-operator-bundle")].containerImage}')
 controllerInBundle=$(skopeo inspect docker://$bundle --format "{{.Labels.controller}}")
 controllerInSnapshot=$(oc get snapshot $snapshot -ojsonpath='{.spec.components[?(@.name=="controller-rhel9-operator")].containerImage}')
@@ -128,8 +132,8 @@ Note, if you haven't yet released the operator in production, you'll need to fol
 git clone https://github.com/parodos-dev/orchestrator-fbc.git
 ```
 
-* Update the graph.yaml in the OCP version following the FBC documentation to ensure that each each version published has an upgrade path. Check [this page](https://docs.openshift.com/container-platform/4.17/extensions/catalogs/fbc.html#olm-channel-schema_fbc) to understand the different options when updating the fragment.
-  The most common case is when updating the [z-stream version](https://github.com/parodos-dev/orchestrator-fbc/pull/92), in which case you will have to amend the original fragment (graph.yaml) and define the linkage between releases, so that the newest one is marked as a replacement to the previous one, and so on. So if we wanted to add the new release as `1.2.0-rc11` to the current graph.yaml, we'd be adding a value in the `entries:` section, and another pair for the `image` and `schema` with the pullspec of the bundle. Note that you should have the digest of the bundle image in `$bundlePullSpec`.
+* Update the `graph.stage.yaml` file for the OCP version following the FBC documentation to ensure that each each version published has an upgrade path. Check [this page](https://docs.openshift.com/container-platform/4.17/extensions/catalogs/fbc.html#olm-channel-schema_fbc) to understand the different options when updating the fragment.
+  The most common case is when updating the [z-stream version](https://github.com/parodos-dev/orchestrator-fbc/pull/92), in which case you will have to amend the original fragment (graph.stage.yaml) and define the linkage between releases, so that the newest one is marked as a replacement to the previous one, and so on. So if we wanted to add the new release as `1.2.0-rc11` to the current graph.stage.yaml, we'd be adding a value in the `entries:` section, and another pair for the `image` and `schema` with the pullspec of the bundle. Note that you should have the digest of the bundle image in `$bundlePullSpec`.
 
 ```console
 ---
@@ -163,16 +167,20 @@ schema: olm.bundle
 ```
 
 
-* Run the `generate-fbc.sh --render <OCP version>` command to generate the new catalog and then update the resulting catalog manifest to ensure that it references the staging repository for the controller. Review the changes and revert any reference to the `quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator` pullspec in the generated images, if any. This is a leftover from the first publishes of the catalog where the initial bundle was referencing this pullspec instead of staging or production.
+* Run the `generate-fbc.sh --render <OCP version> stage` command to generate the new catalog and then update the resulting catalog manifest to ensure that it references the staging repository for the controller. Review the changes and revert any reference to the `quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator` pullspec in the generated images, if any. This is a leftover from the first publishes of the catalog where the initial bundle was referencing this pullspec instead of staging or production.
 
 * Create a PR with the changes and merge it once it's green. Ensure that the on-push and ECP pipelines finish before proceeding. You'll need the snapshot generated from the ECP pipeline to release the FBC fragment to the index.
 
 * Follow these steps for each OCP version:
 
-  * Identify the snapshot that contains the PR you just merged:
+  * Identify the snapshot that contains the PR you just merged. In our current case we'll target OCP v4.14:
 
   ```console
   componentName=fbc-v4-14
+  ```
+
+  And run this command:
+  ```console
   oc get snapshots --sort-by .metadata.creationTimestamp -l pac.test.appstudio.openshift.io/event-type=push,appstudio.openshift.io/application=$componentName -ojsonpath='{range .items[*]}{@.metadata.name}{"\t"}{@.status.conditions[?(@.type=="AppStudioTestSucceeded")].status}{"\t"}{@.metadata.annotations.pac\.test\.appstudio\.openshift\.io/sha-title}{"\n"}{end}'
   ```
 
@@ -200,10 +208,13 @@ schema: olm.bundle
   fbc-v4-14-rjwkj	True	Merge pull request #92 from jordigilh/release/stage/1.2.0-rc11
   ```
 
-  * Create a new Release manifest for staging
+  * Create a new Release manifest for staging using the snapshot listed above:
   ```console
   snapshot=fbc-v4-14-rjwkj
+  ```
 
+  And now create the release:
+  ```console
   releaseName=$(bash -c "oc create -f - <<EOF
   apiVersion: appstudio.redhat.com/v1alpha1
   kind: Release
@@ -333,7 +344,7 @@ At this point, the container images have been pushed to the production registry.
 
 
 #### Releasing a new FBC index to production
-Releasing the fragment is a simple step to update the FBC graph manifest to point to the production registry and run the command to generate the catalog. The lastest commit in the repo should reflect the bundle's container image pullspec being the same as the one in the snapshot we retrieved from the stage build.
+Releasing the fragment is a simple step to update the FBC graph manifest (`graph.prod.yaml`) to point to the production registry and run the command to generate the catalog. The lastest commit in the repo should reflect the bundle's container image pullspec being the same as the one in the snapshot we retrieved from the stage build.
 
 ```console
 ---
@@ -366,7 +377,7 @@ schema: olm.bundle
 # orchestrator-helm-operator v.1.2.0-rc11
 ```
 
-* Run the `generate-fbc.sh --render <OCP version>` command to generate the new catalog and then update the resulting catalog manifest to ensure that it references the production repository for the controller. Review the changes and revert any reference to the `quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator` pullspec in the generated images, if any. This is a leftover from the first publishes of the catalog where the initial bundle was referencing this pullspec instead of staging or production.
+* Run the `generate-fbc.sh --render <OCP version> prod` command to generate the new catalog and then update the resulting catalog manifest to ensure that it references the production repository for the controller. Review the changes and revert any reference to the `quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator` pullspec in the generated images, if any. This is a leftover from the first publishes of the catalog where the initial bundle was referencing this pullspec instead of staging or production.
 
 * Create a PR with the changes and merge it once it's green. Ensure that the on-push and ECP pipelines finish before proceeding. You'll need the snapshot generated from the ECP pipeline to add the FBC fragment to the production index.
 
@@ -487,6 +498,11 @@ Results:
   Solution: Use image from an allowed registry, or modify your xref:ec-cli:ROOT:configuration.adoc#_data_sources[policy
   configuration] to include additional registry prefixes.
 ```
+
+
+### Unable to pull images from staging environment
+The images have a default pullspec [reference](https://github.com/parodos-dev/orchestrator-helm-operator/blob/9e2371748bfbe899f945e9a5655622483504e660/bundle.konflux.Dockerfile#L12) that points to the production registry. When deploying from the staging IIB catalog, the cluster will try to pull the images from the production registry as defined in the spec and fail. To fix this issue, the cluster has to be configured so that it is aware of registry mirrors for specific image pullspecs. Configure your cluster by deploying this [manifest](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/konflux/imagedigestmirrorset.yaml) that will instruct the cluster to fallback to the staging registry when the images are not in production.
+
 
 ## Command tips
 * Retrieve the components for a given application:
