@@ -235,6 +235,7 @@ done
 ```
 
 A sample output should look like:
+```
 Retriving latest version for plugin: @redhat/backstage-plugin-orchestrator\n
 package: "@redhat/backstage-plugin-orchestrator@1.2.0"
 integrity: sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA==
@@ -263,6 +264,7 @@ Retriving latest version for plugin: @redhat/plugin-signals-dynamic\n
 package: "@redhat/plugin-signals-dynamic@1.2.0"
 integrity: sha512-5tbZyRob0JDdrI97HXb7JqFIzNho1l7JuIkob66J+ZMAPCit+pjN1CUuPbpcglKyyIzULxq63jMBWONxcqNSXw==
 ---
+```
 
 After editing the version and integrity values in the *dynamic-plugins* ConfigMap, the RHDH instance will be restarted automatically.
 
