@@ -1,5 +1,3 @@
-**Please note - this document refers to RC builds and supported by RHDH-1.2 only**, the content will be updated once plugins are released as GA.
-
 # Prerequisites
 - RHDH instance deployed with IDP configured (github, gitlab,...)
 - For using the Orchestrator's [software templates](https://github.com/parodos-dev/workflow-software-templates/tree/v1.2.x), OpenShift Gitops (ArgoCD) and OpenShift Pipelines (Tekton) should be installed and configured in RHDH (to enhance the CI/CD plugins)
@@ -50,22 +48,34 @@ metadata:
 EOF
 ```
 The value of `.data.npmrc` points to https://npm.registry.redhat.com.
-For testing RC plugin versions, update to `cmVnaXN0cnk9aHR0cHM6Ly9ucG0uc3RhZ2UucmVnaXN0cnkucmVkaGF0LmNvbQo=` (points to https://npm.stage.registry.redhat.com and can be accessed internally).
+For testing RC plugin versions, update to `cmVnaXN0cnk9aHR0cHM6Ly9ucG0uc3RhZ2UucmVnaXN0cnkucmVkaGF0LmNvbQo=` (points to https://npm.stage.registry.redhat.com and can be accessed internally). If there is a need to point to multiple registries, modify the content of the secret's data from:
+```
+  stringData:
+    .npmrc: |
+      registry=https://npm.registry.redhat.com
+```
+to
+```
+  stringData:
+    .npmrc: |
+      @redhat:registry=https://npm.registry.redhat.com
+      @<other-scope>:registry=<other-registry>
+```
 
 ### dynamic-plugins ConfigMap
 This ConfigMap houses the configuration for enabling and configuring dynamic plugins. To incorporate the orchestrator plugins, append the following configuration to the **dynamic-plugins** ConfigMap:
 
 ```yaml
   - disabled: false
-    package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.1.0-rc.0-0"
-    integrity: sha512-NIIGpwH/uJaMknTdORdnqsHfPeI/OrAl2biqELal1e9tK2r6PrVWfIWr9XoH5AfOjtQjbeAe7joiLwhM+uyVAw==
+    package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.2.0"
+    integrity: sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg==
     pluginConfig:
       orchestrator:
         dataIndexService:
           url: http://sonataflow-platform-data-index-service.sonataflow-infra
   - disabled: false
-    package: "@redhat/backstage-plugin-orchestrator@1.1.0-rc.0-0"
-    integrity: sha512-uxkNFS/4nkVM6FRq0Uvnznvxcm/3MNdh11R6sRsbmKCP4KF4N9T2GF4lgfD7J+p7EuGMD4UFnjKjaR77v0NGaQ==
+    package: "@redhat/backstage-plugin-orchestrator@1.2.0"
+    integrity: sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA==
     pluginConfig:
       dynamicPlugins:
         frontend:
@@ -133,40 +143,18 @@ For the `dynamic-plugins` ConfigMap add:
                   importName: NotificationsSidebarItem
                 path: /notifications
   - disabled: false
-    package: "@redhat/plugin-signals-dynamic@0.0.5-rc.0-0"
-    integrity: sha512-5Iwp9gF6VPiMLJ5NUw5s5Z17AuJ5XYS97wghNTfcmah/OFxTmgZHWxvhcRoXDRQvyj4nc/gOZes74kp6kZ9XDg==
+    package: "@redhat/plugin-notifications-dynamic@1.2.0"
+    integrity: sha512-1mhUl14v+x0Ta1o8Sp4KBa02izGXHd+wsiCVsDP/th6yWDFJsfSMf/DyMIn1Uhat1rQgVFRUMg8QgrvbgZCR/w==
     pluginConfig:
       dynamicPlugins:
         frontend:
           redhat.plugin-signals: {}
   - disabled: false
-    package: "@redhat/plugin-notifications-backend-dynamic@0.2.0-rc.0-0"
-    integrity: sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ==
+    package: "@redhat/plugin-notifications-backend-dynamic@1.2.0"
+    integrity: sha512-pCFB/jZIG/Ip1wp67G0ZDJPp63E+aw66TX1rPiuSAbGSn+Mcnl8g+XlHLOMMTz+NPloHwj2/Tp4fSf59w/IOSw==
   - disabled: false
-    package: "@redhat/plugin-signals-backend-dynamic@0.1.3-rc.0-0"
-    integrity: sha512-LlkM2Mf2QTndsS6eBzyXDhJmRTHLpAku3hhlvWhtQChSLTFCtNGRTIQA5WHG7NqLH0QqBz+UcEjX7Vca82QKKg==
-  - disabled: false # this plugin is optional and can be included to fan-out notifications as emails
-    package: "@redhat/plugin-notifications-backend-module-email-dynamic@0.0.0-rc.0-0"
-    integrity: sha512-TikxFBxBHKJYZy8go+Mw+7yjfSJILgXjr4K0C0+tnKyMOn+OqIX6K8c1fq7IdXto3fftQ+mmCrBqJem25JjVnA==
-    pluginConfig:
-      notifications:
-         processors:
-           email:
-             transportConfig: # these values needs to be updated.
-               transport: smtp
-               hostname: my-smtp-server
-               port: 587
-               secure: false
-               username: my-username
-               password: my-password
-             sender: sender@mycompany.com
-             replyTo: no-reply@mycompany.com
-             broadcastConfig:
-               receiver: users
-             concurrencyLimit: 10
-             cache:
-               ttl:
-                 days: 1
+    package: "@redhat/plugin-signals-backend-dynamic@1.2.0"
+    integrity: sha512-DIISzxtjeJ4a9mX3TLcuGcavRHbCtQ5b52wHn+9+uENUL2IDbFoqmB4/9BQASaKIUSFkRKLYpc5doIkrnTVyrA==
 ```
 
 For the `*-app-config` ConfigMap add the database configuration if isn't already provided. It is required for the notifications plugin:
@@ -186,6 +174,34 @@ For the `*-app-config` ConfigMap add the database configuration if isn't already
 If persistence is enabled (which should be the default setting), ensure that the PostgreSQL environment variables are accessible.
 The RHDH instance will be restarted automatically on ConfigMap changes.
 
+Optionally, include the plugin-notifications-backend-module-email-dynamic to fan-out notifications as emails.
+The environment variables below need to be provided to the RHDH instance.
+See more configuration options for the plugin [here](https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts).
+```
+- disabled: false # 
+    package: "@redhat/plugin-notifications-backend-module-email-dynamic@1.2.0"
+    integrity: sha512-dtmliahV5+xtqvwdxP2jvyzd5oXTbv6lvS3c9nR8suqxTullxxj0GFg1uU2SQ2uKBQWhOz8YhSmrRwxxLa9Zqg==
+    pluginConfig:
+      notifications:
+         processors:
+           email:
+             transportConfig: # these values needs to be updated.
+               transport: smtp
+               hostname: ${NOTIFICATIONS_EMAIL_HOSTNAME}
+               port: 587
+               secure: false
+               username: ${NOTIFICATIONS_EMAIL_USERNAME}
+               password: ${NOTIFICATIONS_EMAIL_PASSWORD}
+             sender: sender@mycompany.com
+             replyTo: no-reply@mycompany.com
+             broadcastConfig:
+               receiver: "none"
+             concurrencyLimit: 10
+             cache:
+               ttl:
+                 days: 1
+```
+
 ### Import Orchestrator's software templates
 To import the Orchestrator software templates into the catalog via the Backstage UI, follow the instructions outlined in this [document](https://backstage.io/docs/features/software-templates/adding-templates).
 Register new templates into the catalog from the
@@ -194,11 +210,8 @@ Register new templates into the catalog from the
 - [Complex template - workflow with custom Java code](https://github.com/parodos-dev/workflow-software-templates/blob/v1.2.x/scaffolder-templates/complex-assessment-workflow/template.yaml)
 
 ## Upgrade plugin versions - WIP
-**NOTE** This section is still **WIP** since there are additional plugins related to the notification that haven't yet been published.
-
 To perform an upgrade of the plugin versions, start by acquiring the new plugin version along with its associated integrity value.
-In the future, this section will be updated to reference the Red Hat NPM registry. However, at present, it directs to @janus-idp NPM packages on https://registry.npmjs.com.
-The following script is useful to obtain the required information for updating the plugin version:
+The following script is useful to obtain the required information for updating the plugin version, however, make sure to select plugin version compatible with the Orchestrator operator version (e.g. 1.2.x for both operator and plugins).
 
 ```bash
 #!/bin/bash
@@ -208,9 +221,9 @@ PLUGINS=(
   "@redhat/backstage-plugin-orchestrator-backend-dynamic"
   "@redhat/plugin-notifications-dynamic"
   "@redhat/plugin-notifications-backend-dynamic"
-  "@redhat/plugin-notifications-backend-module-email-dynamic"
-  "@redhat/plugin-signals-backend-dynamic"
   "@redhat/plugin-signals-dynamic"
+  "@redhat/plugin-signals-backend-dynamic"
+  "@redhat/plugin-notifications-backend-module-email-dynamic"
 )
 
 for PLUGIN_NAME in "${PLUGINS[@]}"
@@ -222,24 +235,34 @@ done
 ```
 
 A sample output should look like:
-```
-Retriving latest version for plugin: @redhat/plugin-notifications\n
-package: "@redhat/plugin-notifications@1.0.0"
-integrity: sha512-t+cnwKOfqJJqbgZIMjJ1Hzr1mqHft619QoK5bF7c8TuQGUjQR0NtaIFWUNhR1JFlE4oQz0NDaAgBnDwtjMk9qA==
----
-Retriving latest version for plugin: @redhat/plugin-notifications-backend-dynamic\n
-package: "@redhat/plugin-notifications-backend-dynamic@1.0.0"
-integrity: sha512-o4GFXmQu6uUXbCDukXHahZ37sfQQYM92pL3LhkXO5aYKudITKzlv6lEZnb9zO9Rnr3U0LD7ytFzks51EfXssXw==
----
 Retriving latest version for plugin: @redhat/backstage-plugin-orchestrator\n
-package: "@redhat/backstage-plugin-orchestrator@1.0.0"
-integrity: sha512-CuYYR7v2O8EVoI1FA7usidzUPp1N5OOKDkIvhDRPf4I7BxgDCWLqW7rBQ4Z7qBXfpeYJrQOxInc0E2xWEat8JA==
+package: "@redhat/backstage-plugin-orchestrator@1.2.0"
+integrity: sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA==
 ---
 Retriving latest version for plugin: @redhat/backstage-plugin-orchestrator-backend-dynamic\n
-package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.0.0"
-integrity: sha512-l0g3T/a1NxX9JogTesZAdUzpNhHQaPxRwki15HWny9GlXCELAx+ta0UC3afsHy6Jp2wOn1prlW0ZuXuc7Ncb0g==
+package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.2.0"
+integrity: sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg==
 ---
-```
+Retriving latest version for plugin: @redhat/plugin-notifications-dynamic\n
+package: "@redhat/plugin-notifications-dynamic@1.2.0"
+integrity: sha512-1mhUl14v+x0Ta1o8Sp4KBa02izGXHd+wsiCVsDP/th6yWDFJsfSMf/DyMIn1Uhat1rQgVFRUMg8QgrvbgZCR/w==
+---
+Retriving latest version for plugin: @redhat/plugin-notifications-backend-dynamic\n
+package: "@redhat/plugin-notifications-backend-dynamic@1.2.0"
+integrity: sha512-pCFB/jZIG/Ip1wp67G0ZDJPp63E+aw66TX1rPiuSAbGSn+Mcnl8g+XlHLOMMTz+NPloHwj2/Tp4fSf59w/IOSw==
+---
+Retriving latest version for plugin: @redhat/plugin-notifications-backend-module-email-dynamic\n
+package: "@redhat/plugin-notifications-backend-module-email-dynamic@1.2.0"
+integrity: sha512-dtmliahV5+xtqvwdxP2jvyzd5oXTbv6lvS3c9nR8suqxTullxxj0GFg1uU2SQ2uKBQWhOz8YhSmrRwxxLa9Zqg==
+---
+Retriving latest version for plugin: @redhat/plugin-signals-backend-dynamic\n
+package: "@redhat/plugin-signals-backend-dynamic@1.2.0"
+integrity: sha512-DIISzxtjeJ4a9mX3TLcuGcavRHbCtQ5b52wHn+9+uENUL2IDbFoqmB4/9BQASaKIUSFkRKLYpc5doIkrnTVyrA==
+---
+Retriving latest version for plugin: @redhat/plugin-signals-dynamic\n
+package: "@redhat/plugin-signals-dynamic@1.2.0"
+integrity: sha512-5tbZyRob0JDdrI97HXb7JqFIzNho1l7JuIkob66J+ZMAPCit+pjN1CUuPbpcglKyyIzULxq63jMBWONxcqNSXw==
+---
 
 After editing the version and integrity values in the *dynamic-plugins* ConfigMap, the RHDH instance will be restarted automatically.
 
