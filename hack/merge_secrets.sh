@@ -2,7 +2,7 @@
 
 # The script merges two given K8s secrets in yaml format into a single secret named 'docker-credentials' in 'orchestrator-gitops' namespace.
 # This script is required to simplify the instruction of
-# https://github.com/parodos-dev/orchestrator-helm-chart/tree/gh-pages/gitops#installing-docker-credentials
+# https://github.com/parodos-dev/orchestrator-helm-operator/tree/main/docs/gitops#installing-docker-credentials
 
 # Check if the correct number of arguments is provided
 if [ $# -ne 2 ]; then
