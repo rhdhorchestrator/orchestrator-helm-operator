@@ -5,7 +5,7 @@ metadata:
     alm-examples: |-
       [
         {
-          "apiVersion": "orchestrator.parodos.dev/v1alpha1",
+          "apiVersion": "rhdh.redhat.com/v1alpha1",
           "kind": "Orchestrator",
           "metadata": {
             "name": "orchestrator-sample"
@@ -41,7 +41,9 @@ metadata:
               "serviceNamespace": "sonataflow-infra"
             },
             "rhdhOperator": {
+              "enableGuestProvider": false,
               "enabled": true,
+              "isReleaseCandidate": false,
               "secretRef": {
                 "argocd": {
                   "password": "ARGOCD_PASSWORD",
@@ -60,34 +62,58 @@ metadata:
                   "clusterToken": "K8S_CLUSTER_TOKEN",
                   "clusterUrl": "K8S_CLUSTER_URL"
                 },
-                "name": "backstage-backend-auth-secret"
+                "name": "backstage-backend-auth-secret",
+                "notificationsEmail": {
+                  "hostname": "NOTIFICATIONS_EMAIL_HOSTNAME",
+                  "password": "NOTIFICATIONS_EMAIL_PASSWORD",
+                  "username": "NOTIFICATIONS_EMAIL_USERNAME"
+                }
               },
               "subscription": {
-                "channel": "fast",
+                "channel": "fast-1.2",
                 "installPlanApproval": "Automatic",
                 "name": "rhdh",
-                "namespace": "rhdh-operator"
+                "namespace": "rhdh-operator",
+                "source": "redhat-operators",
+                "startingCSV": "",
+                "targetNamespace": "rhdh-operator"
               }
             },
             "rhdhPlugins": {
               "notifications": {
-                "integrity": "sha512-BQ7ujmrbv2MLelNGyleC4Z8fVVywYBMYZTwmRC534WCT38QHQ0cWJbebOgeIYszFA98STW4F5tdKbVot/2gWMg==",
-                "package": "plugin-notifications@1.2.5"
+                "integrity": "sha512-wmISWN02G4OiBF7y8Jpl5KCbDfhzl70s+r0h2tdVh1IIwYmojH5pqXFQAhDd3FTlqYc8yqDG8gEAQ8v66qbU1g==",
+                "package": "plugin-notifications-dynamic@0.2.0-rc.0-0"
               },
               "notificationsBackend": {
-                "integrity": "sha512-5zluThJwFVKX0Wlh4E15vDKUFGu/qJ0UsxHYWoISJ+ing1R38gskvN3kukylNTgOp8B78OmUglPfNlydcYEHvA==",
-                "package": "plugin-notifications-backend-dynamic@1.4.11"
+                "integrity": "sha512-CHTNYVGWPxT94viabzCqxKIkDxflium9vkgh9Emu+3SuJSEsrZ6G+U1UZgpQ4gO03oOeiTm3xsoTg/AfKGf7CQ==",
+                "package": "plugin-notifications-backend-dynamic@0.2.0-rc.0-0"
               },
-              "npmRegistry": "",
+              "notificationsEmail": {
+                "enabled": false,
+                "integrity": "sha512-TikxFBxBHKJYZy8go+Mw+7yjfSJILgXjr4K0C0+tnKyMOn+OqIX6K8c1fq7IdXto3fftQ+mmCrBqJem25JjVnA==",
+                "package": "plugin-notifications-backend-module-email-dynamic@0.0.0-rc.0-0",
+                "port": 587,
+                "replyTo": "",
+                "sender": ""
+              },
+              "npmRegistry": "https://npm.registry.redhat.com",
               "orchestrator": {
-                "integrity": "sha512-qSXQ2O7/eLBEF186PzaRfzLfutFYUq9MdiiIZbHejz+KML9rVInPJkc1tine3R3JQVuw1QBIQ2vhPNbGbHXWZg==",
-                "package": "backstage-plugin-orchestrator@1.10.6"
+                "integrity": "sha512-uxkNFS/4nkVM6FRq0Uvnznvxcm/3MNdh11R6sRsbmKCP4KF4N9T2GF4lgfD7J+p7EuGMD4UFnjKjaR77v0NGaQ==",
+                "package": "backstage-plugin-orchestrator@1.1.0-rc.0-0"
               },
               "orchestratorBackend": {
-                "integrity": "sha512-wVZE7Dak10edxh1ZEckzYKrE13GrqhzSVelURhxjZcgXEHdGPWYUFHNMEpte7hzIBE85350Ka7fpy7C4BNPvEw==",
-                "package": "backstage-plugin-orchestrator-backend-dynamic@1.8.0"
+                "integrity": "sha512-NIIGpwH/uJaMknTdORdnqsHfPeI/OrAl2biqELal1e9tK2r6PrVWfIWr9XoH5AfOjtQjbeAe7joiLwhM+uyVAw==",
+                "package": "backstage-plugin-orchestrator-backend-dynamic@1.1.0-rc.0-0"
               },
-              "scope": "@janus-idp"
+              "scope": "@redhat",
+              "signals": {
+                "integrity": "sha512-5Iwp9gF6VPiMLJ5NUw5s5Z17AuJ5XYS97wghNTfcmah/OFxTmgZHWxvhcRoXDRQvyj4nc/gOZes74kp6kZ9XDg==",
+                "package": "plugin-signals-dynamic@0.0.5-rc.0-0"
+              },
+              "signalsBackend": {
+                "integrity": "sha512-LlkM2Mf2QTndsS6eBzyXDhJmRTHLpAku3hhlvWhtQChSLTFCtNGRTIQA5WHG7NqLH0QqBz+UcEjX7Vca82QKKg==",
+                "package": "plugin-signals-backend-dynamic@0.1.3-rc.0-0"
+              }
             },
             "serverlessOperator": {
               "enabled": true,
@@ -95,16 +121,20 @@ metadata:
                 "channel": "stable",
                 "installPlanApproval": "Automatic",
                 "name": "serverless-operator",
-                "namespace": "openshift-serverless"
+                "namespace": "openshift-serverless",
+                "sourceName": "redhat-operators"
               }
             },
             "sonataFlowOperator": {
               "enabled": true,
+              "isReleaseCandidate": false,
               "subscription": {
                 "channel": "alpha",
                 "installPlanApproval": "Automatic",
-                "name": "logicoperator-rhel8",
-                "namespace": "openshift-serverless-logic"
+                "name": "logic-operator-rhel8",
+                "namespace": "openshift-serverless-logic",
+                "sourceName": "redhat-operators",
+                "startingCSV": "logic-operator-rhel8.v1.33.0"
               }
             },
             "tekton": {
@@ -116,7 +146,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2024-07-11T19:22:12Z"
+    createdAt: "2024-09-12T17:54:38Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
@@ -140,7 +170,7 @@ metadata:
     operatorframework.io/arch.ppc64le: unsupported
     operatorframework.io/arch.s390x: unsupported
     operatorframework.io/suggested-namespace: orchestrator
-  name: orchestrator-operator.v1.2.0-rc5
+  name: orchestrator-operator.v1.2.0-rc12
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -152,7 +182,7 @@ spec:
         actions or external systems.
       displayName: Orchestrator
       kind: Orchestrator
-      name: orchestrators.orchestrator.parodos.dev
+      name: orchestrators.rhdh.redhat.com
       version: v1alpha1
   description: |
     Red Hat Developer Hub Orchestrator is a plugin that enables serverless asynchronous workflows to Backstage.
@@ -325,7 +355,19 @@ spec:
           - get
           - patch
         - apiGroups:
-          - orchestrator.parodos.dev
+          - networking.k8s.io
+          resources:
+          - networkpolicies
+          verbs:
+          - get
+          - create
+          - delete
+          - list
+          - watch
+          - patch
+          - update
+        - apiGroups:
+          - rhdh.redhat.com
           resources:
           - orchestrators
           - orchestrators/status
@@ -410,7 +452,7 @@ spec:
                 - --upstream=http://127.0.0.1:8080/
                 - --logtostderr=true
                 - --v=0
-                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.14.4@sha256:fcca9269424da38cfd216f4731de9fe5dea9f98e32c00da767b8e6e1ce9613cb
+                image: registry.redhat.io/openshift4/ose-kube-rbac-proxy-rhel9@sha256:29201e85bd41642b72c7c0ce915e40aad90823d0efc3e7bbab9c351c92c74341
                 name: kube-rbac-proxy
                 ports:
                 - containerPort: 8443
@@ -433,7 +475,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=orchestrator-operator
-                image: quay.io/orchestrator/orchestrator-operator:1.2.0-rc5
+                image: quay.io/orchestrator/orchestrator-operator:1.2.0-rc12
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -516,10 +558,10 @@ spec:
     url: https://github.com/parodos-dev/orchestrator-helm-operator
   maintainers:
   - email: jgil@redhat.com
-    name: Jordi Gil
+    name: Red Hat
   maturity: alpha
   minKubeVersion: 1.26.0
   provider:
     name: Red Hat
     url: https://www.redhat.com
-  version: 1.2.0-rc5
+  version: 1.2.0-rc12

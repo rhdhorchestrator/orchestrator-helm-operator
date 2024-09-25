@@ -1,4 +1,4 @@
-apiVersion: orchestrator.parodos.dev/v1alpha1
+apiVersion: rhdh.redhat.com/v1alpha1
 kind: Orchestrator
 metadata:
   name: orchestrator-sample
@@ -51,8 +51,9 @@ spec:
       name: rhdh # name of the operator package
       source: redhat-operators # name of the catalog source
       startingCSV: "" # The initial version of the operator
+      targetNamespace: rhdh-operator # the target namespace for the backstage CR in which RHDH instance is created
   rhdhPlugins: # RHDH plugins required for the Orchestrator
-    npmRegistry: "https://npm.stage.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
+    npmRegistry: "https://npm.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
     scope: "@redhat"
     orchestrator:
       package: "backstage-plugin-orchestrator@1.1.0-rc.0-0"

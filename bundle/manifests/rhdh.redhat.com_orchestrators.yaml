@@ -2,9 +2,9 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
-  name: orchestrators.orchestrator.parodos.dev
+  name: orchestrators.rhdh.redhat.com
 spec:
-  group: orchestrator.parodos.dev
+  group: rhdh.redhat.com
   names:
     kind: Orchestrator
     listKind: OrchestratorList
@@ -156,10 +156,15 @@ spec:
                 description: RHDH Operator contains the configuration fields for the
                   Red Hat Developer Hub operator
                 properties:
+                  catalogBranch:
+                    default: v1.2.x
+                    description: CatalogBranch captures the catalog branch value.
+                      Defaults to "v1.2.x".
+                    type: string
                   enableGuestProvider:
                     default: false
                     description: EnableGuestProvider captures whether to enable the
-                      guest provider in RHDH
+                      guest provider in RHDH. Defaults to false.
                     type: boolean
                   enabled:
                     default: true
@@ -268,15 +273,43 @@ spec:
                         default: backstage-backend-auth-secret
                         description: Name of the secret that contains the credentials
                           for the plugin to establish a communication channel with
-                          the Kubernetes API, ArgoCD and GitHub servers.
+                          the Kubernetes API, ArgoCD, GitHub servers and SMTP mail
+                          server.
                         type: string
+                      notificationsEmail:
+                        description: Notifications Email backstage plugin specific
+                          configuration fields that are injected to the backstage
+                          instance.
+                        properties:
+                          hostname:
+                            default: NOTIFICATIONS_EMAIL_HOSTNAME
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the hostname
+                              of the SMTP server for the notifications plugin. Defaults
+                              to 'NOTIFICATIONS_EMAIL_HOSTNAME', empty for not available.
+                            type: string
+                          password:
+                            default: NOTIFICATIONS_EMAIL_PASSWORD
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the password
+                              of the SMTP server for the notifications plugin. Defaults
+                              to 'NOTIFICATIONS_EMAIL_PASSWORD', empty for not available.
+                            type: string
+                          username:
+                            default: NOTIFICATIONS_EMAIL_USERNAME
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the username
+                              of the SMTP server for the notifications plugin. Defaults
+                              to 'NOTIFICATIONS_EMAIL_USERNAME', empty for not available.
+                            type: string
+                        type: object
                     type: object
                   subscription:
                     description: Subscription specifies the subscription attributes
                       to use to deploy the operator.
                     properties:
                       channel:
-                        default: fast
+                        default: fast-1.2
                         description: Channel defines the channel of the operator package
                           to subscribe to
                         type: string
@@ -303,6 +336,11 @@ spec:
                         default: ""
                         description: The initial version of the operator
                         type: string
+                      targetNamespace:
+                        default: rhdh-operator
+                        description: The target namespace for the backstage CR in
+                          which RHDH instance is created
+                        type: string
                     type: object
                 type: object
               rhdhPlugins:
@@ -312,11 +350,11 @@ spec:
                     description: Notification plugin information
                     properties:
                       integrity:
-                        default: sha512-wmISWN02G4OiBF7y8Jpl5KCbDfhzl70s+r0h2tdVh1IIwYmojH5pqXFQAhDd3FTlqYc8yqDG8gEAQ8v66qbU1g==
+                        default: sha512-1mhUl14v+x0Ta1o8Sp4KBa02izGXHd+wsiCVsDP/th6yWDFJsfSMf/DyMIn1Uhat1rQgVFRUMg8QgrvbgZCR/w==
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: plugin-notifications-dynamic@0.2.0-rc.0-0
+                        default: plugin-notifications-dynamic@1.2.0
                         description: Package name
                         type: string
                     type: object
@@ -324,39 +362,61 @@ spec:
                     description: Notification backend plugin information
                     properties:
                       integrity:
-                        default: sha512-2Eqi1SWIy1vIWcR0hjSCfRP2w9z+qFdpKsB3dmbssv4Pg98AFj41LYlrTLscHri7am6cd4xe1fEb7gJGqbNQiQ==
+                        default: sha512-pCFB/jZIG/Ip1wp67G0ZDJPp63E+aw66TX1rPiuSAbGSn+Mcnl8g+XlHLOMMTz+NPloHwj2/Tp4fSf59w/IOSw==
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: plugin-notifications-backend-dynamic@0.2.0-rc.0-0
+                        default: plugin-notifications-backend-dynamic@1.2.0
                         description: Package name
                         type: string
                     type: object
-                  notifications_email:
+                  notificationsEmail:
                     description: Notification email plugin information
                     properties:
+                      enabled:
+                        default: false
+                        description: whether to install the notifications email plugin.
+                          requires setting of hostname and credentials in backstage
+                          secret to enable. See value backstage-backend-auth-secret.
+                          See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts
+                        type: boolean
                       integrity:
-                        default: sha512-TikxFBxBHKJYZy8go+Mw+7yjfSJILgXjr4K0C0+tnKyMOn+OqIX6K8c1fq7IdXto3fftQ+mmCrBqJem25JjVnA==
+                        default: sha512-dtmliahV5+xtqvwdxP2jvyzd5oXTbv6lvS3c9nR8suqxTullxxj0GFg1uU2SQ2uKBQWhOz8YhSmrRwxxLa9Zqg==
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: plugin-notifications-backend-module-email-dynamic@0.0.0-rc.0-0
+                        default: plugin-notifications-backend-module-email-dynamic@1.2.0
                         description: Package name
+                        type: string
+                      port:
+                        default: 587
+                        description: SMTP server port
+                        type: integer
+                      replyTo:
+                        default: ""
+                        description: Reply-to address
+                        type: string
+                      sender:
+                        default: ""
+                        description: The email sender address
                         type: string
                     type: object
                   npmRegistry:
-                    default: https://npm.stage.registry.redhat.com
-                    description: NPM Registry
+                    default: https://npm.registry.redhat.com
+                    description: NPM registry is defined already in the container,
+                      but sometimes the registry need to be modified to use different
+                      versions of the plugin, for example staging (https://npm.stage.registry.redhat.com)
+                      or development repositories
                     type: string
                   orchestrator:
                     description: Orchestrator plugin information
                     properties:
                       integrity:
-                        default: sha512-uxkNFS/4nkVM6FRq0Uvnznvxcm/3MNdh11R6sRsbmKCP4KF4N9T2GF4lgfD7J+p7EuGMD4UFnjKjaR77v0NGaQ==
+                        default: sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA==
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: backstage-plugin-orchestrator@1.1.0-rc.0-0
+                        default: backstage-plugin-orchestrator@1.2.0
                         description: Package name
                         type: string
                     type: object
@@ -364,11 +424,11 @@ spec:
                     description: Orchestrator backend plugin information
                     properties:
                       integrity:
-                        default: sha512-NIIGpwH/uJaMknTdORdnqsHfPeI/OrAl2biqELal1e9tK2r6PrVWfIWr9XoH5AfOjtQjbeAe7joiLwhM+uyVAw==
+                        default: sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg==
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: backstage-plugin-orchestrator-backend-dynamic@1.1.0-rc.0-0
+                        default: backstage-plugin-orchestrator-backend-dynamic@1.2.0
                         description: Package name
                         type: string
                     type: object
@@ -380,11 +440,11 @@ spec:
                     description: Signals plugin information
                     properties:
                       integrity:
-                        default: sha512-5Iwp9gF6VPiMLJ5NUw5s5Z17AuJ5XYS97wghNTfcmah/OFxTmgZHWxvhcRoXDRQvyj4nc/gOZes74kp6kZ9XDg==
+                        default: sha512-5tbZyRob0JDdrI97HXb7JqFIzNho1l7JuIkob66J+ZMAPCit+pjN1CUuPbpcglKyyIzULxq63jMBWONxcqNSXw==
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: plugin-signals-dynamic@0.0.5-rc.0-0
+                        default: plugin-signals-dynamic@1.2.0
                         description: Package name
                         type: string
                     type: object
@@ -392,11 +452,11 @@ spec:
                     description: Signals backend plugin information
                     properties:
                       integrity:
-                        default: sha512-LlkM2Mf2QTndsS6eBzyXDhJmRTHLpAku3hhlvWhtQChSLTFCtNGRTIQA5WHG7NqLH0QqBz+UcEjX7Vca82QKKg==
+                        default: sha512-DIISzxtjeJ4a9mX3TLcuGcavRHbCtQ5b52wHn+9+uENUL2IDbFoqmB4/9BQASaKIUSFkRKLYpc5doIkrnTVyrA==
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: plugin-signals-backend-dynamic@0.1.3-rc.0-0
+                        default: plugin-signals-backend-dynamic@1.2.0
                         description: Package name
                         type: string
                     type: object
@@ -481,7 +541,7 @@ spec:
                         description: SourceName captures the name of the catalog source
                         type: string
                       startingCSV:
-                        default: ""
+                        default: logic-operator-rhel8.v1.33.0
                         description: The initial version of the operator
                         type: string
                     type: object

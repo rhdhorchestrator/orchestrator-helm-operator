@@ -1,0 +1,30 @@
+{{- if .Values.sonataFlowOperator.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-rhdh-to-sonataflow-and-workflows
+  # Sonataflow and Workflows are using the same namespace.
+  namespace: "{{- include "get-workflow-namespace" . }}"
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            # Allow RHDH namespace to communicate with workflows and sonataflow services
+            kubernetes.io/metadata.name: {{ .Values.rhdhOperator.subscription.targetNamespace }}
+      - namespaceSelector:
+          matchLabels:
+            # Allow any other namespace the has workflows deployed because this is where
+            # this namespace contains the sonataflow services
+            rhdh.redhat.com/workflow-namespace: ""
+      - namespaceSelector:
+          matchLabels:
+            # Allow knative events to be delivered to workflows.
+            kubernetes.io/metadata.name: knative-eventing
+      - namespaceSelector:
+          matchLabels:
+            # Allow auxiliary knative function for workflow (such as m2k-save-transformation)
+            kubernetes.io/metadata.name: knative-serving
+
+{{- end }}
