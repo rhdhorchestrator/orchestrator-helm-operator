@@ -12,6 +12,9 @@ The **Orchestrator** project facilitates the automation of complex workflows acr
 - **postgresql/**
   - Documentation for installing PostgreSQL Server
 
+- **main/**
+  - Installation instructions, and configuration details specific to main branch of the Orchestrator project.
+
 - **release-x.y/**
   - Installation instructions, and configuration details specific to version x.y of the Orchestrator project.
 
