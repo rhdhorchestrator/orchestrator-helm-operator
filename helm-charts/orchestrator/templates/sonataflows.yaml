@@ -34,6 +34,15 @@ spec:
         limits:
           memory: {{ .Values.orchestrator.sonataflowPlatform.resources.limits.memory }}
           cpu: {{ .Values.orchestrator.sonataflowPlatform.resources.limits.cpu }}
+  {{- if (and (.Values.orchestrator.sonataflowPlatform.broker.name) (.Values.orchestrator.sonataflowPlatform.broker.namespace)) }}
+  eventing:
+    broker:
+      ref:
+        apiVersion: eventing.knative.dev/v1
+        kind: Broker
+        name: {{ .Values.orchestrator.sonataflowPlatform.broker.name }}
+        namespace: {{ .Values.orchestrator.sonataflowPlatform.broker.namespace }}
+  {{- end }}
   services:
     dataIndex:
       enabled: true
