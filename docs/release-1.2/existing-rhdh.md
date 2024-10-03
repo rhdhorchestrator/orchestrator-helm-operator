@@ -5,11 +5,26 @@
 
 # Installation steps
 
+## Create the Sonataflow Namespace and Deploy Postgres
+
+```bash
+oc new-project sonataflow-infra
+oc new-app --template postgresql-persistent \
+-p POSTGRESQL_VERSION=15-el8 \
+-p VOLUME_CAPACITY=2Gi \
+-p POSTGRESQL_DATABASE=sonataflow
+```
+
 ## Install the Orchestrator Operator
 In 1.2, the Orchestrator infrastructure is being installed using the orchestrator-operator.
 - Install the orchestrator-operator from the OperatorHub.
 - Create orchestrator resource (operand) instance - ensure `rhdhOperator: enabled: False` is set, e.g.
-  ```
+  ```yaml
+  apiVersion: rhdh.redhat.com/v1alpha1
+  kind: Orchestrator
+  metadata:
+    name: orchestrator
+    namespace: orchestrator
   spec:
     orchestrator:
       namespace: sonataflow-infra
@@ -23,9 +38,9 @@ In 1.2, the Orchestrator infrastructure is being installed using the orchestrato
             memory: 64Mi
     postgres:
       authSecret:
-        name: sonataflow-psql-postgresql
-        passwordKey: postgres-password
-        userKey: postgres-username
+        name: postgresql
+        passwordKey: database-password
+        userKey: database-user
       database: sonataflow
       serviceName: sonataflow-psql-postgresql
       serviceNamespace: sonataflow-infra
@@ -35,20 +50,19 @@ In 1.2, the Orchestrator infrastructure is being installed using the orchestrato
 
 ## Edit RHDH configuration
 As part of RHDH deployed resources, there are two primary ConfigMaps that require modification, typically found under the *rhdh-operator* namespaces, or located in the same namespace as the Backstage CR.
-Before enabling the Orchestrator and Notifications plugins, pls ensure a secret that points to the target npmjs registry exists in the same RHDH namespace, e.g.:
+Before enabling the Orchestrator and Notifications plugins, pls ensure a secret that points to the target npmjs registry exists in the same RHDH namespace, e.g:
 ```
-cat <<EOF | oc apply -n $RHDH_NAMESPACE -f -
 apiVersion: v1
-data:
-  .npmrc: cmVnaXN0cnk9aHR0cHM6Ly9ucG0ucmVnaXN0cnkucmVkaGF0LmNvbQo=
 kind: Secret
 metadata:
   name: dynamic-plugins-npmrc
-  namespace: rhdh-operator
-EOF
+type: Opaque
+stringData:
+  .npmrc: |
+    registry=https://npm.registry.redhat.com
 ```
 The value of `.data.npmrc` points to https://npm.registry.redhat.com.
-For testing RC plugin versions, update to `cmVnaXN0cnk9aHR0cHM6Ly9ucG0uc3RhZ2UucmVnaXN0cnkucmVkaGF0LmNvbQo=` (points to https://npm.stage.registry.redhat.com and can be accessed internally). If there is a need to point to multiple registries, modify the content of the secret's data from:
+For testing RC plugin versions, update to `registry=https://npm.stage.registry.redhat.com` (can be accessed internally). If there is a need to point to multiple registries, modify the content of the secret's data from:
 ```
   stringData:
     .npmrc: |
