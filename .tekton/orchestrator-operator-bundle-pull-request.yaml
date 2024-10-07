@@ -75,7 +75,7 @@ spec:
       description: Skip ecosystem checks against built image
       name: skip-ecosystem-checks
       type: string
-    - default: "false"
+    - default: "true"
       description: Execute the build with network isolation
       name: hermetic
       type: string
