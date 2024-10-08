@@ -2,8 +2,11 @@ FROM registry.access.redhat.com/ubi9:latest as builder
 ARG IMG=registry.redhat.io/rhdh-orchestrator-dev-preview-beta/controller-rhel9-operator@sha256:9f4671e180ea94a47fcb235cd7edea0eccae0667c14f8a453642eedf492f41da
 WORKDIR /operator
 COPY . .
-RUN dnf install make -y && make bundle IMG=${IMG}
+RUN VERSION=$(grep "^VERSION ?="  Makefile | awk -F'= ' '{print $2}') && \
+	IMAGE_TAG_BASE=$(grep "^IMAGE_TAG_BASE ?=" Makefile | awk -F'= ' '{print $2}') && \
+	sed -i 's|version: .*|version: '${VERSION}'|; s|name: orchestrator-operator.v.*|name: orchestrator-operator.v.'${VERSION}'|; s|image: '${IMAGE_TAG_BASE}'|image: '$IMG'|' bundle/manifests/orchestrator-operator.clusterserviceversion.yaml
 
+# Build bundle
 FROM scratch
 
 USER 1001
