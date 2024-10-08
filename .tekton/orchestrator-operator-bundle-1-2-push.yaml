@@ -6,7 +6,7 @@ metadata:
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch == "release-1.2" && ( "bundle/***".pathChanged() || ".tekton/orchestrator-operator-bundle-push.yaml".pathChanged() || "bundle.konflux.Dockerfile".pathChanged() )
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch == "release-1.2" && ( "bundle/***".pathChanged() || ".tekton/orchestrator-operator-bundle-1-2-push.yaml".pathChanged() || "bundle.konflux.Dockerfile".pathChanged() )
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: helm-operator-1-2
