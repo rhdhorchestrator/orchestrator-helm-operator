@@ -22,7 +22,7 @@ rhdhOperator:
   isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
   enabled: true # whether the operator should be deployed by the chart
   enableGuestProvider: false # whether to enable guest provider
-  catalogBranch: v1.2.x # The branch for https://github.com/parodos-dev/workflow-software-templates used to import software templates resources
+  catalogBranch: v1.3.x # The branch for https://github.com/parodos-dev/workflow-software-templates used to import software templates resources
   secretRef:
     name: backstage-backend-auth-secret # name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD, GitHub servers and SMTP mail server.
     backstage:
@@ -45,7 +45,7 @@ rhdhOperator:
 
   subscription:
     namespace: rhdh-operator # namespace where the operator should be deployed
-    channel: fast-1.2 # channel of an operator package to subscribe to
+    channel: fast-1.3 # channel of an operator package to subscribe to
     installPlanApproval: Automatic # whether the update should be installed automatically
     name: rhdh # name of the operator package
     source: redhat-operators # name of the catalog source
