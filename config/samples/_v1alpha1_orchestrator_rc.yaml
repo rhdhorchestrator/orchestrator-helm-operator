@@ -1,0 +1,111 @@
+apiVersion: rhdh.redhat.com/v1alpha1
+kind: Orchestrator
+metadata:
+  name: orchestrator-sample
+spec:
+  sonataflow:
+    images:
+      4.13: brew.registry.redhat.io/rh-osbs/iib:826480
+      4.14: brew.registry.redhat.io/rh-osbs/iib:826493
+      4.15: brew.registry.redhat.io/rh-osbs/iib:826482
+      4.16: brew.registry.redhat.io/rh-osbs/iib:826483
+  # This file should be used for testing CR operators
+  sonataFlowOperator:
+    isReleaseCandidate: true # Indicates RC builds should be used by the chart to install Sonataflow
+    enabled: true # whether the operator should be deployed by the chart
+    subscription:
+      namespace: openshift-serverless-logic # namespace where the operator should be deployed
+      channel: alpha # channel of an operator package to subscribe to
+      name: logic-operator-rhel8 # name of the operator package
+      sourceName: sonataflow-brew # name of the catalog source
+      startingCSV: logic-operator-rhel8.v1.34.0 # The initial version of the operator
+  serverlessOperator:
+    enabled: true # whether the operator should be deployed by the chart
+    subscription:
+      namespace: openshift-serverless # namespace where the operator should be deployed
+      channel: stable # channel of an operator package to subscribe to
+      installPlanApproval: Automatic # whether the update should be installed automatically
+      name: serverless-operator # name of the operator package
+      sourceName: redhat-operators # name of the catalog source
+  rhdhOperator:
+    isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
+    enabled: true # whether the operator should be deployed by the chart
+    enableGuestProvider: false # whether to enable guest provider
+    secretRef:
+      name: backstage-backend-auth-secret # name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD, GitHub servers and SMTP mail server.
+      backstage:
+        backendSecret: BACKEND_SECRET # Key in the secret with name defined in the 'name' field that contains the value of the Backstage backend secret. Defaults to 'BACKEND_SECRET'. It's required.
+      github: #GitHub specific configuration fields that are injected to the backstage instance to allow the plugin to communicate with GitHub.
+        token: GITHUB_TOKEN # Key in the secret with name defined in the 'name' field that contains the value of the authentication token as expected by GitHub. Required for importing resource to the catalog, launching software templates and more. Defaults to 'GITHUB_TOKEN', empty for not available.
+        clientId: GITHUB_CLIENT_ID # Key in the secret with name defined in the 'name' field that contains the value of the client ID that you generated on GitHub, for GitHub authentication (requires GitHub App). Defaults to 'GITHUB_CLIENT_ID', empty for not available.
+        clientSecret: GITHUB_CLIENT_SECRET # Key in the secret with name defined in the 'name' field that contains the value of the client secret tied to the generated client ID. Defaults to 'GITHUB_CLIENT_SECRET', empty for not available.
+      k8s: # Kubernetes specific configuration fields that are injected to the backstage instance to allow the plugin to communicate with the Kubernetes API Server.
+        clusterToken: K8S_CLUSTER_TOKEN # Key in the secret with name defined in the 'name' field that contains the value of the Kubernetes API bearer token used for authentication. Defaults to 'K8S_CLUSTER_TOKEN', empty for not available.
+        clusterUrl: K8S_CLUSTER_URL # Key in the secret with name defined in the 'name' field that contains the value of the API URL of the kubernetes cluster. Defaults to 'K8S_CLUSTER_URL', empty for not available.
+      argocd: # ArgoCD specific configuration fields that are injected to the backstage instance to allow the plugin to communicate with ArgoCD. Note that ArgoCD must be deployed beforehand and the argocd.enabled field must be set to true as well.
+        url: ARGOCD_URL # Key in the secret with name defined in the 'name' field that contains the value of the URL of the ArgoCD API server. Defaults to 'ARGOCD_URL', empty for not available.
+        username: ARGOCD_USERNAME # Key in the secret with name defined in the 'name' field that contains the value of the username to login to ArgoCD. Defaults to 'ARGOCD_USERNAME', empty for not available.
+        password: ARGOCD_PASSWORD # Key in the secret with name  defined in the 'name' field that contains the value of the password to authenticate to ArgoCD. Defaults to 'ARGOCD_PASSWORD', empty for not available.
+      notificationsEmail:
+        hostname: NOTIFICATIONS_EMAIL_HOSTNAME # Key in the secret with name defined in the 'name' field that contains the value of the hostname of the SMTP server for the notifications plugin. Defaults to 'NOTIFICATIONS_EMAIL_HOSTNAME', empty for not available.
+        username: NOTIFICATIONS_EMAIL_USERNAME # Key in the secret with name defined in the 'name' field that contains the value of the username of the SMTP server for the notifications plugin. Defaults to 'NOTIFICATIONS_EMAIL_USERNAME', empty for not available.
+        password: NOTIFICATIONS_EMAIL_PASSWORD # Key in the secret with name defined in the 'name' field that contains the value of the password of the SMTP server for the notifications plugin. Defaults to 'NOTIFICATIONS_EMAIL_PASSWORD', empty for not available.
+    subscription:
+      namespace: rhdh-operator # namespace where the operator should be deployed
+      channel: fast-1.3 # channel of an operator package to subscribe to
+      installPlanApproval: Automatic # whether the update should be installed automatically
+      name: rhdh # name of the operator package
+      source: redhat-operators # name of the catalog source
+      startingCSV: "" # The initial version of the operator
+      targetNamespace: rhdh-operator # the target namespace for the backstage CR in which RHDH instance is created
+  rhdhPlugins: # RHDH plugins required for the Orchestrator
+    npmRegistry: "https://npm.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
+    scope: "@redhat"
+    orchestrator:
+      package: "backstage-plugin-orchestrator@1.2.0"
+      integrity: sha512-FhM13wVXjjF39syowc4RnMC/gKm4TRlmh8lBrMwPXAw1VzgIADI8H6WVEs837poVX/tYSqj2WhehwzFqU6PuhA==
+    orchestratorBackend:
+      package: "backstage-plugin-orchestrator-backend-dynamic@1.2.0"
+      integrity: sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg==
+    notifications:
+      package: "plugin-notifications-dynamic@1.2.0"
+      integrity: sha512-1mhUl14v+x0Ta1o8Sp4KBa02izGXHd+wsiCVsDP/th6yWDFJsfSMf/DyMIn1Uhat1rQgVFRUMg8QgrvbgZCR/w==
+    notificationsBackend:
+      package: "plugin-notifications-backend-dynamic@1.2.0"
+      integrity: sha512-pCFB/jZIG/Ip1wp67G0ZDJPp63E+aw66TX1rPiuSAbGSn+Mcnl8g+XlHLOMMTz+NPloHwj2/Tp4fSf59w/IOSw==
+    signals:
+      package: "plugin-signals-dynamic@1.2.0"
+      integrity: sha512-5tbZyRob0JDdrI97HXb7JqFIzNho1l7JuIkob66J+ZMAPCit+pjN1CUuPbpcglKyyIzULxq63jMBWONxcqNSXw==
+    signalsBackend:
+      package: "plugin-signals-backend-dynamic@1.2.0"
+      integrity: sha512-DIISzxtjeJ4a9mX3TLcuGcavRHbCtQ5b52wHn+9+uENUL2IDbFoqmB4/9BQASaKIUSFkRKLYpc5doIkrnTVyrA==
+    notificationsEmail:
+      enabled: false # whether to install the notifications email plugin. requires setting of hostname and credentials in backstage secret to enable. See value backstage-backend-auth-secret. See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts
+      package: "plugin-notifications-backend-module-email-dynamic@1.2.0"
+      integrity: sha512-dtmliahV5+xtqvwdxP2jvyzd5oXTbv6lvS3c9nR8suqxTullxxj0GFg1uU2SQ2uKBQWhOz8YhSmrRwxxLa9Zqg==
+      port: 587 # SMTP server port
+      sender: "" # the email sender address
+      replyTo: "" # reply-to address
+  postgres:
+    serviceName: "sonataflow-psql-postgresql" # The name of the Postgres DB service to be used by platform services. Cannot be empty.
+    serviceNamespace: "sonataflow-infra" # The namespace of the Postgres DB service to be used by platform services.
+    authSecret:
+      name: "sonataflow-psql-postgresql" # name of existing secret to use for PostgreSQL credentials.
+      userKey: postgres-username # name of key in existing secret to use for PostgreSQL credentials.
+      passwordKey: postgres-password # name of key in existing secret to use for PostgreSQL credentials.
+    database: sonataflow # existing database instance used by data index and job service
+  orchestrator:
+    namespace: "sonataflow-infra" # Namespace where sonataflow's workflows run. The value is captured when running the setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `sonataflow-infra`.
+    sonataflowPlatform:
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "1Gi"
+          cpu: "500m"
+  tekton:
+    enabled: false # whether to create the Tekton pipeline resources
+  argocd:
+    enabled: false # whether to install the ArgoCD plugin and create the orchestrator AppProject
+    namespace: "" # Defines the namespace where the orchestrator's instance of ArgoCD is deployed. The value is captured when running setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `orchestrator-gitops` in the setup.sh script.
