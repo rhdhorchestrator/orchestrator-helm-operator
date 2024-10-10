@@ -82,7 +82,7 @@ docker-build: ## Build docker image with the manager.
 	docker build -t ${IMG} .
 
 .PHONY: docker-push
-docker-push: ## Push docker image with the manager. 
+docker-push: ## Push docker image with the manager.
 	docker push ${IMG}
 
 # PLATFORMS defines the target platforms for  the manager image be build to provide support to multiple
