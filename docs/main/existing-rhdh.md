@@ -36,7 +36,7 @@ In 1.2, the Orchestrator infrastructure is being installed using the orchestrato
 ## Edit RHDH configuration
 As part of RHDH deployed resources, there are two primary ConfigMaps that require modification, typically found under the *rhdh-operator* namespaces, or located in the same namespace as the Backstage CR.
 Before enabling the Orchestrator and Notifications plugins, pls ensure a secret that points to the target npmjs registry exists in the same RHDH namespace, e.g.:
-```
+```bash
 cat <<EOF | oc apply -n $RHDH_NAMESPACE -f -
 apiVersion: v1
 data:
@@ -44,7 +44,6 @@ data:
 kind: Secret
 metadata:
   name: dynamic-plugins-npmrc
-  namespace: rhdh-operator
 EOF
 ```
 The value of `.data.npmrc` points to https://npm.registry.redhat.com.
