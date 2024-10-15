@@ -1,0 +1,12 @@
+kind: ImageDigestMirrorSet
+apiVersion: config.openshift.io/v1
+metadata:
+  name: orchestrator-operator-fbc-workspace-index
+spec:
+  imageDigestMirrors:
+    - source: registry.redhat.io/rhdh-orchestrator-dev-preview-beta/orchestrator-operator-bundle
+      mirrors:
+        - quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator-1-2/orchestrator-operator-bundle-1-2
+    - source: registry.redhat.io/rhdh-orchestrator-dev-preview-beta/controller-rhel9-operator
+      mirrors:
+        - quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator-1-2/controller-rhel9-operator-1-2
