@@ -3,15 +3,21 @@ kind: Orchestrator
 metadata:
   name: orchestrator-sample
 spec:
+  sonataflow:
+    images:
+      4.13: brew.registry.redhat.io/rh-osbs/iib:826480
+      4.14: brew.registry.redhat.io/rh-osbs/iib:826493
+      4.15: brew.registry.redhat.io/rh-osbs/iib:826482
+      4.16: brew.registry.redhat.io/rh-osbs/iib:826483
+  # This file should be used for testing CR operators
   sonataFlowOperator:
-    isReleaseCandidate: false # Indicates RC builds should be used by the chart to install Sonataflow
+    isReleaseCandidate: true # Indicates RC builds should be used by the chart to install Sonataflow
     enabled: true # whether the operator should be deployed by the chart
     subscription:
       namespace: openshift-serverless-logic # namespace where the operator should be deployed
       channel: alpha # channel of an operator package to subscribe to
-      installPlanApproval: Automatic # whether the update should be installed automatically
       name: logic-operator-rhel8 # name of the operator package
-      sourceName: redhat-operators # name of the catalog source
+      sourceName: sonataflow-brew # name of the catalog source
       startingCSV: logic-operator-rhel8.v1.34.0 # The initial version of the operator
   serverlessOperator:
     enabled: true # whether the operator should be deployed by the chart
@@ -46,7 +52,7 @@ spec:
         password: NOTIFICATIONS_EMAIL_PASSWORD # Key in the secret with name defined in the 'name' field that contains the value of the password of the SMTP server for the notifications plugin. Defaults to 'NOTIFICATIONS_EMAIL_PASSWORD', empty for not available.
     subscription:
       namespace: rhdh-operator # namespace where the operator should be deployed
-      channel: fast-1.2 # channel of an operator package to subscribe to
+      channel: fast-1.3 # channel of an operator package to subscribe to
       installPlanApproval: Automatic # whether the update should be installed automatically
       name: rhdh # name of the operator package
       source: redhat-operators # name of the catalog source

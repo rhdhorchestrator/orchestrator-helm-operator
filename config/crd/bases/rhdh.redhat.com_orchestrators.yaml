@@ -40,6 +40,14 @@ spec:
             description: Spec defines the desired state of Orchestrator
             type: object
             properties:
+              sonataflow:
+                description: SonatafFlow contains the configuration fields for the SonataFlow when using release candidate
+                properties:
+                  images:
+                    description: Indicates RC builds images that should be used by the chart to install Sonataflow
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                type: object
               sonataFlowOperator:
                 description: SonatafFlowOperator contains the configuration fields for the SonataFlow Operator
                 properties:
@@ -75,7 +83,7 @@ spec:
                         description: SourceName captures the name of the catalog source
                         type: string
                       startingCSV:
-                        default: "logic-operator-rhel8.v1.33.0"
+                        default: "logic-operator-rhel8.v1.34.0"
                         description: The initial version of the operator
                         type: string
                     type: object

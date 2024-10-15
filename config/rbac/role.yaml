@@ -223,4 +223,21 @@ rules:
   - delete
   - watch
   - patch
+- apiGroups:
+  - operator.openshift.io
+  resources:
+  - imagecontentsourcepolicies
+  verbs:
+  - get
+  - create
+  - watch
+  - list
+  - update
+  - delete
+- apiGroups:
+  - config.openshift.io
+  resources:
+  - clusterversions
+  verbs:
+  - get
 #+kubebuilder:scaffold:rules
