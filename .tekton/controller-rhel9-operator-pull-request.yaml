@@ -7,13 +7,13 @@ metadata:
     build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch == "release-1.2" && ( "bundle/***".pathChanged() || ".tekton/orchestrator-operator-bundle-1-2-pull-request".pathChanged() || "bundle.konflux.Dockerfile".pathChanged() )
+    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch == "release-1.2" && ("Makefile".pathChanged() || "Dockerfile".pathChanged() || "config/***".pathChanged() || "helm-charts/***".pathChanged() || ".tekton/controller-rhel9-operator-pull-request.yaml".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: helm-operator-1-2
-    appstudio.openshift.io/component: orchestrator-operator-bundle-1-2
+    appstudio.openshift.io/component: controller-rhel9-operator-1-2
     pipelines.appstudio.openshift.io/type: build
-  name: orchestrator-operator-bundle-1-2-on-pull-request
+  name: controller-rhel9-operator-on-pull-request
   namespace: orchestrator-releng-tenant
 spec:
   params:
@@ -22,11 +22,11 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator-1-2/orchestrator-operator-bundle-1-2:on-pr-{{revision}}
+    value: quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/controller-rhel9-operator:on-pr-{{revision}}
   - name: image-expires-after
     value: 5d
   - name: dockerfile
-    value: bundle.konflux.Dockerfile
+    value: Dockerfile
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.
