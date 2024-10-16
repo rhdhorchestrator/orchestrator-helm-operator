@@ -1,14 +1,34 @@
 # Prerequisites
-- RHDH instance deployed with IDP configured (github, gitlab,...)
-- For using the Orchestrator's [software templates](https://github.com/parodos-dev/workflow-software-templates/tree/v1.2.x), OpenShift Gitops (ArgoCD) and OpenShift Pipelines (Tekton) should be installed and configured in RHDH (to enhance the CI/CD plugins)
-- A secret in RHDH's namespace name `dynamic-plugins-npmrc` that points to the plugins npm registry (details will be provided below)
+Before proceeding, ensure the following prerequisites are in place:
+1. **RHDH instance**\
+RHDH instance deployed with IDP configured (github, gitlab,...)
+1. **Secret for npm registry**\
+A secret in RHDH's namespace name `dynamic-plugins-npmrc` that points to the plugins npm registry (details will be provided below)
+1. **PostgreSQL Database**\
+A PostgreSQL database is mandatory for the Orchestrator's operations.
+You have two options for meeting this requirement:\
+   - **If you do not have a PostgreSQL instance in your cluster** \
+   you can deploy the PostgreSQL reference implementation by following the steps here.
+   - **If you already have PostgreSQL running in your cluster** \
+   ensure that the default settings in the [PostgreSQL values](https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/postgresql/values.yaml) file match those provided in the [Orchestrator values](https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/charts/orchestrator/values.yaml) file.
+
+><font color="red">⚠️**Warning**:</font> Skipping these steps will prevent the Orchestrator from functioning properly. 
+
+## For Software template
+1. **OpenShift Gitops (ArgoCD) and OpenShift Pipelines (Tekton)**\
+For using the Orchestrator's [software templates](https://github.com/parodos-dev/workflow-software-templates/tree/v1.2.x), OpenShift Gitops (ArgoCD) and OpenShift Pipelines (Tekton) should be installed and configured in RHDH (to enhance the CI/CD plugins)
 
 # Installation steps
 
 ## Install the Orchestrator Operator
 In 1.2, the Orchestrator infrastructure is being installed using the orchestrator-operator.
-- Install the orchestrator-operator from the OperatorHub.
-- Create orchestrator resource (operand) instance - ensure `rhdhOperator: enabled: False` is set, e.g.
+1. Install Orchestrator operator
+   1. Go to OperatorHub in your OpenShift Console.
+   1. Search for and install the Orchestrator Operator.
+1. Create an Orchestrator instance
+   1. Once the Orchestrator Operator is installed, navigate to Installed Operators.
+   1. Select Orchestrator Operator.
+   2. Click on Create Instance to deploy an Orchestrator instance but edit the YAML defintion disabling RHDH operator by setting `rhdhOperator: enabled: False`, e.g.
   ```
   spec:
     orchestrator:
@@ -62,7 +82,7 @@ to
 ```
 
 ### dynamic-plugins ConfigMap
-This ConfigMap houses the configuration for enabling and configuring dynamic plugins. To incorporate the orchestrator plugins, append the following configuration to the **dynamic-plugins** ConfigMap:
+This ConfigMap houses the configuration for enabling and configuring dynamic plugins. To incorporate the orchestrator plugins, in the **dynamic-plugins** ConfigMap append into `plugins` section the following configuration:
 
 ```yaml
   - disabled: false
