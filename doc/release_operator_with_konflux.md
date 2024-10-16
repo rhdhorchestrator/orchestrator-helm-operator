@@ -172,8 +172,8 @@ schema: olm.bundle
   * Identify the snapshot that contains the PR you just merged:
 
   ```console
-  componentName=fbc-v4-14
-  oc get snapshots --sort-by .metadata.creationTimestamp -l pac.test.appstudio.openshift.io/event-type=push,appstudio.openshift.io/application=$componentName -ojsonpath='{range .items[*]}{@.metadata.name}{"\t"}{@.status.conditions[?(@.type=="AppStudioTestSucceeded")].status}{"\t"}{@.metadata.annotations.pac\.test\.appstudio\.openshift\.io/sha-title}{"\n"}{end}'
+  applicationName=fbc-v4-14
+  oc get snapshots --sort-by .metadata.creationTimestamp -l pac.test.appstudio.openshift.io/event-type=push,appstudio.openshift.io/application=$applicationName -ojsonpath='{range .items[*]}{@.metadata.name}{"\t"}{@.status.conditions[?(@.type=="AppStudioTestSucceeded")].status}{"\t"}{@.metadata.annotations.pac\.test\.appstudio\.openshift\.io/sha-title}{"\n"}{end}'
   ```
 
   Example:
@@ -208,10 +208,10 @@ schema: olm.bundle
   apiVersion: appstudio.redhat.com/v1alpha1
   kind: Release
   metadata:
-    generateName: $componentName-
+    generateName: $applicationName-
     namespace: orchestrator-releng-tenant
   spec:
-    releasePlan: $componentName-release-as-staging-fbc
+    releasePlan: $applicationName-release-as-staging-fbc
     snapshot: $snapshot
   EOF" | awk '{print $1}')
   ```
@@ -376,7 +376,7 @@ schema: olm.bundle
 
   ```console
   componentName=fbc-v4-14
-  oc get snapshots --sort-by .metadata.creationTimestamp -l pac.test.appstudio.openshift.io/event-type=push,appstudio.openshift.io/application=$componentName -ojsonpath='{range .items[*]}{@.metadata.name}{"\t"}{@.status.conditions[?(@.type=="AppStudioTestSucceeded")].status}{"\t"}{@.metadata.annotations.pac\.test\.appstudio\.openshift\.io/sha-title}{"\n"}{end}'
+  oc get snapshots --sort-by .metadata.creationTimestamp -l pac.test.appstudio.openshift.io/event-type=push,appstudio.openshift.io/application=$applicationName -ojsonpath='{range .items[*]}{@.metadata.name}{"\t"}{@.status.conditions[?(@.type=="AppStudioTestSucceeded")].status}{"\t"}{@.metadata.annotations.pac\.test\.appstudio\.openshift\.io/sha-title}{"\n"}{end}'
   ```
 
   Example:
@@ -412,10 +412,10 @@ schema: olm.bundle
   apiVersion: appstudio.redhat.com/v1alpha1
   kind: Release
   metadata:
-    generateName: $componentName-
+    generateName: $applicationName-
     namespace: orchestrator-releng-tenant
   spec:
-    releasePlan: $componentName-release-as-production-fbc
+    releasePlan: $applicationName-release-as-production-fbc
     snapshot: $snapshot
   EOF" | awk '{print $1}')
   ```
@@ -487,6 +487,9 @@ Results:
   Solution: Use image from an allowed registry, or modify your xref:ec-cli:ROOT:configuration.adoc#_data_sources[policy
   configuration] to include additional registry prefixes.
 ```
+
+### Cluster fails to pull images from production registry (registry.redhat.io) because images are only in staging
+Deploy this [ImageDigestMirrorSet](imagedigestmirrorset.yaml) to your cluster to configure the cluster to use the staging registry as mirror to the production registry.
 
 ## Command tips
 * Retrieve the components for a given application:
