@@ -39,8 +39,7 @@ Production releases builds on top of the staging releases to do more or less the
 * Release these images to the production repository based on the same snapshot used to release to staging.
 * Release the [FBC](https://docs.openshift.com/container-platform/4.17/extensions/catalogs/fbc.html) (File Based Catalog) fragment to the RH catalog index in production after updating the FBC graph file to include the new fragment like it was done in staging, but using the production image pullspec.
 
-### Capturing the component names:
-
+### Preparing the environment
 The release of the orchestrator includes support for multiple versions within the same repository. The git repository for the helm operator defines branches as `release-X.Y` as the location of the semantic X and Y version. In turn, Konflux supports different versions by defining their own uniquely named application, with each containing their own set of compoments, also unique in their name, such as `controller-rhel9-operator-1-2` or `controller-rhel9-operator-1-3`.
 
 Thus, to make it easy and reusable, the release process defined in this page needs to parametrize the names of the components so that the process can be reused as much as possible. We will start the process by defining an environment variable that contains the name of the application that holds the controller and bundle. The next command lists all the applications in the workspace:
@@ -59,6 +58,7 @@ serverless-workflows
 For our case, we'll use the `helm-operator-1-2` application:
 ```console
 applicationName=helm-operator-1-2
+releaseVersion=$(echo $applicationName| sed  's/helm-operator//g')
 ```
 
 Retrieve the names of the components that match the controller and bundle based on the prefixed compoment names as we know them `controller-rhel9-operator` and `orchestrator-operator-bundle`:
@@ -109,10 +109,10 @@ releaseName=$(bash -c "oc create -f - <<EOF
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
-  generateName: helm-operator-staging-
+  generateName: helm-operator-staging$releaseVersion-
   namespace: orchestrator-releng-tenant
 spec:
-  releasePlan: helm-operator-staging
+  releasePlan: helm-operator-staging$releaseVersion
   snapshot: $snapshot
 EOF" | awk '{print $1}')
 ```
@@ -129,8 +129,8 @@ If the release fails, follow the [troubleshooting](#release-pipeline-failed) gui
 
 ```console
 advisoryURL=$(oc get $releaseName -ojsonpath='{.status.artifacts.advisory.url}' | sed  's/blob/raw/')
-controllerPullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("'$controller_rhel9_operator'$") ))| .[].containerImage')
-bundlePullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("'$orchestrator_operator_bundle'$") ))| .[].containerImage')
+controllerPullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("controller-rhel9-operator$") ))| .[].containerImage')
+bundlePullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("orchestrator-operator-bundle$") ))| .[].containerImage')
 skopeo inspect docker://$controllerPullSpec >/dev/null && echo "Controller image found in $controllerPullSpec" || echo "Controller image not found in $controllerPullSpec"
 skopeo inspect docker://$bundlePullSpec >/dev/null && echo "Bundle image found in $bundlePullSpec" || echo "Controller image not found in $bundlePullSpec"
 ```
@@ -302,19 +302,19 @@ Releasing to production requires the images to be processed in staging first. On
 * Identify the snapshot used in the stage release. List all the releases for staging and extract the snapshot used for that release. We will be using this snapshot for the production release. The next command will list all releases in staging that were successful sorted by `creationTimestamp` in ascending order (latest are the newest releases).
 
 ```console
-oc get release --sort-by .metadata.creationTimestamp | grep helm-operator-staging |grep Succeeded
+oc get release --sort-by .metadata.creationTimestamp | grep helm-operator-staging$releaseVersion |grep Succeeded
 ```
 
 Example:
 ```console
-helm-operator-staging-f4dnv   helm-operator-vslbm   helm-operator-staging              Succeeded        29h
-helm-operator-staging-f8dlm   helm-operator-vslbm   helm-operator-staging              Succeeded        28h
+helm-operator-staging-1-2-1df4m         helm-operator-1-2-hrv2d   helm-operator-staging-1-2          Succeeded        12h
+helm-operator-staging-1-2-sx9c8         helm-operator-1-2-gsxpz   helm-operator-staging-1-2          Succeeded        20m
 ```
 
-We'll use the snapshot `helm-operator-vslbm` for the production release, being the last successful release.
+We'll use the snapshot `helm-operator-1-2-gsxpz` for the production release, being the last successful release.
 
 ```console
-snapshot=helm-operator-vslbm
+snapshot=helm-operator-1-2-gsxpz
 ```
 * Create a new release manifest for Production:
 ```console
@@ -322,10 +322,10 @@ releaseName=$(bash -c "oc create -f - <<EOF
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: Release
 metadata:
-  generateName: helm-operator-prod-
+  generateName: helm-operator-prod$releaseVersion-
   namespace: orchestrator-releng-tenant
 spec:
-  releasePlan: helm-operator-prod
+  releasePlan: helm-operator-prod$releaseVersion
   snapshot: $snapshot
 EOF" | awk '{print $1}')
 ```
