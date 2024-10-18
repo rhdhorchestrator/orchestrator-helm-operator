@@ -8,7 +8,7 @@
 ## Install the Orchestrator Operator
 In 1.2, the Orchestrator infrastructure is being installed using the orchestrator-operator.
 1. Install the orchestrator-operator from the OperatorHub.
-2. Create orchestrator resource (operand) instance - ensure `rhdhOperator: enabled: False` is set, e.g.
+1. Create orchestrator resource (operand) instance - ensure `rhdhOperator: enabled: False` is set, e.g.
     ```yaml
     spec:
       orchestrator:
@@ -47,8 +47,8 @@ In 1.2, the Orchestrator infrastructure is being installed using the orchestrato
         oc wait -n sonataflow-infra deploy/sonataflow-platform-jobs-service --for=condition=Available --timeout=5m
         oc get networkpolicy -n sonataflow-infra
         ```
-   2. Copy and execute each command from the output in your terminal. These commands ensure that all necessary services and resources in your OpenShift environment are available and running correctly.
-   3. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.parodos.dev/main/docs/serverless-workflows/troubleshooting/).
+   1. Copy and execute each command from the output in your terminal. These commands ensure that all necessary services and resources in your OpenShift environment are available and running correctly.
+   1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.parodos.dev/main/docs/serverless-workflows/troubleshooting/).
 
 ## Edit RHDH configuration
 As part of RHDH deployed resources, there are two primary ConfigMaps that require modification, typically found under the *rhdh-operator* namespaces, or located in the same namespace as the Backstage CR.
@@ -62,7 +62,6 @@ kind: Secret
 metadata:
   name: dynamic-plugins-npmrc
 EOF
-```
 ```
 The value of `.data.npmrc` points to https://npm.registry.redhat.com.
 For testing RC plugin versions, update to `cmVnaXN0cnk9aHR0cHM6Ly9ucG0uc3RhZ2UucmVnaXN0cnkucmVkaGF0LmNvbQo=` (points to https://npm.stage.registry.redhat.com and can be accessed internally). If there is a need to point to multiple registries, modify the content of the secret's data from:

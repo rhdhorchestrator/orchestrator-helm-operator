@@ -29,7 +29,7 @@ In 1.2, the Orchestrator infrastructure is being installed using the orchestrato
    1. Once the Orchestrator Operator is installed, navigate to Installed Operators.
    1. Select Orchestrator Operator.
    2. Click on Create Instance to deploy an Orchestrator instance but edit the YAML defintion disabling RHDH operator by setting `rhdhOperator: enabled: False`, e.g.
-  ```
+  ```yaml
   spec:
     orchestrator:
       namespace: sonataflow-infra
