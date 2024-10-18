@@ -35,6 +35,8 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
       - Repository permissions: **Read** access to metadata, **Read** and **Write** access to actions, actions variables, administration, code, codespaces, commit statuses, environments, issues, pull requests, repository hooks, secrets, security events, and workflows.
       - Organization permissions: **Read** access to members, **Read** and **Write** access to organization administration, organization hooks, organization projects, and organization secrets.
 
+><font color="red">⚠️**Warning**:</font> Skipping these steps will prevent the Orchestrator from functioning properly. 
+
 ### Deployment with GitOps
 
   If you plan to deploy in a GitOps environment, make sure you have installed the `ArgoCD/Red Hat OpenShift GitOps` and the `Tekton/Red Hat Openshift Pipelines Install` operators following these [instructions](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/gitops/README.md).
@@ -49,8 +51,39 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 
   Remember to enable [argocd](https://github.com/parodos-dev/orchestrator-helm-operator/blob/c577e95e063e2bf8119b2b23890df04792f9424c/config/crd/bases/rhdh.redhat.com_orchestrators.yaml#L451) and [tekton](https://github.com/parodos-dev/orchestrator-helm-operator/blob/c577e95e063e2bf8119b2b23890df04792f9424c/config/crd/bases/rhdh.redhat.com_orchestrators.yaml#L443) in your CR instance.
 
-## Installation
+## Detailed Installation Guide
+### From OperatorHub
+1. Deploying PostgreSQL reference implementation
+   - **If you do not have a PostgreSQL instance in your cluster** \
+   you can deploy the PostgreSQL reference implementation by following the steps here.
+   - **If you already have PostgreSQL running in your cluster** \
+   ensure that the default settings in the [PostgreSQL values](https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/postgresql/values.yaml) file match those provided in the [Orchestrator values](https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/charts/orchestrator/values.yaml) file.
+1. Install Orchestrator operator
+   1. Go to OperatorHub in your OpenShift Console.
+   1. Search for and install the Orchestrator Operator.
+1. Create an Orchestrator instance
+   1. Once the Orchestrator Operator is installed, navigate to Installed Operators.
+   1. Select Orchestrator Operator.
+   1. Click on Create Instance to deploy an Orchestrator instance.
+1. Verify resources and wait until they are running
+   1. From console run the following command get the necessary wait commands: \
+      `oc describe orchestrator orchestrator-sample -n openshift-operators | grep -A 10 "Run the following commands to wait until the services are ready:"`\
 
+      The command will return an output similar to the one below, which lists several oc wait commands. This depends on your specific cluster. 
+      ```bash
+        oc wait -n openshift-serverless deploy/knative-openshift --for=condition=Available --timeout=5m
+        oc wait -n knative-eventing knativeeventing/knative-eventing --for=condition=Ready --timeout=5m
+        oc wait -n knative-serving knativeserving/knative-serving --for=condition=Ready --timeout=5m
+        oc wait -n openshift-serverless-logic deploy/logic-operator-rhel8-controller-manager --for=condition=Available --timeout=5m
+        oc wait -n sonataflow-infra sonataflowplatform/sonataflow-platform --for=condition=Succeed --timeout=5m
+        oc wait -n sonataflow-infra deploy/sonataflow-platform-data-index-service --for=condition=Available --timeout=5m
+        oc wait -n sonataflow-infra deploy/sonataflow-platform-jobs-service --for=condition=Available --timeout=5m
+        oc get networkpolicy -n sonataflow-infra
+        ```
+   1. Copy and execute each command from the output in your terminal. These commands ensure that all necessary services and resources in your OpenShift environment are available and running correctly.
+   1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.parodos.dev/main/docs/serverless-workflows/troubleshooting/).
+
+### With Helm (deprecated)
 1. Deploy the PostgreSQL reference implementation for persistence support in SonataFlow following these [instructions](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/postgresql/README.md)
 
 1. Create a namespace for the Orchestrator solution:

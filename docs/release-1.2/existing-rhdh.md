@@ -7,31 +7,48 @@
 
 ## Install the Orchestrator Operator
 In 1.2, the Orchestrator infrastructure is being installed using the orchestrator-operator.
-- Install the orchestrator-operator from the OperatorHub.
-- Create orchestrator resource (operand) instance - ensure `rhdhOperator: enabled: False` is set, e.g.
-  ```
-  spec:
-    orchestrator:
-      namespace: sonataflow-infra
-      sonataflowPlatform:
-        resources:
-          limits:
-            cpu: 500m
-            memory: 1Gi
-          requests:
-            cpu: 250m
-            memory: 64Mi
-    postgres:
-      authSecret:
-        name: sonataflow-psql-postgresql
-        passwordKey: postgres-password
-        userKey: postgres-username
-      database: sonataflow
-      serviceName: sonataflow-psql-postgresql
-      serviceNamespace: sonataflow-infra
-    rhdhOperator:
-      enabled: false
-  ```
+1. Install the orchestrator-operator from the OperatorHub.
+1. Create orchestrator resource (operand) instance - ensure `rhdhOperator: enabled: False` is set, e.g.
+    ```yaml
+    spec:
+      orchestrator:
+        namespace: sonataflow-infra
+        sonataflowPlatform:
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 64Mi
+      postgres:
+        authSecret:
+          name: sonataflow-psql-postgresql
+          passwordKey: postgres-password
+          userKey: postgres-username
+        database: sonataflow
+        serviceName: sonataflow-psql-postgresql
+        serviceNamespace: sonataflow-infra
+      rhdhOperator:
+        enabled: false
+    ```
+1. Verify resources and wait until they are running
+   1. From console run the following command get the necessary wait commands: \
+      `oc describe orchestrator orchestrator-sample -n openshift-operators | grep -A 10 "Run the following commands to wait until the services are ready:"`\
+
+      The command will return an output similar to the one below, which lists several oc wait commands. This depends on your specific cluster. 
+      ```bash
+        oc wait -n openshift-serverless deploy/knative-openshift --for=condition=Available --timeout=5m
+        oc wait -n knative-eventing knativeeventing/knative-eventing --for=condition=Ready --timeout=5m
+        oc wait -n knative-serving knativeserving/knative-serving --for=condition=Ready --timeout=5m
+        oc wait -n openshift-serverless-logic deploy/logic-operator-rhel8-controller-manager --for=condition=Available --timeout=5m
+        oc wait -n sonataflow-infra sonataflowplatform/sonataflow-platform --for=condition=Succeed --timeout=5m
+        oc wait -n sonataflow-infra deploy/sonataflow-platform-data-index-service --for=condition=Available --timeout=5m
+        oc wait -n sonataflow-infra deploy/sonataflow-platform-jobs-service --for=condition=Available --timeout=5m
+        oc get networkpolicy -n sonataflow-infra
+        ```
+   1. Copy and execute each command from the output in your terminal. These commands ensure that all necessary services and resources in your OpenShift environment are available and running correctly.
+   1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.parodos.dev/main/docs/serverless-workflows/troubleshooting/).
 
 ## Edit RHDH configuration
 As part of RHDH deployed resources, there are two primary ConfigMaps that require modification, typically found under the *rhdh-operator* namespaces, or located in the same namespace as the Backstage CR.
@@ -44,7 +61,6 @@ data:
 kind: Secret
 metadata:
   name: dynamic-plugins-npmrc
-  namespace: rhdh-operator
 EOF
 ```
 The value of `.data.npmrc` points to https://npm.registry.redhat.com.
