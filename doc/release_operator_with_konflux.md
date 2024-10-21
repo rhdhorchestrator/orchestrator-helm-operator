@@ -397,7 +397,7 @@ schema: olm.bundle
   * Identify the snapshot that contains the PR you just merged:
 
   ```console
-  componentName=fbc-v4-14
+  applicationName=fbc-v4-14
   oc get snapshots --sort-by .metadata.creationTimestamp -l pac.test.appstudio.openshift.io/event-type=push,appstudio.openshift.io/application=$applicationName -ojsonpath='{range .items[*]}{@.metadata.name}{"\t"}{@.status.conditions[?(@.type=="AppStudioTestSucceeded")].status}{"\t"}{@.metadata.annotations.pac\.test\.appstudio\.openshift\.io/sha-title}{"\n"}{end}'
   ```
 
