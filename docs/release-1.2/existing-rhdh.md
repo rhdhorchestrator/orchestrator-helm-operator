@@ -143,8 +143,8 @@ To enable the Notifications plugin, edit the same ConfigMaps.
 For the `dynamic-plugins` ConfigMap add:
 ```yaml
   - disabled: false
-    package: "@redhat/plugin-notifications-dynamic@0.2.0-rc.0-0"
-    integrity: sha512-wmISWN02G4OiBF7y8Jpl5KCbDfhzl70s+r0h2tdVh1IIwYmojH5pqXFQAhDd3FTlqYc8yqDG8gEAQ8v66qbU1g==
+    package: "@redhat/plugin-notifications-dynamic@1.2.0"
+    integrity: sha512-1mhUl14v+x0Ta1o8Sp4KBa02izGXHd+wsiCVsDP/th6yWDFJsfSMf/DyMIn1Uhat1rQgVFRUMg8QgrvbgZCR/w==
     pluginConfig:
       dynamicPlugins:
         frontend:
@@ -159,8 +159,8 @@ For the `dynamic-plugins` ConfigMap add:
                   importName: NotificationsSidebarItem
                 path: /notifications
   - disabled: false
-    package: "@redhat/plugin-notifications-dynamic@1.2.0"
-    integrity: sha512-1mhUl14v+x0Ta1o8Sp4KBa02izGXHd+wsiCVsDP/th6yWDFJsfSMf/DyMIn1Uhat1rQgVFRUMg8QgrvbgZCR/w==
+    package: "@redhat/plugin-signals-dynamic@1.2.0"
+    integrity: sha512-5tbZyRob0JDdrI97HXb7JqFIzNho1l7JuIkob66J+ZMAPCit+pjN1CUuPbpcglKyyIzULxq63jMBWONxcqNSXw==
     pluginConfig:
       dynamicPlugins:
         frontend:
@@ -193,6 +193,7 @@ The RHDH instance will be restarted automatically on ConfigMap changes.
 Optionally, include the plugin-notifications-backend-module-email-dynamic to fan-out notifications as emails.
 The environment variables below need to be provided to the RHDH instance.
 See more configuration options for the plugin [here](https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts).
+
 ```
 - disabled: false # 
     package: "@redhat/plugin-notifications-backend-module-email-dynamic@1.2.0"
