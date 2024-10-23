@@ -112,14 +112,6 @@
     {{- .workflowNamespace -}}
 {{- end -}}
 
-{{- define "get-rhdh-namespace" -}}
-    {{- if (not (hasKey . "rhdhNamespace" ) ) -}}
-        {{- $rhdhNamespace := include "get-namespace-with-label" (list "" "rhdh.redhat.com/rhdh-namespace")  }}
-        {{- $_ := set . "rhdhNamespace" $rhdhNamespace }}
-    {{- end -}}
-    {{- .rhdhNamespace -}}
-{{- end -}}
-
 {{- define "get-argocd-namespace" -}}
     {{- if .Values.argocd.enabled }}
         {{- if (not (hasKey . "argoCDNamespace" ) ) -}}

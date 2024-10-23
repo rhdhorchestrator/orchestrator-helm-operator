@@ -23,6 +23,7 @@ rhdhOperator:
   enabled: true # whether the operator should be deployed by the chart
   enableGuestProvider: false # whether to enable guest provider
   catalogBranch: v1.3.x # The branch for https://github.com/parodos-dev/workflow-software-templates used to import software templates resources
+  namespace: # Namespace for Existing RHDH Instance
   secretRef:
     name: backstage-backend-auth-secret # name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD, GitHub servers and SMTP mail server.
     backstage:
