@@ -68,7 +68,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 1.  Download the setup script from the github repository and run it to create the RHDH secret and label the GitOps namespaces:
 
     ```console
-    wget https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/main/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
+    wget https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/release-1.2/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
     ```
 
     Run the script:
@@ -131,7 +131,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 1.  Run the following commands to determine when the installation is completed:
 
     ```console
-    wget https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/main/hack/wait_for_operator_installed.sh -O /tmp/wait_for_operator_installed.sh && chmod u+x /tmp/wait_for_operator_installed.sh && /tmp/wait_for_operator_installed.sh
+    wget https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/release-1.2/hack/wait_for_operator_installed.sh -O /tmp/wait_for_operator_installed.sh && chmod u+x /tmp/wait_for_operator_installed.sh && /tmp/wait_for_operator_installed.sh
     ```
 
     During the installation process, Kubernetes cronjobs are created by the operator to monitor the lifecycle of the CRs managed by the operator: RHDH operator, OpenShift Serverless operator and OpenShift Serverless Logic operator. When deleting one of the previously mentioned CRs, a job is triggered that ensures the CR is removed before the operator is.
@@ -140,9 +140,9 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
     > **Note:** that every minute on the clock a job is triggered to reconcile the CRs with the orchestrator resource values. These cronjobs are deleted when their respective features (e.g. `rhdhOperator.enabled=false`) are removed or when the orchestrator resource is removed. This is required because the CRs are not managed by helm due to the CRD dependency pre availability to the deployment of the CR.
 
 1. Apply the Orchestrator custom resource (CR) on the cluster to create an instance of RHDH and resources of OpenShift Serverless Operator and OpenShift Serverless Operator Logic.
-   Make any changes to the [CR](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/config/samples/_v1alpha1_orchestrator.yaml) before applying it, or test the default Orchestrator CR:
+   Make any changes to the [CR](https://github.com/parodos-dev/orchestrator-helm-operator/blob/release-1.2/config/samples/_v1alpha1_orchestrator.yaml) before applying it, or test the default Orchestrator CR:
     ```console
-    oc apply -n orchestrator -f https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/refs/heads/main/config/samples/_v1alpha1_orchestrator.yaml
+    oc apply -n orchestrator -f https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/refs/heads/release-1.2/config/samples/_v1alpha1_orchestrator.yaml
     ```
 
 ## Additional information
@@ -174,7 +174,7 @@ When deploying a workflow in a namespace different from where Sonataflow service
    Store the namespace value in SONATAFLOW_PLATFORM_NAMESPACE.
 
 4. **Set Up a Network Policy:**
-   Configure a network policy to allow traffic only between RHDH, Sonataflow services, and the workflows. The policy can be derived from [here](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/helm-charts/orchestrator/templates/network-policies.yaml)
+   Configure a network policy to allow traffic only between RHDH, Sonataflow services, and the workflows. The policy can be derived from [here](https://github.com/parodos-dev/orchestrator-helm-operator/blob/release-1.2/helm-charts/orchestrator/templates/network-policies.yaml)
 
    ```console
    oc create -f <<EOF
