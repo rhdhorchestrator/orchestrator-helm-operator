@@ -60,7 +60,7 @@ rhdhPlugins: # RHDH plugins required for the Orchestrator
     integrity: sha512-rg+VX81ILTXhfyZqyff0rSmoeEse47ICjKcdavxvfKiG+Rd4uxo80P6o5ca2ZLzsJhYPiKk9Jl3HPtcmLCGzPg==
   orchestratorBackend:
     package: "backstage-plugin-orchestrator-backend-dynamic@1.3.0-rc.0"
-    integrity: sha512-lyw7IHuXsakTa5Pok8S2GK0imqrmXe3z+TcL7eB2sJYFqQPkCP5la1vqteL9/1EaI5eI6nKZ60WVRkPEldKBTg==
+    integrity: sha512-vFF3jQ3VAo4CvQxO9Q/B+4epp7J9tgAIh54h5JAO8S58EaM6oXwc+A5ClK8xPey6QtBOX0mA5yaJ2UgqamtQ+Q==
   notifications:
     package: "plugin-notifications-dynamic@1.3.0-rc.3"
     integrity: sha512-zqwK318o+Lc16pV5wvN6IWMLFqImOWr0xbsGBI69YNVGpXA6AOccXInGbn1RA1QKXfV5sNo8xc5N0WIIgx43Iw==
