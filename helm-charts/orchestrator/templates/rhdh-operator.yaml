@@ -230,6 +230,8 @@ data:
       - disabled: false
         package: "{{ .Values.rhdhPlugins.scope }}/{{ .Values.rhdhPlugins.signalsBackend.package }}"
         integrity: {{ .Values.rhdhPlugins.signalsBackend.integrity }}
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-github-dynamic
   {{- if and .Values.rhdhPlugins.notificationsEmail.enabled
         ( and (.Values.rhdhOperator.secretRef.notificationsEmail.hostname) (dig "data" .Values.rhdhOperator.secretRef.notificationsEmail.hostname "" $secret ) )
   }}
