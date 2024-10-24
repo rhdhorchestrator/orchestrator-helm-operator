@@ -22,7 +22,7 @@ metadata:
   namespace: {{ .Values.sonataFlowOperator.subscription.namespace }}
 spec:
   channel: {{ .Values.sonataFlowOperator.subscription.channel }}
-  installPlanApproval: Automatic
+  installPlanApproval: {{ .Values.sonataFlowOperator.subscription.installPlanApproval }}
   name: {{ .Values.sonataFlowOperator.subscription.name }}
   source: {{ .Values.sonataFlowOperator.subscription.sourceName }}
   sourceNamespace: openshift-marketplace
