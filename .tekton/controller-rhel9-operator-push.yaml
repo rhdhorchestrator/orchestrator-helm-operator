@@ -21,7 +21,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/orchestrator-releng-tenant/helm-operator/controller-rhel9-operator:{{revision}}
+    value: quay.io/redhat-user-workloads/orchestrator-releng-tenant/controller-rhel9-operator:{{revision}}
   - name: dockerfile
     value: Dockerfile
   pipelineSpec:
