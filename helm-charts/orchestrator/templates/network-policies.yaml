@@ -12,7 +12,7 @@ spec:
       - namespaceSelector:
           matchLabels:
             # Allow RHDH namespace to communicate with workflows and sonataflow services
-            kubernetes.io/metadata.name: {{ $namespace := or (.Values.rhdhOperator.namespace) (.Values.rhdhOperator.subscription.targetNamespace) "rhdh-operator" }}{{ $namespace }}
+            kubernetes.io/metadata.name: {{- $namespace := or (.Values.rhdhOperator.namespace) (and (.Values.rhdhOperator.subscription) .Values.rhdhOperator.subscription.targetNamespace) "rhdh-operator" }}{{ $namespace }}
       - namespaceSelector:
           matchLabels:
             # Allow any other namespace the has workflows deployed because this is where
