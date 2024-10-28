@@ -131,7 +131,7 @@ spec:
                     default: "v1.2.x"
                     description: CatalogBranch captures the catalog branch value. Defaults to "v1.2.x".
                     type: string
-                  namespace:
+                  existingRHDHNamespace:
                     default: ""
                     description: Namespace of the Existing RHDH Instance
                     type: string

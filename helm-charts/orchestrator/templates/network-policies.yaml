@@ -16,7 +16,7 @@ spec:
               {{- /* Use rhdhOperator.namespace if defined */ -}}
               {{- /* Otherwise, targetNamespace if rhdhOperator.subscription is defined and targetNamespace is also set */ -}}
               {{- /* Fallback to "rhdh-operator" if none of the above are set */ -}}
-            kubernetes.io/metadata.name: {{- $namespace := or (.Values.rhdhOperator.namespace) (and (.Values.rhdhOperator.subscription) (.Values.rhdhOperator.subscription.targetNamespace)) "rhdh-operator" }}{{ $namespace }}
+            kubernetes.io/metadata.name: {{- $namespace := or (.Values.rhdhOperator.existingRHDHNamespace) (and (.Values.rhdhOperator.subscription) (.Values.rhdhOperator.subscription.targetNamespace)) "rhdh-operator" }}{{ $namespace }}
       - namespaceSelector:
           matchLabels:
             # Allow any other namespace the has workflows deployed because this is where
