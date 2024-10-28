@@ -261,6 +261,14 @@
                         "v1.2.x"
                     ]
                 },
+                "existingRHDHNamespace": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The namespace of existing RHDH instance Schema",
+                    "examples": [
+                        "rhdh"
+                    ]
+                },
                 "secretRef": {
                     "type": "object",
                     "default": {},
