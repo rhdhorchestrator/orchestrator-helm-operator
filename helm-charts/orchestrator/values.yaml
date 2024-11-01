@@ -109,4 +109,4 @@ argocd:
   namespace: "" # Defines the namespace where the orchestrator's instance of ArgoCD is deployed. The value is captured when running setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `orchestrator-gitops` in the setup.sh script.
 
 networkPolicy:
-  existingRHDHNamespace: "" # Namespace of existing RHDH instance
+  rhdhNamespace: "" # Namespace of existing RHDH instance
