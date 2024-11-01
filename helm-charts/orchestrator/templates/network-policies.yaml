@@ -13,8 +13,8 @@ spec:
           matchLabels:
             # Allow RHDH namespace to communicate with workflows and sonataflow services
             {{- $namespace:= "" }}
-            {{- if (and (not .Values.rhdhOperator.enabled) .Values.networkPolicy.existingRHDHNamespace) }}
-              {{- $namespace = .Values.networkPolicy.existingRHDHNamespace }} # use existingRHDHNamespace if defined
+            {{- if (and (not .Values.rhdhOperator.enabled) .Values.networkPolicy.rhdhNamespace) }}
+              {{- $namespace = .Values.networkPolicy.rhdhNamespace }} # use rhdhNamespace if defined
             {{- else if (and (.Values.rhdhOperator.enabled) ( and .Values.rhdhOperator.subscription .Values.rhdhOperator.subscription.targetNamespace ) )}}
               {{- $namespace = .Values.rhdhOperator.subscription.targetNamespace }} # otherwise, use targetNamespace if defined
             {{- else }}

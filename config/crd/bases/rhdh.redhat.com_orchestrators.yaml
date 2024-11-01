@@ -468,7 +468,7 @@ spec:
               networkPolicy:
                 description: NetworkPolicy contains the namespace of an existing RHDH instance
                 properties:
-                  existingRHDHNamespace:
+                  rhdhNamespace:
                     description: Namespace of the existing RHDH instance.
                     type: string
                     default: ""
