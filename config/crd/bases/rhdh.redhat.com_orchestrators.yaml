@@ -466,7 +466,7 @@ spec:
                     default: orchestrator-gitops
                 type: object
               networkPolicy:
-                description: ArgoCD contains the fields for the ArgoCD configuration
+                description: NetworkPolicy contains the namespace of an existing RHDH instance
                 properties:
                   existingRHDHNamespace:
                     description: Namespace of the existing RHDH instance.
