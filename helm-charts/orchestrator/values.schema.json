@@ -1212,6 +1212,27 @@
                 "enabled": false,
                 "namespace": ""
             }]
+        },
+        "networkPolicy": {
+            "type": "object",
+            "default": {},
+            "title": "The network policy Schema",
+            "required": [
+                "rhdhNamespace"
+            ],
+            "properties": {
+                "rhdhNamespace": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The namespace of existing RHDH instance Schema",
+                    "examples": [
+                        "rhdh-operator"
+                    ]
+                }
+            },
+            "examples": [{
+                "rhdhNamespace": "rhdh-operator"
+            }]
         }
     },
     "examples": [{
@@ -1344,6 +1365,9 @@
         "argocd": {
             "enabled": false,
             "namespace": ""
+        },
+        "networkPolicy": {
+            "rhdhNamespace": "rhdh-operator"
         }
     }]
 }
