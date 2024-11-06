@@ -12,7 +12,15 @@ spec:
       - namespaceSelector:
           matchLabels:
             # Allow RHDH namespace to communicate with workflows and sonataflow services
-            kubernetes.io/metadata.name: {{ .Values.rhdhOperator.subscription.targetNamespace }}
+            {{- $namespace:= "" }}
+            {{- if (and (not .Values.rhdhOperator.enabled) .Values.networkPolicy.rhdhNamespace) }}
+              {{- $namespace = .Values.networkPolicy.rhdhNamespace }} # use rhdhNamespace if defined
+            {{- else if (and (.Values.rhdhOperator.enabled) ( and .Values.rhdhOperator.subscription .Values.rhdhOperator.subscription.targetNamespace ) )}}
+              {{- $namespace = .Values.rhdhOperator.subscription.targetNamespace }} # otherwise, use targetNamespace if defined
+            {{- else }}
+               {{- fail "No namespace for existing RHDH instance defined" }}
+            {{- end }}
+            kubernetes.io/metadata.name: {{ $namespace }}
       - namespaceSelector:
           matchLabels:
             # Allow any other namespace the has workflows deployed because this is where

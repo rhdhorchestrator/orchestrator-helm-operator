@@ -457,6 +457,14 @@ spec:
                     type: string
                     default: orchestrator-gitops
                 type: object
+              networkPolicy:
+                description: NetworkPolicy contains the namespace of an existing RHDH instance
+                properties:
+                  rhdhNamespace:
+                    description: Namespace of the existing RHDH instance.
+                    type: string
+                    default: ""
+                type: object
           status:
             description: Status defines the observed state of Orchestrator
             type: object
