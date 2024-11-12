@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM quay.io/orchestrator/helm-operator:v1.35.0-cve-fixes
+FROM quay.io/orchestrator/helm-operator:v1.35.0-cve-fixes-12NOV24
 
 
 LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
