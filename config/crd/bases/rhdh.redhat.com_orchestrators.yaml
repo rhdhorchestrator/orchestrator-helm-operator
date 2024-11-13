@@ -266,11 +266,11 @@ spec:
                     properties:
                       package:
                         description: Package name
-                        default: backstage-plugin-orchestrator@1.3.0-rc.0
+                        default: backstage-plugin-orchestrator@1.3.0-rc.3
                         type: string
                       integrity:
                         description: Package SHA integrity
-                        default: sha512-rg+VX81ILTXhfyZqyff0rSmoeEse47ICjKcdavxvfKiG+Rd4uxo80P6o5ca2ZLzsJhYPiKk9Jl3HPtcmLCGzPg==
+                        default: sha512-s8SeUMLr9L9oqc2EHqn+KxQlFqXD/OIr3hS/jVUWhxfnC7cwfFNiqZG1c5Kl9vtI16zAc8MUf+qhsCd7S1MYvg==
                         type: string
                     type: object
                   orchestratorBackend:
@@ -279,11 +279,11 @@ spec:
                       package:
                         description: Package name
                         type: string
-                        default: backstage-plugin-orchestrator-backend-dynamic@1.3.0-rc.0
+                        default: backstage-plugin-orchestrator-backend-dynamic@1.3.0-rc.3
                       integrity:
                         description: Package SHA integrity
                         type: string
-                        default: sha512-vFF3jQ3VAo4CvQxO9Q/B+4epp7J9tgAIh54h5JAO8S58EaM6oXwc+A5ClK8xPey6QtBOX0mA5yaJ2UgqamtQ+Q==
+                        default: sha512-08cllbcquVA6QLuO0XknxdynS5mvAazb0s9zES1AkuFn2GR7ZKIuIZMjcUwVjHEthwv4UdSNPB7W3IFDsmSDZw==
                     type: object
                   notifications:
                     description: Notification plugin information
