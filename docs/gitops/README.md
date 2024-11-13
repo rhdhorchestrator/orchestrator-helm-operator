@@ -61,7 +61,7 @@ To install the OpenShift GitOps Operator with custom configuration:
 
     ```bash
     oc new-project orchestrator-gitops
-    oc apply -f https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-chart/main/docs/gitops/resources/argocd-example.yaml
+    oc apply -f https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/main/docs/gitops/resources/argocd-example.yaml
     ```
 
     Alternatively, if creating a default ArgoCD instance, ensure to exclude Tekton resources from its specification:
