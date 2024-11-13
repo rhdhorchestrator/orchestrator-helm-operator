@@ -100,7 +100,7 @@ snapshot=helm-operator-1-2-cf7qp
 bundle=$(oc get snapshot $snapshot -ojsonpath='{.spec.components[?(@.name=="'$orchestrator_operator_bundle'")].containerImage}')
 controllerInBundle=$(skopeo inspect docker://$bundle --format "{{.Labels.controller}}"|awk -F'@' '{print $2}')
 controllerInSnapshot=$(oc get snapshot $snapshot -ojsonpath='{.spec.components[?(@.name=="'$controller_rhel9_operator'")].containerImage}'|awk -F'@' '{print $2}')
-if [ "$controllerInBundle" = "$controllerInSnapshot" ]; then echo "controller image pullspec matches";else echo "controller image pullspec does not match. This snapshot is not a good candidate for release";fi
+if [ -n "$controllerInBundle" ] && [ "$controllerInBundle" = "$controllerInSnapshot" ]; then echo "controller image pullspec matches";else echo "controller image pullspec does not match. This snapshot is not a good candidate for release";fi
 ```
 
 * Create a new Release manifest for staging
