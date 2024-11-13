@@ -157,9 +157,9 @@ spec:
                   Red Hat Developer Hub operator
                 properties:
                   catalogBranch:
-                    default: v1.2.x
+                    default: v1.3.x
                     description: CatalogBranch captures the catalog branch value.
-                      Defaults to "v1.2.x".
+                      Defaults to "v1.3.x".
                     type: string
                   enableGuestProvider:
                     default: false
