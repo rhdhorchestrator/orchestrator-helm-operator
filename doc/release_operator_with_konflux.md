@@ -98,9 +98,9 @@ snapshot=helm-operator-1-2-cf7qp
 * Ensure that the bundle's controller pullspec matches the one in the snapshot. The bundle's container image contains a label with the image pullspec of the controller used in the bundle. Use the following commands to extract the controler from the bundle of the snapshot `helm-operator-1-2-cf7qp`:
 ```console
 bundle=$(oc get snapshot $snapshot -ojsonpath='{.spec.components[?(@.name=="'$orchestrator_operator_bundle'")].containerImage}')
-controllerInBundle=$(skopeo inspect docker://$bundle --format "{{.Labels.controller}}")
-controllerInSnapshot=$(oc get snapshot $snapshot -ojsonpath='{.spec.components[?(@.name=="'$controller_rhel9_operator'")].containerImage}')
-if [ "$controllerInBundle"=="$controllerInSnapshot" ]; then echo "controller image pullspec matches";else echo "controller image pullspec does not match. This snapshot is not a good candidate for release";fi
+controllerInBundle=$(skopeo inspect docker://$bundle --format "{{.Labels.controller}}"|awk -F'@' '{print $2}')
+controllerInSnapshot=$(oc get snapshot $snapshot -ojsonpath='{.spec.components[?(@.name=="'$controller_rhel9_operator'")].containerImage}'|awk -F'@' '{print $2}')
+if [ "$controllerInBundle" = "$controllerInSnapshot" ]; then echo "controller image pullspec matches";else echo "controller image pullspec does not match. This snapshot is not a good candidate for release";fi
 ```
 
 * Create a new Release manifest for staging
