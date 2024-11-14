@@ -35,8 +35,9 @@ spec:
             # Allow auxiliary knative function for workflow (such as m2k-save-transformation)
             kubernetes.io/metadata.name: knative-serving
 ---
-# NetworkPolicy to allow unrestricted communication between all pods 
+# NetworkPolicy to allow unrestricted communication between all pods
 # within the workflow's namespace
+apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-intra-namespace
