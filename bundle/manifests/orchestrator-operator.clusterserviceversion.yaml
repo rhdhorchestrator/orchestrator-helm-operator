@@ -127,7 +127,7 @@ metadata:
                 "name": "logic-operator-rhel8",
                 "namespace": "openshift-serverless-logic",
                 "source": "redhat-operators",
-                "startingCSV": "logic-operator-rhel8.v1.34.0"
+                "startingCSV": "logic-operator-rhel8.v1.35.0"
               }
             },
             "tekton": {

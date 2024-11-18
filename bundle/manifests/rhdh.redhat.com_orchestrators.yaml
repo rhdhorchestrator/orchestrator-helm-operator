@@ -556,7 +556,7 @@ spec:
                         description: Source captures the name of the catalog source
                         type: string
                       startingCSV:
-                        default: logic-operator-rhel8.v1.34.0
+                        default: logic-operator-rhel8.v1.35.0
                         description: The initial version of the operator
                         type: string
                     type: object
