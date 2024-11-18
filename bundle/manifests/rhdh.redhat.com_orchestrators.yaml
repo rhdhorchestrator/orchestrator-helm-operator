@@ -555,6 +555,14 @@ spec:
                       resources. Defaults to false.
                     type: boolean
                 type: object
+              networkPolicy:
+                description: NetworkPolicy contains the namespace of an existing RHDH instance
+                properties:
+                  rhdhNamespace:
+                    description: Namespace of the existing RHDH instance.
+                    type: string
+                    default: ""
+                type: object
             type: object
           status:
             description: Status defines the observed state of Orchestrator
