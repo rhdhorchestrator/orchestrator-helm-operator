@@ -268,6 +268,26 @@ spec:
                               available.
                             type: string
                         type: object
+                      gitlab:
+                        description: Gitlab specific configuration fields that are
+                          injected to the backstage instance to allow the plugin to
+                          communicate with Gitlub.
+                        properties:   
+                          token:
+                            default: GITLAB_TOKEN
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the authentication
+                              token as expected by Gitlab. Required for importing
+                              resource to the catalog, launching software templates
+                              and more. Defaults to 'GITLAB_TOKEN', empty for not
+                              available.
+                            type: string
+                          host:
+                            default: gitlab.cee.redhat.com
+                            description: The name of the host for the gitlab instance used.
+                              Required for launching software templates. 
+                              Defaults to 'gitlab.cee.redhat.com', empty for not available.
+                            type: string                                                                      
                       k8s:
                         description: Kubernetes specific configuration fields that
                           are injected to the backstage instance to allow the plugin
@@ -292,7 +312,7 @@ spec:
                         default: backstage-backend-auth-secret
                         description: Name of the secret that contains the credentials
                           for the plugin to establish a communication channel with
-                          the Kubernetes API, ArgoCD, GitHub servers and SMTP mail
+                          the Kubernetes API, ArgoCD, GitHub/Gitlab servers and SMTP mail
                           server.
                         type: string
                       notificationsEmail:

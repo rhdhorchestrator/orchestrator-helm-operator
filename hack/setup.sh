@@ -109,6 +109,16 @@ function captureGitToken {
   fi
 }
 
+function captureGitlabToken {
+   if [ -z "$GITLAB_TOKEN" ]; then
+    read -s -p "Enter Gitlab user access token: " value
+    echo ""
+    GITLAB_TOKEN=$value
+  else
+    echo "Gitlab access token already set."
+  fi
+}
+
 function captureGitClientId {
    if [ -z "$GITHUB_CLIENT_ID" ]; then
     read -s -p "Enter GitHub client ID (empty for disabling it): " value
@@ -255,6 +265,9 @@ function createBackstageSecret {
   fi
   if [ -n "$GITHUB_TOKEN" ]; then
     secretKeys[GITHUB_TOKEN]=$GITHUB_TOKEN
+  fi
+  if [ -n "$GITLAB_TOKEN" ]; then
+    secretKeys[GITLAB_TOKEN]=$GITLAB_TOKEN
   fi
   if [ -n "$GITHUB_CLIENT_ID" ]; then
     secretKeys[GITHUB_CLIENT_ID]=$GITHUB_CLIENT_ID
