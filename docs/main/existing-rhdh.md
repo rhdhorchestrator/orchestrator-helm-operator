@@ -55,7 +55,7 @@ In 1.3, the Orchestrator infrastructure is installed using the Orchestrator Oper
       rhdhOperator:
         enabled: false
       networkPolicy:
-        rhdhNamespace: ${RHDH_NAMESPACE}   
+        rhdhNamespace: ${RHDH_NAMESPACE} # Replace with namespace RHDH is deployed in
     ```
 1. Verify resources and wait until they are running
    1. From the console run the following command in order to get the necessary wait commands: \
