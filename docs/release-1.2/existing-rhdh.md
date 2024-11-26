@@ -54,6 +54,8 @@ In 1.2, the Orchestrator infrastructure is installed using the Orchestrator Oper
         serviceNamespace: sonataflow-infra
       rhdhOperator:
         enabled: false
+      networkPolicy:
+        rhdhNamespace: custom-rhdh    
     ```
 1. Verify resources and wait until they are running
    1. From the console run the following command in order to get the necessary wait commands: \
