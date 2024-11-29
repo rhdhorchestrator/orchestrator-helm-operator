@@ -119,15 +119,15 @@ By default it should point to `http://sonataflow-platform-data-index-service.son
   ```
 ```yaml
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.3.0-rc.4"
-        integrity: sha512-nXY/bYGSRVuRMr2EfdV2TZBV9zyIK1lBOst+Sy6kzgJockuv3RX1mvBpC9x1nbFGsRkjd6hLrpx0YWsceapd7A==
+        package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.3.0-rc.7"
+        integrity: sha512-DM1amRIdclPjWfRboRXo+oz4mdNW58rW2WDxvU+VCGbx5LOBQKpAOuvKwxWQtCcKQ74wPrtDkWZbpKr3fMPqsg==
         pluginConfig:
           orchestrator:
             dataIndexService:
               url: http://sonataflow-platform-data-index-service.sonataflow-infra
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator@1.3.0-rc.4"
-        integrity: sha512-sB2VsgsLGXYvM9DHgXPJ24CCP+w7AwzBQDAkA+zZlJeJfPe+KelbhX5OTjl7VoE3Yp+1vIaNPX/9sc0c+DFSxg==
+        package: "@redhat/backstage-plugin-orchestrator@1.3.0-rc.7"
+        integrity: sha512-wOKbnn9L89YAZRS6NLIGB3CtRgemLVxttse26poNfrRs0m40kj4DuP7ELAsuCGhz5CfQqwIA3t/w/8dOrRw3cw==
         pluginConfig:
           dynamicPlugins:
             frontend:

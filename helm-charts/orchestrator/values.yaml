@@ -56,11 +56,11 @@ rhdhPlugins: # RHDH plugins required for the Orchestrator
   npmRegistry: "https://npm.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
   scope: "@redhat"
   orchestrator:
-    package: "backstage-plugin-orchestrator@1.3.0-rc.4"
-    integrity: sha512-sB2VsgsLGXYvM9DHgXPJ24CCP+w7AwzBQDAkA+zZlJeJfPe+KelbhX5OTjl7VoE3Yp+1vIaNPX/9sc0c+DFSxg==
+    package: "backstage-plugin-orchestrator@1.3.0-rc.7"
+    integrity: sha512-wOKbnn9L89YAZRS6NLIGB3CtRgemLVxttse26poNfrRs0m40kj4DuP7ELAsuCGhz5CfQqwIA3t/w/8dOrRw3cw==
   orchestratorBackend:
-    package: "backstage-plugin-orchestrator-backend-dynamic@1.3.0-rc.4"
-    integrity: sha512-nXY/bYGSRVuRMr2EfdV2TZBV9zyIK1lBOst+Sy6kzgJockuv3RX1mvBpC9x1nbFGsRkjd6hLrpx0YWsceapd7A==
+    package: "backstage-plugin-orchestrator-backend-dynamic@1.3.0-rc.7"
+    integrity: sha512-DM1amRIdclPjWfRboRXo+oz4mdNW58rW2WDxvU+VCGbx5LOBQKpAOuvKwxWQtCcKQ74wPrtDkWZbpKr3fMPqsg==
   notifications:
     package: "plugin-notifications-dynamic@1.3.0-rc.3"
     integrity: sha512-zqwK318o+Lc16pV5wvN6IWMLFqImOWr0xbsGBI69YNVGpXA6AOccXInGbn1RA1QKXfV5sNo8xc5N0WIIgx43Iw==
