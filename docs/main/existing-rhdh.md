@@ -119,15 +119,15 @@ By default it should point to `http://sonataflow-platform-data-index-service.son
   ```
 ```yaml
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.3.0-rc.7"
-        integrity: sha512-DM1amRIdclPjWfRboRXo+oz4mdNW58rW2WDxvU+VCGbx5LOBQKpAOuvKwxWQtCcKQ74wPrtDkWZbpKr3fMPqsg==
+        package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.3.0"
+        integrity: sha512-Th5vmwyhHyhURwQo28++PPHTvxGSFScSHPJyofIdE5gTAb87ncyfyBkipSDq7fwj4L8CQTXa4YP6A2EkHW1npg==
         pluginConfig:
           orchestrator:
             dataIndexService:
               url: http://sonataflow-platform-data-index-service.sonataflow-infra
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator@1.3.0-rc.7"
-        integrity: sha512-wOKbnn9L89YAZRS6NLIGB3CtRgemLVxttse26poNfrRs0m40kj4DuP7ELAsuCGhz5CfQqwIA3t/w/8dOrRw3cw==
+        package: "@redhat/backstage-plugin-orchestrator@1.3.0"
+        integrity: sha512-A/twx1SOOGDQjglLzOxQikKO0XOdPP1jh2lj9Y/92bLox8mT+eaZpub8YLwR2mb7LsUIUImg+U6VnKwoAV9ATA==
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -149,8 +149,8 @@ To include the Notification Plugin append this configuration to the ConfigMap:
 - Be sure to review [this section](#identify-latest-supported-plugin-versions) to determine the latest supported Orchestrator plugin `package:` and `integrity:` values, and update the dynamic-plugin ConfigMap entries accordingly. The samples in this document may not reflect the latest. 
 ```yaml
       - disabled: false
-        package: "@redhat/plugin-notifications-dynamic@1.3.0-rc.3"
-        integrity: sha512-zqwK318o+Lc16pV5wvN6IWMLFqImOWr0xbsGBI69YNVGpXA6AOccXInGbn1RA1QKXfV5sNo8xc5N0WIIgx43Iw==
+        package: "@redhat/plugin-notifications-dynamic@1.3.0"
+        integrity: sha512-iYLgIy0YdP/CdTLol07Fncmo9n0J8PdIZseiwAyUt9RFJzKIXmoi2CpQLPKMx36lEgPYUlT0rFO81Ie2CSis4Q==
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -165,18 +165,18 @@ To include the Notification Plugin append this configuration to the ConfigMap:
                       importName: NotificationsSidebarItem
                     path: /notifications
       - disabled: false
-        package: "@redhat/plugin-signals-dynamic@1.3.0-rc.3"
-        integrity: sha512-WRUi5xpJDD5Jd2p+juCIpsXCnXfHLoSwPZ/N7a7ZnqarfajTkL8qOglhIJh+lVTbe65S8v1rtQLGj9bTCXuPlA==
+        package: "@redhat/plugin-signals-dynamic@1.3.0"
+        integrity: sha512-+E8XeTXcG5oy+aNImGj/MY0dvEkP7XAsu4xuZjmAqOHyVfiIi0jnP/QDz8XMbD1IjCimbr/DMUZdjmzQiD0hSQ==
         pluginConfig:
           dynamicPlugins:
             frontend:
               redhat.plugin-signals: {}
       - disabled: false
-        package: "@redhat/plugin-notifications-backend-dynamic@1.3.0-rc.3"
-        integrity: sha512-2qai8t66dyHEIaPFjdJ9M5nPh53vkH5O7Keed/lFNH0TbPoxamql9V0tdOwdx5Mb7bJwj9N1ulin/mCNniFuTA==
+        package: "@redhat/plugin-notifications-backend-dynamic@1.3.0"
+        integrity: sha512-Pw9Op/Q+1MctmLiVvQ3M+89tkbWkw8Lw0VfcwyGSMiHpK/Xql1TrSFtThtLlymRgeCSBgxHYhh3MUusNQX08VA==
       - disabled: false
-        package: "@redhat/plugin-signals-backend-dynamic@1.3.0-rc.3"
-        integrity: sha512-FgmPouKc2FuHSMfmkdXCVx0/1kPlT6OVbRUNFzOJGSjZAj0nvxSg+W3pt15dSOC5Fe5j2FLSuevCx34YVA+VzQ==
+        package: "@redhat/plugin-signals-backend-dynamic@1.3.0"
+        integrity: sha512-5Bl6C+idPXtquQxMZW+bjRMcOfFYcKxcGZZFv2ITkPVeY2zzxQnAz3vYHnbvKRSwlQxjIyRXY6YgITGHXWT0nw==
 ```
 
 Optionally, include the `plugin-notifications-backend-module-email-dynamic` to fan-out notifications as emails.
@@ -184,8 +184,8 @@ The environment variables below need to be provided to the RHDH instance (Or set
 See more configuration options for the plugin [here](https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts).
 ```yaml
       - disabled: false
-        package: "@redhat/plugin-notifications-backend-module-email-dynamic@1.3.0-rc.3"
-        integrity: sha512-uIGPDdSha9H1kWwofYJXg/GgrGZuF9WZTXgRb8YtN4iKAAZ9FLAD9BuLobUKYXbzO6jGaNzIw82kTJa1VhvEzg==
+        package: "@redhat/plugin-notifications-backend-module-email-dynamic@1.3.0"
+        integrity: sha512-sm7yRoO6Nkk3B7+AWKb10maIrb2YBNSiqQaWmFDVg2G9cbDoWr9wigqqeQ32+b6o2FenfNWg8xKY6PPyZGh8BA==
         pluginConfig:
           notifications:
             processors:
