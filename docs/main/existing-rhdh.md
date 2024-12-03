@@ -1,23 +1,7 @@
 # Prerequisites
 - RHDH 1.3 instance deployed with IDP configured (github, gitlab, ...)
-- For using the Orchestrator's [software templates](https://github.com/parodos-dev/workflow-software-templates/tree/v1.3.x), OpenShift Gitops (ArgoCD) and OpenShift Pipelines (Tekton) should be installed and configured in RHDH (to enhance the CI/CD plugins) - [Follow these steps](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/gitops/README.md)
+- For using the Orchestrator's [software templates](https://github.com/parodos-dev/workflow-software-templates/tree/v1.3.x), OpenShift GitOps (ArgoCD) and OpenShift Pipelines (Tekton) should be installed and configured in RHDH (to enhance the CI/CD plugins) - [Follow these steps](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/gitops/README.md)
 - A secret in RHDH's namespace named `dynamic-plugins-npmrc` that points to the plugins npm registry (details will be provided below)
-- NetworkPolicy created to allow intra-namespace communication in sonataflow-infra
-  ```yaml
-  apiVersion: networking.k8s.io/v1
-  kind: NetworkPolicy
-  metadata:
-    name: allow-intra-namespace
-    namespace: sonataflow-infra
-  spec:
-    podSelector: {}
-    policyTypes:
-      - Ingress
-    ingress:
-      - from:
-        - podSelector: {}
-  ```
-
 
 # Installation steps
 
