@@ -54,8 +54,6 @@ In 1.3, the Orchestrator infrastructure is installed using the Orchestrator Oper
         serviceNamespace: sonataflow-infra
       rhdhOperator:
         enabled: false
-      networkPolicy:
-        rhdhNamespace: ${RHDH_NAMESPACE} # Replace with namespace RHDH is deployed in
     ```
 1. Verify resources and wait until they are running
    1. From the console run the following command in order to get the necessary wait commands: \
@@ -73,7 +71,7 @@ In 1.3, the Orchestrator infrastructure is installed using the Orchestrator Oper
         oc get networkpolicy -n sonataflow-infra
         ```
    1. Copy and execute each command from the output in your terminal. These commands ensure that all necessary services and resources in your OpenShift environment are available and running correctly.
-   1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.parodos.dev/main/docs/serverless-workflows/troubleshooting/).
+   1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.parodos.dev/1.3/docs/serverless-workflows/troubleshooting/).
 
 ## Edit RHDH configuration
 As part of RHDH deployed resources, there are two primary ConfigMaps that require modification, typically found under the *rhdh-operator* namespace, or located in the same namespace as the Backstage CR.
