@@ -326,6 +326,8 @@ data:
           target: https://github.com/parodos-dev/workflow-software-templates/blob/{{ .Values.rhdhOperator.catalogBranch }}/scaffolder-templates/basic-workflow/template.yaml
         - type: url
           target: https://github.com/parodos-dev/workflow-software-templates/blob/{{ .Values.rhdhOperator.catalogBranch }}/scaffolder-templates/complex-assessment-workflow/template.yaml
+        - type: url
+          target: https://github.com/redhat-developer/rhdh-plugins/blob/main/workspaces/orchestrator/plugins/orchestrator-common/src/generated/docs/api-doc/orchestrator-api.yaml
 {{- end }}
 {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "rhdh.redhat.com/v1alpha1" "Backstage" .Values.rhdhOperator.subscription.targetNamespace "backstage" .Release.Name .Capabilities.APIVersions ) }}
 {{- if eq $unmanagedNamespaceExists "false" }}
