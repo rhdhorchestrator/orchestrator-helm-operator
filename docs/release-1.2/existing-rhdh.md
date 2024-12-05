@@ -217,6 +217,35 @@ Include ArgoCD and Tekton Plugins if using OpenShift Gitops (ArgoCD) and OpenShi
         package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic
       - disabled: false
         package: ./dynamic-plugins/dist/roadiehq-scaffolder-backend-argocd-dynamic
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
+        pluginConfig:
+          kubernetes:
+            clusterLocatorMethods:
+            - clusters:
+              - authProvider: serviceAccount
+                name: Default Cluster
+                serviceAccountToken: ${K8S_CLUSTER_TOKEN}
+                skipTLSVerify: true
+                url: ${K8S_CLUSTER_URL}
+              type: config
+            customResources:
+            - apiVersion: v1
+              group: tekton.dev
+              plural: pipelines
+            - apiVersion: v1
+              group: tekton.dev
+              plural: pipelineruns
+            - apiVersion: v1
+              group: tekton.dev
+              plural: taskruns
+            - apiVersion: v1
+              group: route.openshift.io
+              plural: routes
+            serviceLocatorMethod:
+              type: multiTenant
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
 ```
 
 ### app-config ConfigMap
