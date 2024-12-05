@@ -246,6 +246,8 @@ Include ArgoCD and Tekton Plugins if using OpenShift Gitops (ArgoCD) and OpenShi
               type: multiTenant
       - disabled: false
         package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-github-dynamic
 ```
 
 ### app-config ConfigMap
@@ -293,7 +295,7 @@ The `${POSTGRES_*}` variables *are* accessible by default, so they can be left i
 
 ### Import Orchestrator's software templates
 Orchestrator software templates rely on the following tools:
-- Github is the git respository system
+- Github is the git repository system
 - Quay is the image registry
 - GitOps tools are OpenShift GitOps (ArgoCD) and OpenShift Pipelines (Tekton)
 
