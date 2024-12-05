@@ -95,11 +95,11 @@ orchestrator:
   sonataflowPlatform:
     resources:
       requests:
-        memory: "64Mi"
-        cpu: "250m"
+        memory: "64Mi" # Defines the Memory resource limits.
+        cpu: "250m" # Defines the CPU resource limits.
       limits:
-        memory: "1Gi"
-        cpu: "500m"
+        memory: "1Gi" # Defines the Memory resource limits.
+        cpu: "500m" # Defines the CPU resource limits.
 
 tekton:
   enabled: false # whether to create the Tekton pipeline resources
