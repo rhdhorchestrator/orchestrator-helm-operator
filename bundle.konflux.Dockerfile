@@ -4,7 +4,7 @@ WORKDIR /operator
 COPY . .
 RUN VERSION=$(grep "^VERSION ?="  Makefile | awk -F'= ' '{print $2}') && \
 	IMAGE_TAG_BASE=$(grep "^IMAGE_TAG_BASE ?=" Makefile | awk -F'= ' '{print $2}') && \
-	sed -i 's|version: .*|version: '${VERSION}'|g; s|name: orchestrator-operator.v.*|name: orchestrator-operator.v.'${VERSION}'|g; s|image: '${IMAGE_TAG_BASE}'.*|image: '$IMG'|g' bundle/manifests/orchestrator-operator.clusterserviceversion.yaml
+	sed -i 's|^\s\sversion: .*|  version: '${VERSION}'|; s|name: orchestrator-operator.v.*|name: orchestrator-operator.v'${VERSION}'|g; s|image: '${IMAGE_TAG_BASE}'.*|image: '$IMG'|g' bundle/manifests/orchestrator-operator.clusterserviceversion.yaml
 
 # Build bundle
 FROM scratch
