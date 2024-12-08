@@ -201,6 +201,37 @@ Include ArgoCD and Tekton Plugins if using OpenShift Gitops (ArgoCD) and OpenShi
         package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic
       - disabled: false
         package: ./dynamic-plugins/dist/roadiehq-scaffolder-backend-argocd-dynamic
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
+        pluginConfig:
+          kubernetes:
+            clusterLocatorMethods:
+            - clusters:
+              - authProvider: serviceAccount
+                name: Default Cluster
+                serviceAccountToken: ${K8S_CLUSTER_TOKEN}
+                skipTLSVerify: true
+                url: ${K8S_CLUSTER_URL}
+              type: config
+            customResources:
+            - apiVersion: v1
+              group: tekton.dev
+              plural: pipelines
+            - apiVersion: v1
+              group: tekton.dev
+              plural: pipelineruns
+            - apiVersion: v1
+              group: tekton.dev
+              plural: taskruns
+            - apiVersion: v1
+              group: route.openshift.io
+              plural: routes
+            serviceLocatorMethod:
+              type: multiTenant
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
+      - disabled: false
+        package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-github-dynamic
 ```
 
 ### app-config ConfigMap
@@ -248,7 +279,7 @@ The `${POSTGRES_*}` variables *are* accessible by default, so they can be left i
 
 ### Import Orchestrator's software templates
 Orchestrator software templates rely on the following tools:
-- Github is the git respository system
+- Github is the git repository system
 - Quay is the image registry
 - GitOps tools are OpenShift GitOps (ArgoCD) and OpenShift Pipelines (Tekton)
 
