@@ -55,7 +55,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 ### From OperatorHub
 1. Deploying PostgreSQL reference implementation
    - **If you do not have a PostgreSQL instance in your cluster** \
-   you can deploy the PostgreSQL reference implementation by following the steps [here](https://github.com/parodos-dev/orchestrator-helm-chart/blob/gh-pages/postgresql/README.md).
+   you can deploy the PostgreSQL reference implementation by following the steps [here](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/postgresql/README.md).
    - **If you already have PostgreSQL running in your cluster** \
    ensure that the default settings in the [PostgreSQL values](https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/postgresql/values.yaml) file match those provided in the [Orchestrator values](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/helm-charts/orchestrator/values.yaml) file.
 1. Install Orchestrator operator
