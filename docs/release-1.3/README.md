@@ -83,7 +83,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
    1. Copy and execute each command from the output in your terminal. These commands ensure that all necessary services and resources in your OpenShift environment are available and running correctly.
    1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.parodos.dev/1.3/docs/serverless-workflows/troubleshooting/).
 
-### With Helm (deprecated)
+### Manual Install
 1. Deploy the PostgreSQL reference implementation for persistence support in SonataFlow following these [instructions](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/postgresql/README.md)
 
 1. Create a namespace for the Orchestrator solution:
