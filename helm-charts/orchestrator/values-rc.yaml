@@ -7,31 +7,33 @@ sonataFlowOperator:
     channel: alpha # channel of an operator package to subscribe to
     name: logic-operator-rhel8 # name of the operator package
     sourceName: sonataflow-brew # name of the catalog source
-    startingCSV: logic-operator-rhel8.v1.34.0 # The initial version of the operator
+    startingCSV: logic-operator-rhel8.v1.35.0 # The initial version of the operator
 
 rhdhOperator:
-  isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
+  isReleaseCandidate: true # Indicates RC builds should be used by the chart to install RHDH
   enabled: true # whether the operator should be deployed by the chart
   subscription:
     namespace: rhdh-operator # namespace where the operator should be deployed
     channel: fast # channel of an operator package to subscribe to
     name: rhdh # name of the operator package
-    source: rhdh-brew # name of the catalog source
-    startingCSV: rhdh-operator.v1.3.0 # The initial version of the operator
-
+    source: redhat-brew # name of the catalog source, in case of RC will be used to name the CatalogSource
+    startingCSV: "" # The initial version of the operator
+    targetNamespace: rhdh-operator # the target namespace for the backstage CR in which RHDH instance is created
 sonataflow:
   images:
-      4.13: brew.registry.redhat.io/rh-osbs/iib:826480
-      4.14: brew.registry.redhat.io/rh-osbs/iib:826493
-      4.15: brew.registry.redhat.io/rh-osbs/iib:826482
-      4.16: brew.registry.redhat.io/rh-osbs/iib:826483
+      4.13: brew.registry.redhat.io/rh-osbs/iib:878684
+      4.14: brew.registry.redhat.io/rh-osbs/iib:878712
+      4.15: brew.registry.redhat.io/rh-osbs/iib:878686
+      4.16: brew.registry.redhat.io/rh-osbs/iib:878689
+      4.17: brew.registry.redhat.io/rh-osbs/iib:878687
 
 rhdh:
   images:
-    4.13: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.13-x86_64
-    4.14: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.14-x86_64
-    4.15: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.15-x86_64
-    4.16: quay.io/rhdh/iib:1.2.0.RC-06-18-v4.16-x86_64
+    4.13: quay.io/rhdh/iib:1.4-v4.14-x86_64
+    4.14: quay.io/rhdh/iib:1.4-v4.14-x86_64
+    4.15: quay.io/rhdh/iib:1.4-v4.14-x86_64
+    4.16: quay.io/rhdh/iib:1.4-v4.14-x86_64
+    4.17: quay.io/rhdh/iib:1.4-v4.14-x86_64
 
 orchestrator:
   namespace: "sonataflow-infra" # Namespace where sonataflow's workflows run. The value is captured when running the setup.sh script and stored as a label in the selected namespace. User can override the value by populating this field. Defaults to `sonataflow-infra`.

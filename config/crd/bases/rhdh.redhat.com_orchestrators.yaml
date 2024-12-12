@@ -40,6 +40,14 @@ spec:
             description: Spec defines the desired state of Orchestrator
             type: object
             properties:
+              rhdh:
+                description: rhdh contains the configuration fields for the RHDH when using release candidate
+                properties:
+                  images:
+                    description: Indicates RC builds images that should be used by the chart to install RHDH
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                type: object
               sonataflow:
                 description: SonatafFlow contains the configuration fields for the SonataFlow when using release candidate
                 properties:
@@ -239,6 +247,10 @@ spec:
                       sourceName:
                         default: "redhat-operators"
                         description: SourceName captures the name of the catalog source
+                        type: string
+                      source:
+                        default: "redhat-operators"
+                        description: Source captures the name of the catalog source
                         type: string
                       startingCSV:
                         default: ""
