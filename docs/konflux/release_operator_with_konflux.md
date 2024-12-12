@@ -274,7 +274,7 @@ schema: olm.bundle
     name: orchestrator-operator
     namespace: openshift-operators
   spec:
-    channel: alpha
+    channel: stable
     installPlanApproval: Automatic
     name: orchestrator-operator
     source: orchestrator-operator
