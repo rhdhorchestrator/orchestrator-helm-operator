@@ -1,6 +1,6 @@
 # Orchestrator Documentation
 
-For comprehensive documentation on the Orchestrator, please visit [https://www.parodos.dev](https://www.parodos.dev).
+For comprehensive documentation on the Orchestrator, please visit [https://www.rhdhorchestrator.io](https://www.rhdhorchestrator.io).
 
 ## Installing the Orchestrator Helm Operator
 
