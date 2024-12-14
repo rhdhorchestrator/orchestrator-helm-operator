@@ -896,9 +896,31 @@
                     "default": {},
                     "title": "The sonataflowPlatform Schema",
                     "required": [
+                        "monitoring",
                         "resources"
                     ],
                     "properties": {
+                        "monitoring": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The monitoring Schema",
+                            "required": [
+                                "enabled"
+                            ],
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "default": false,
+                                    "title": "The enabled Schema",
+                                    "examples": [
+                                        false
+                                    ]
+                                }
+                            },
+                            "examples": [{
+                                "enabled": false
+                            }]
+                        },
                         "resources": {
                             "type": "object",
                             "default": {},
@@ -1181,6 +1203,9 @@
         "orchestrator": {
             "namespace": "sonataflow-infra",
             "sonataflowPlatform": {
+                "monitoring": {
+                    "enabled": false
+                },
                 "resources": {
                     "requests": {
                         "memory": "64Mi",

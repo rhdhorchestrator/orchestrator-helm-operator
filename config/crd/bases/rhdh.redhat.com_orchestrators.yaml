@@ -362,6 +362,14 @@ spec:
                   sonataflowPlatform:
                     description: SonataflowPlatform contains the pod resource configuration to be used for the data index and job services
                     properties:
+                      monitoring:
+                        description: Contains the monitoring configuration fields
+                        properties:
+                          enabled:
+                            description: Enabled determines whether monitoring should be enabled. Defaults to true.
+                            default: true
+                            type: boolean
+                        type: object
                       resources:
                         description: Resources contains the requests and limit of CPU and memory resources for the pod instance
                         type: object

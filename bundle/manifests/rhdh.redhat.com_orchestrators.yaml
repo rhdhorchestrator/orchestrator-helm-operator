@@ -88,6 +88,15 @@ spec:
                           Job Service container image to be used instead of the provided
                           one by SonataFlow
                         type: string
+                      monitoring:
+                        description: Contains the monitoring configuration fields
+                        properties:
+                          enabled:
+                            default: true
+                            description: Enabled determines whether monitoring should
+                              be enabled. Defaults to true.
+                            type: boolean
+                        type: object
                       resources:
                         description: Resources contains the requests and limit of
                           CPU and memory resources for the pod instance
