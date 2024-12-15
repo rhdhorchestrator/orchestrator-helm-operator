@@ -96,7 +96,7 @@ There is a need to create a single K8s secret combined with the following secret
    - Generate a token [here](https://access.redhat.com/terms-based-registry/create), and download it as OCP secret.
 
 Those two K8s secrets should be merged into a single secret named `docker-credentials` in `orchestrator-gitops` namespace in the cluster that runs the pipelines.
-You may use this [helper script](https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/hack/merge_secrets.sh) to merge the secrets or choose another method of downloading the credentials and merging them.
+You may use this [helper script](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/hack/merge_secrets.sh) to merge the secrets or choose another method of downloading the credentials and merging them.
 
 ## Define the SSH credentials
 
