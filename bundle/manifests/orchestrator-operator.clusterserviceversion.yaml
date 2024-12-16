@@ -98,7 +98,7 @@ metadata:
                 "integrity": "sha512-Th5vmwyhHyhURwQo28++PPHTvxGSFScSHPJyofIdE5gTAb87ncyfyBkipSDq7fwj4L8CQTXa4YP6A2EkHW1npg==",
                 "package": "backstage-plugin-orchestrator-backend-dynamic@1.3.0"
               },
-              "scope": "@redhat",
+              "scope": "@redhat"
             },
             "serverlessOperator": {
               "enabled": true,
