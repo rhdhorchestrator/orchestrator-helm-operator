@@ -1,5 +1,6 @@
 {{- if eq "true" (include "install-tekton-pipeline" .) }}
   {{- $gitopsNamespace := include "get-argocd-namespace" . }}
+  {{- $version = include "get-tekton-version" . -}}
 apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
@@ -115,8 +116,19 @@ spec:
     - name: build-and-push-image
       runAfter: ["flatten-workflow"]
       taskRef:
+{{- if (semverCompare ">=1.17" $version) -}}
+        resolver: cluster
+        params:
+        - name: kind
+          value: task
+        - name: name
+          value: buildah
+        - name: namespace
+          value: openshift-pipelines
+{{- else }}
         name: buildah
         kind: ClusterTask
+{{- end }}
       workspaces:
         - name: source
           workspace: workflow-source
@@ -130,7 +142,7 @@ spec:
         - name: CONTEXT
           value: flat/$(params.workflowId)
         - name: BUILD_EXTRA_ARGS
-          value: '--authfile=/workspace/dockerconfig/.dockerconfigjson --ulimit nofile=4096:4096 --build-arg WF_RESOURCES="." '
+          value: '--authfile=/workspace/dockerconfig/.dockerconfigjson --ulimit nofile=4096:4096 --build-arg WF_RESOURCES=. '
     - name: push-workflow-gitops
       runAfter: ["build-gitops", "build-and-push-image"]
       taskRef:

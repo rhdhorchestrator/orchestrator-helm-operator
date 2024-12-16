@@ -40,6 +40,17 @@ You can use the Janus IDP Demo repository to install the `Red Hat OpenShift Pipe
 
 The OpenShift Pipelines Operator can be installed directly from the OperatorHub. Select the operator from the list and install it without any special configuration.
 
+Make sure you install an OpenShift Pipelines Operator's version compatible with your Orchestrator Operator's version:
+
+| OpenShift Pipelines Operator version          |  Orchestrator Operator Version |
+|-----------------------------------------------|--------------------------------|
+| 4.13                                          |1.3.x                           |
+| 4.14                                          |1.3.x                           |
+| 4.15                                          |1.3.x                           |
+| 4.16                                          |1.3.x                           |
+| 4.17                                          |1.4.x                           |
+
+
 ### Install OpenShift GitOps Operator
 
 To install the OpenShift GitOps Operator with custom configuration:
