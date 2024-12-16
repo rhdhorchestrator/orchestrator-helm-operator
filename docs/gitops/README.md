@@ -11,7 +11,7 @@ You can use the Janus IDP Demo repository to install the `Red Hat OpenShift Pipe
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/parodos-dev/janus-idp-bootstrap.git
+    git clone https://github.com/rhdhorchestrator/janus-idp-bootstrap.git
     ```
 
 2. Navigate to the charts directory:
@@ -22,7 +22,7 @@ You can use the Janus IDP Demo repository to install the `Red Hat OpenShift Pipe
 3. Install the OpenShift Pipelines operator:
 
     ```bash
-    helm upgrade --install orchestrator-pipelines pipelines-operator/ -f pipelines-operator/values.yaml -n orchestrator-gitops --create-namespace
+    helm upgrade --install orchestrator-pipelines pipelines-operator/ -f pipelines-operator/values.yaml -n orchestrator-gitops --create-namespace --set operator.channel=pipelines-1.16
     ```
 
 ### Install OpenShift GitOps Operator
