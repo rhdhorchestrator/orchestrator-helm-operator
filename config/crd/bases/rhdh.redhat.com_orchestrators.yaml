@@ -12,14 +12,16 @@ spec:
     singular: orchestrator
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - jsonPath: .status.conditions[-1:].status
-      name: Ready
-      type: string
-    - jsonPath: .status.conditions[-1:].reason
-      name: Reason
-      type: string
-    name: v1alpha1
+  - name: v1alpha2
+    served: true
+    storage: true
+    additionalPrinterColumns:
+      - jsonPath: .status.conditions[-1:].status
+        name: Ready
+        type: string
+      - jsonPath: .status.conditions[-1:].reason
+        name: Reason
+        type: string
     schema:
       openAPIV3Schema:
         description: Orchestrator is the Schema for the orchestrators API
@@ -297,54 +299,6 @@ spec:
                         type: string
                         default: sha512-Th5vmwyhHyhURwQo28++PPHTvxGSFScSHPJyofIdE5gTAb87ncyfyBkipSDq7fwj4L8CQTXa4YP6A2EkHW1npg==
                     type: object
-                  notifications:
-                    description: Notification plugin information
-                    properties:
-                      package:
-                        description: Package name
-                        type: string
-                        default: plugin-notifications-dynamic@1.3.0
-                      integrity:
-                        description: Package SHA integrity
-                        type: string
-                        default: sha512-iYLgIy0YdP/CdTLol07Fncmo9n0J8PdIZseiwAyUt9RFJzKIXmoi2CpQLPKMx36lEgPYUlT0rFO81Ie2CSis4Q==
-                    type: object
-                  notificationsBackend:
-                    description: Notification backend plugin information
-                    properties:
-                      package:
-                        description: Package name
-                        type: string
-                        default: plugin-notifications-backend-dynamic@1.3.0
-                      integrity:
-                        description: Package SHA integrity
-                        type: string
-                        default: sha512-Pw9Op/Q+1MctmLiVvQ3M+89tkbWkw8Lw0VfcwyGSMiHpK/Xql1TrSFtThtLlymRgeCSBgxHYhh3MUusNQX08VA==
-                    type: object
-                  signals:
-                    description: Signals plugin information
-                    properties:
-                      package:
-                        description: Package name
-                        type: string
-                        default: plugin-signals-dynamic@1.3.0
-                      integrity:
-                        description: Package SHA integrity
-                        type: string
-                        default: sha512-+E8XeTXcG5oy+aNImGj/MY0dvEkP7XAsu4xuZjmAqOHyVfiIi0jnP/QDz8XMbD1IjCimbr/DMUZdjmzQiD0hSQ==
-                    type: object
-                  signalsBackend:
-                    description: Signals backend plugin information
-                    properties:
-                      package:
-                        description: Package name
-                        type: string
-                        default: plugin-signals-backend-dynamic@1.3.0
-                      integrity:
-                        description: Package SHA integrity
-                        type: string
-                        default: sha512-5Bl6C+idPXtquQxMZW+bjRMcOfFYcKxcGZZFv2ITkPVeY2zzxQnAz3vYHnbvKRSwlQxjIyRXY6YgITGHXWT0nw==
-                    type: object
                   notificationsEmail:
                     description: Notification email plugin information
                     properties:
@@ -352,14 +306,6 @@ spec:
                         description: whether to install the notifications email plugin. requires setting of hostname and credentials in backstage secret to enable. See value backstage-backend-auth-secret. See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts
                         type: boolean
                         default: false
-                      package:
-                        description: Package name
-                        type: string
-                        default: plugin-notifications-backend-module-email-dynamic@1.3.0
-                      integrity:
-                        description: Package SHA integrity
-                        type: string
-                        default: sha512-sm7yRoO6Nkk3B7+AWKb10maIrb2YBNSiqQaWmFDVg2G9cbDoWr9wigqqeQ32+b6o2FenfNWg8xKY6PPyZGh8BA==
                       port:
                         description: SMTP server port
                         type: integer
@@ -490,7 +436,5 @@ spec:
             type: object
             x-kubernetes-preserve-unknown-fields: true
         type: object
-    served: true
-    storage: true
     subresources:
       status: {}
