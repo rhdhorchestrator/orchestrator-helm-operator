@@ -35,7 +35,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
       - Repository permissions: **Read** access to metadata, **Read** and **Write** access to actions, actions variables, administration, code, codespaces, commit statuses, environments, issues, pull requests, repository hooks, secrets, security events, and workflows.
       - Organization permissions: **Read** access to members, **Read** and **Write** access to organization administration, organization hooks, organization projects, and organization secrets.
 
-><font color="red">⚠️**Warning**:</font> Skipping these steps will prevent the Orchestrator from functioning properly. 
+><font color="red">⚠️**Warning**:</font> Skipping these steps will prevent the Orchestrator from functioning properly.
 
 ### Deployment with GitOps
 
@@ -69,7 +69,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
    1. From console run the following command get the necessary wait commands: \
       `oc describe orchestrator orchestrator-sample -n openshift-operators | grep -A 10 "Run the following commands to wait until the services are ready:"`\
 
-      The command will return an output similar to the one below, which lists several oc wait commands. This depends on your specific cluster. 
+      The command will return an output similar to the one below, which lists several oc wait commands. This depends on your specific cluster.
       ```bash
         oc wait -n openshift-serverless deploy/knative-openshift --for=condition=Available --timeout=5m
         oc wait -n knative-eventing knativeeventing/knative-eventing --for=condition=Ready --timeout=5m
@@ -154,7 +154,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
       name: orchestrator-operator
       namespace: openshift-operators
     spec:
-      channel: alpha
+      channel: stable
       installPlanApproval: Automatic
       name: orchestrator-operator
       source: redhat-operators

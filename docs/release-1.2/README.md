@@ -121,7 +121,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
       name: orchestrator-operator
       namespace: openshift-operators
     spec:
-      channel: alpha
+      channel: stable
       installPlanApproval: Automatic
       name: orchestrator-operator
       source: redhat-operators
