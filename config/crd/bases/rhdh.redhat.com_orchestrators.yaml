@@ -188,8 +188,8 @@ spec:
                             default: GITLAB_TOKEN
                             type: string
                           host:
-                            description: The name of the host for the gitlab instance used. Required for launching software templates. Defaults to 'gitlab.cee.redhat.com', empty for not available.
-                            default: gitlab.cee.redhat.com
+                            description: The name of the host for the gitlab instance used. Required for launching software templates. Defaults to 'GITLAB_HOST', empty for not available.
+                            default: GITLAB_HOST
                             type: string
                         type: object                        
                       k8s:
