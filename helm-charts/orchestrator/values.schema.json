@@ -642,7 +642,7 @@
                 "orchestrator": {
                     "type": "object",
                     "default": {},
-                    "title": "The orchestrator Schema",
+                    "title": "The Orchestrator Schema",
                     "required": [
                         "package",
                         "integrity"
@@ -673,7 +673,7 @@
                 "orchestratorBackend": {
                     "type": "object",
                     "default": {},
-                    "title": "The orchestratorBackend Schema",
+                    "title": "The OrchestratorBackend Schema",
                     "required": [
                         "package",
                         "integrity"
@@ -1025,7 +1025,7 @@
         "orchestrator": {
             "type": "object",
             "default": {},
-            "title": "The orchestrator Schema",
+            "title": "The Orchestrator Schema",
             "required": [
                 "namespace",
                 "sonataflowPlatform"

@@ -56,7 +56,7 @@ roleRef:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ trunc -52 (printf "%s-reconcile" $releaseNameKind | trimPrefix "-" | trimPrefix "_" ) }} # Fixes https://github.com/parodos-dev/orchestrator-helm-chart/issues/160
+  name: {{ trunc -52 (printf "%s-reconcile" $releaseNameKind | trimPrefix "-" | trimPrefix "_" ) }} # Fixes https://github.com/rhdhorchestrator/orchestrator-helm-chart/issues/160
   # job name is used in the spec.template.metadata.labels, and labels cannot be more than 63 characters https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   namespace: {{ .release.Namespace }}
   labels:
@@ -107,7 +107,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ trunc -57 (printf "%s-delete" $releaseNameKind) | trimPrefix "-" | trimPrefix "_" }} # Fixes https://github.com/parodos-dev/orchestrator-helm-chart/issues/160
+  name: {{ trunc -57 (printf "%s-delete" $releaseNameKind) | trimPrefix "-" | trimPrefix "_" }} # Fixes https://github.com/rhdhorchestrator/orchestrator-helm-chart/issues/160
   # job name is used in the spec.template.metadata.labels, and labels cannot be more than 63 characters https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   namespace: {{ .release.Namespace }}
   annotations:
