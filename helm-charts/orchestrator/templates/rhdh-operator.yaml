@@ -189,7 +189,7 @@ data:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              janus-idp.backstage-plugin-orchestrator:
+              red-hat-developer-hub.backstage-plugin-orchestrator:
                 appIcons:
                   - importName: OrchestratorIcon
                     module: OrchestratorPlugin
@@ -206,7 +206,7 @@ data:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              redhat.plugin-notifications:
+              backstage.plugin-notifications:
                 dynamicRoutes:
                   - importName: NotificationsPage
                     menuItem:
@@ -221,7 +221,7 @@ data:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              redhat.plugin-signals: {}
+              backstage.plugin-signals: {}
       - disabled: false
         package: ./dynamic-plugins/dist/backstage-plugin-notifications-backend-dynamic
       - disabled: false
