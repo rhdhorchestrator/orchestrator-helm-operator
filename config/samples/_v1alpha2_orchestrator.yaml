@@ -1,4 +1,4 @@
-apiVersion: rhdh.redhat.com/v1alpha1
+apiVersion: rhdh.redhat.com/v1alpha2
 kind: Orchestrator
 metadata:
   name: orchestrator-sample
@@ -59,24 +59,10 @@ spec:
       package: "backstage-plugin-orchestrator@1.3.0"
       integrity: sha512-A/twx1SOOGDQjglLzOxQikKO0XOdPP1jh2lj9Y/92bLox8mT+eaZpub8YLwR2mb7LsUIUImg+U6VnKwoAV9ATA==
     orchestratorBackend:
-      package: "backstage-plugin-orchestrator-backend-dynamic@1.3.0"
-      integrity: sha512-Th5vmwyhHyhURwQo28++PPHTvxGSFScSHPJyofIdE5gTAb87ncyfyBkipSDq7fwj4L8CQTXa4YP6A2EkHW1npg==
-    notifications:
-      package: "plugin-notifications-dynamic@1.3.0"
-      integrity: sha512-iYLgIy0YdP/CdTLol07Fncmo9n0J8PdIZseiwAyUt9RFJzKIXmoi2CpQLPKMx36lEgPYUlT0rFO81Ie2CSis4Q==
-    notificationsBackend:
-      package: "plugin-notifications-backend-dynamic@1.3.0"
-      integrity: sha512-Pw9Op/Q+1MctmLiVvQ3M+89tkbWkw8Lw0VfcwyGSMiHpK/Xql1TrSFtThtLlymRgeCSBgxHYhh3MUusNQX08VA==
-    signals:
-      package: "plugin-signals-dynamic@1.3.0"
-      integrity: sha512-+E8XeTXcG5oy+aNImGj/MY0dvEkP7XAsu4xuZjmAqOHyVfiIi0jnP/QDz8XMbD1IjCimbr/DMUZdjmzQiD0hSQ==
-    signalsBackend:
-      package: "plugin-signals-backend-dynamic@1.3.0"
-      integrity: sha512-5Bl6C+idPXtquQxMZW+bjRMcOfFYcKxcGZZFv2ITkPVeY2zzxQnAz3vYHnbvKRSwlQxjIyRXY6YgITGHXWT0nw==
+    package: "backstage-plugin-orchestrator-backend-dynamic@1.3.0"
+    integrity: sha512-Th5vmwyhHyhURwQo28++PPHTvxGSFScSHPJyofIdE5gTAb87ncyfyBkipSDq7fwj4L8CQTXa4YP6A2EkHW1npg==
     notificationsEmail:
       enabled: false # whether to install the notifications email plugin. requires setting of hostname and credentials in backstage secret to enable. See value backstage-backend-auth-secret. See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts
-      package: "plugin-notifications-backend-module-email-dynamic@1.3.0"
-      integrity: sha512-sm7yRoO6Nkk3B7+AWKb10maIrb2YBNSiqQaWmFDVg2G9cbDoWr9wigqqeQ32+b6o2FenfNWg8xKY6PPyZGh8BA==
       port: 587 # SMTP server port
       sender: "" # the email sender address
       replyTo: "" # reply-to address
