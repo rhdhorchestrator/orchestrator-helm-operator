@@ -1043,6 +1043,34 @@
                                     "cpu": "500m"
                                 }
                             }]
+                        },
+                        "eventing": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The eventing Schema",
+                            "properties": {
+                                "broker": {
+                                    "type": "object",
+                                    "default": {},
+                                    "title": "The broker Schema",
+                                    "required": [
+                                        "name",
+                                        "namespace"
+                                    ],
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The name of the broker"
+                                        },
+                                        "namespace": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The namespace on which the broker is deployed"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     },
                     "examples": [{

@@ -1,4 +1,4 @@
-# Using Knative kafka broker
+# Using Knative Kafka broker
 If you want to use a Knative broker for communication between the different componenets (Data Index, Job Service and Workflows), you should use a reliable broker, i.e: not in-memory.
 
 Kafka perfectly fullfills this reliability need.
@@ -9,13 +9,13 @@ Kafka perfectly fullfills this reliability need.
 
 ## Installation steps
 
-1. Configure and enable kafka broker feature in Knative: https://knative.dev/docs/eventing/brokers/broker-types/kafka-broker/
+1. Configure and enable Kafka broker feature in Knative: https://knative.dev/docs/eventing/brokers/broker-types/kafka-broker/
 ```console
 oc apply --filename https://github.com/knative-extensions/eventing-kafka-broker/releases/download/knative-v1.14.5/eventing-kafka-controller.yaml
 oc apply --filename https://github.com/knative-extensions/eventing-kafka-broker/releases/download/knative-v1.14.5/eventing-kafka-broker.yaml
 ```
 > [!NOTE]
-> This examples uses`knative-v1.14.5`, this may change, please refer to [the official documentation link](https://knative.dev/docs/eventing/brokers/broker-types/kafka-broker/)
+> At the time this document was written, the latest `knative` version was `v1.14.5`. Please refer to [the latest official documentation](https://knative.dev/docs/eventing/brokers/broker-types/kafka-broker/) for more up-to-date instructions for the Kafka broker setup.
  * Review the `Security Context Constraints` (`scc`) to be granted to the `knative-kafka-broker-data-plane` service account used by the `kafka-broker-receiver`  deployment:
 ```console
 oc get deployments.apps -n knative-eventing kafka-broker-receiver -oyaml | oc adm policy scc-subject-review --filename -
@@ -41,21 +41,24 @@ oc patch cm kafka-broker-config -n knative-eventing \
 oc wait --for condition=ready=true pod -l app=kafka-broker-receiver -n knative-eventing --timeout=60s
 ```
 
-2. Create kafka broker (Knative `sink`): see https://docs.openshift.com/serverless/1.33/eventing/brokers/kafka-broker.html for more details:
+2. Create Kafka broker (Knative `sink`): see https://docs.openshift.com/serverless/1.35/eventing/brokers/kafka-broker.html for more details:
 ```Console
+BROKER_NAME=kafka-broker # change the name to match your needs
+BROKER_NAMESPACE=sonataflow-infra # change to your target namespace
 echo "apiVersion: eventing.knative.dev/v1
 kind: Broker
 metadata:
   annotations:
     # case-sensitive
     eventing.knative.dev/broker.class: Kafka
-  name: kafka-broker
+  name: ${BROKER_NAME}
+  namespace: ${BROKER_NAMESPACE}
 spec:
   # Configuration specific to this broker.
   config:
     apiVersion: v1
     kind: ConfigMap
-    name: kafka-broker-config
+    name: ${BROKER_NAME}-config
     namespace: knative-eventing" | oc apply -n sonataflow-infra -f -
 ```
 3. Configure the `sonataflowplatforms.sonataflow.org`: given that the `Orchestrator` is named `orchestrator-sample` and was created under the `orchestrator` namespace:
@@ -68,8 +71,8 @@ oc -n orchestrator patch orchestrators.rhdh.redhat.com orchestrator-sample --typ
       "sonataflowPlatform": {
         "eventing": {
           "broker": {
-            "name": "<BROKER NAME>",
-            "namespace": "<BROKER NAMESPACE>"
+            "name": "${BROKER_NAME}",
+            "namespace": "${BROKER_NAMESPACE}"
           }
         }
       }
