@@ -1,6 +1,6 @@
 # Use the 'create api' subcommand to add watches to this file.
 - group: rhdh.redhat.com
-  version: v1alpha1
+  version: v1alpha2
   kind: Orchestrator
   chart: helm-charts/orchestrator
   dryRunOption: server
