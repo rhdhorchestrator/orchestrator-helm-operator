@@ -23,7 +23,7 @@ This document is aimed for those who need to release a new version of the Orches
 For further reading on Konflux, visit their [documentation website](https://konflux-ci.dev/docs/advanced-how-tos/releasing/) to get acquainted with it and understand the release process as described in it.
 
 ## Prerequisites:
-To be able to release the operator, you will need first to have access to the orchestrator-releng workspace in konflux via the [Red Hat Console](https://console.redhat.com/application-pipeline/workspaces/orchestrator-releng/applications). If you don't, please reach out to @jordigilh, @masayag, @rgolangh or @pkliczewski to request access. You'll also need to be able to create PRs to the [orchestrator-helm-operator](https://github.com/parodos-dev/orchestrator-helm-operator) and [orchestrator-fbc](https://github.com/parodos-dev/orchestrator-fbc) repositories.
+To be able to release the operator, you will need first to have access to the orchestrator-releng workspace in konflux via the [Red Hat Console](https://console.redhat.com/application-pipeline/workspaces/orchestrator-releng/applications). If you don't, please reach out to @jordigilh, @masayag, @rgolangh or @pkliczewski to request access. You'll also need to be able to create PRs to the [orchestrator-helm-operator](https://github.com/rhdhorchestrator/orchestrator-helm-operator) and [orchestrator-fbc](https://github.com/rhdhorchestrator/orchestrator-fbc) repositories.
 
 Accessing the Konflux cluster via oc CLI requires an auth token from the OCP. Once you've been added to the `orchestrator-releng` workspace, head to [this URL](https://oauth-openshift.apps.stone-prd-rh01.pg1f.p1.openshiftapps.com/oauth/token/request) to obtain a new token and login to the
 Konflux cluster.
@@ -50,26 +50,26 @@ oc get snapshots --sort-by .metadata.creationTimestamp -l pac.test.appstudio.ope
 
 Example:
 ```console
-helm-operator-v2wsd		False	Merge pull request #170 from parodos-dev/appstudio-orchestrator-operator-bundle
+helm-operator-v2wsd		False	Merge pull request #170 from rhdhorchestrator/appstudio-orchestrator-operator-bundle
 helm-operator-hds86		False	Merge pull request #173 from jordigilh/migrate/doc_from_helm_charts
-helm-operator-gsbw7		False	Merge pull request #176 from parodos-dev/konflux-purge-operator-controller
-helm-operator-2t79j		False	Merge pull request #177 from parodos-dev/konflux-purge-operator-bundle
-helm-operator-rtrjw		False	Merge pull request #183 from parodos-dev/appstudio-controller-rhel9-operator
-helm-operator-kbzh5		False	Merge pull request #182 from parodos-dev/appstudio-orchestrator-operator-bundle
+helm-operator-gsbw7		False	Merge pull request #176 from rhdhorchestrator/konflux-purge-operator-controller
+helm-operator-2t79j		False	Merge pull request #177 from rhdhorchestrator/konflux-purge-operator-bundle
+helm-operator-rtrjw		False	Merge pull request #183 from rhdhorchestrator/appstudio-controller-rhel9-operator
+helm-operator-kbzh5		False	Merge pull request #182 from rhdhorchestrator/appstudio-orchestrator-operator-bundle
 helm-operator-kr8xs		False	Merge pull request #178 from jordigilh/konflux/use_comet_image_names_in_tekton
-helm-operator-kpxfn		False	Merge pull request #184 from parodos-dev/konflux/references/main
-helm-operator-pddv7		False	Merge pull request #191 from parodos-dev/appstudio-controller-rhel9-operator
-helm-operator-lbsdg		False	Merge pull request #189 from parodos-dev/appstudio-orchestrator-operator-bundle
+helm-operator-kpxfn		False	Merge pull request #184 from rhdhorchestrator/konflux/references/main
+helm-operator-pddv7		False	Merge pull request #191 from rhdhorchestrator/appstudio-controller-rhel9-operator
+helm-operator-lbsdg		False	Merge pull request #189 from rhdhorchestrator/appstudio-orchestrator-operator-bundle
 helm-operator-m4bkb		False	Merge pull request #187 from jordigilh/konflux/fix_build_attestation
 helm-operator-z26kc		True	Merge pull request #194 from jordigilh/release/1.2.0-rc11
-helm-operator-6mhqg		True	Merge pull request #195 from parodos-dev/konflux/component-updates/controller-rhel9-operator
-helm-operator-f949l		True	Merge pull request #196 from parodos-dev/konflux/references/main
+helm-operator-6mhqg		True	Merge pull request #195 from rhdhorchestrator/konflux/component-updates/controller-rhel9-operator
+helm-operator-f949l		True	Merge pull request #196 from rhdhorchestrator/konflux/references/main
 helm-operator-zpds7		True	Merge pull request #197 from jordigilh/konflux/add_label_controller_pullspec_to_bundle_dockerfile
 ```
 
-If you're releasing from a controller's update nudge, which is the most probable case, check the last snapshot that has passed the integration tests and has a remote branch that looks like this `parodos-dev/konflux/component-updates/controller-rhel9-operator`, like this entry:
+If you're releasing from a controller's update nudge, which is the most probable case, check the last snapshot that has passed the integration tests and has a remote branch that looks like this `rhdhorchestrator/konflux/component-updates/controller-rhel9-operator`, like this entry:
 ```console
-helm-operator-6mhqg		True	Merge pull request #195 from parodos-dev/konflux/component-updates/controller-rhel9-operator
+helm-operator-6mhqg		True	Merge pull request #195 from rhdhorchestrator/konflux/component-updates/controller-rhel9-operator
 ```
 
 * Ensure that the bundle's controller pullspec matches the one in the snapshot.
@@ -129,11 +129,11 @@ Note, if you haven't yet released the operator in production, you'll need to fol
 * Clone the orchestrator-fbc repository:
 
 ```console
-git clone https://github.com/parodos-dev/orchestrator-fbc.git
+git clone https://github.com/rhdhorchestrator/orchestrator-fbc.git
 ```
 
 * Update the `graph.stage.yaml` file for the OCP version following the FBC documentation to ensure that each each version published has an upgrade path. Check [this page](https://docs.openshift.com/container-platform/4.17/extensions/catalogs/fbc.html#olm-channel-schema_fbc) to understand the different options when updating the fragment.
-  The most common case is when updating the [z-stream version](https://github.com/parodos-dev/orchestrator-fbc/pull/92), in which case you will have to amend the original fragment (graph.stage.yaml) and define the linkage between releases, so that the newest one is marked as a replacement to the previous one, and so on. So if we wanted to add the new release as `1.2.0-rc11` to the current graph.stage.yaml, we'd be adding a value in the `entries:` section, and another pair for the `image` and `schema` with the pullspec of the bundle. Note that you should have the digest of the bundle image in `$bundlePullSpec`.
+  The most common case is when updating the [z-stream version](https://github.com/rhdhorchestrator/orchestrator-fbc/pull/92), in which case you will have to amend the original fragment (graph.stage.yaml) and define the linkage between releases, so that the newest one is marked as a replacement to the previous one, and so on. So if we wanted to add the new release as `1.2.0-rc11` to the current graph.stage.yaml, we'd be adding a value in the `entries:` section, and another pair for the `image` and `schema` with the pullspec of the bundle. Note that you should have the digest of the bundle image in `$bundlePullSpec`.
 
 ```console
 ---
@@ -190,10 +190,10 @@ schema: olm.bundle
   ...
   ...
   fbc-v4-14-5p7m9	True	Merge pull request #81 from jordigilh/release/1.2.0-rc6
-  fbc-v4-14-jv6f8	True	Merge pull request #83 from parodos-dev/konflux/references/main
-  fbc-v4-14-dhxqb	True	Merge pull request #82 from parodos-dev/konflux/component-updates/operator-bundle
-  fbc-v4-14-bdx8p	True	Merge pull request #85 from parodos-dev/konflux/component-updates/operator-bundle
-  fbc-v4-14-hftq5	True	Merge pull request #84 from parodos-dev/konflux/references/main
+  fbc-v4-14-jv6f8	True	Merge pull request #83 from rhdhorchestrator/konflux/references/main
+  fbc-v4-14-dhxqb	True	Merge pull request #82 from rhdhorchestrator/konflux/component-updates/operator-bundle
+  fbc-v4-14-bdx8p	True	Merge pull request #85 from rhdhorchestrator/konflux/component-updates/operator-bundle
+  fbc-v4-14-hftq5	True	Merge pull request #84 from rhdhorchestrator/konflux/references/main
   fbc-v4-14-g6b2z	True	Merge pull request #86 from jordigilh/release/1.2.0-rc9
   fbc-v4-14-kttjb	True	Merge pull request #87 from jordigilh/release/ocp_4.14_rc9
   fbc-v4-14-mcncx	True	Merge pull request #88 from jordigilh/release/orchestrator-rc9_ocp_prod
@@ -396,10 +396,10 @@ schema: olm.bundle
   ...
   ...
   fbc-v4-14-5p7m9	True	Merge pull request #81 from jordigilh/release/1.2.0-rc6
-  fbc-v4-14-jv6f8	True	Merge pull request #83 from parodos-dev/konflux/references/main
-  fbc-v4-14-dhxqb	True	Merge pull request #82 from parodos-dev/konflux/component-updates/operator-bundle
-  fbc-v4-14-bdx8p	True	Merge pull request #85 from parodos-dev/konflux/component-updates/operator-bundle
-  fbc-v4-14-hftq5	True	Merge pull request #84 from parodos-dev/konflux/references/main
+  fbc-v4-14-jv6f8	True	Merge pull request #83 from rhdhorchestrator/konflux/references/main
+  fbc-v4-14-dhxqb	True	Merge pull request #82 from rhdhorchestrator/konflux/component-updates/operator-bundle
+  fbc-v4-14-bdx8p	True	Merge pull request #85 from rhdhorchestrator/konflux/component-updates/operator-bundle
+  fbc-v4-14-hftq5	True	Merge pull request #84 from rhdhorchestrator/konflux/references/main
   fbc-v4-14-g6b2z	True	Merge pull request #86 from jordigilh/release/1.2.0-rc9
   fbc-v4-14-kttjb	True	Merge pull request #87 from jordigilh/release/ocp_4.14_rc9
   fbc-v4-14-mcncx	True	Merge pull request #88 from jordigilh/release/orchestrator-rc9_ocp_prod
@@ -501,7 +501,7 @@ Results:
 
 
 ### Unable to pull images from staging environment
-The images have a default pullspec [reference](https://github.com/parodos-dev/orchestrator-helm-operator/blob/9e2371748bfbe899f945e9a5655622483504e660/bundle.konflux.Dockerfile#L12) that points to the production registry. When deploying from the staging IIB catalog, the cluster will try to pull the images from the production registry as defined in the spec and fail. To fix this issue, the cluster has to be configured so that it is aware of registry mirrors for specific image pullspecs. Configure your cluster by deploying this [manifest](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/konflux/imagedigestmirrorset.yaml) that will instruct the cluster to fallback to the staging registry when the images are not in production.
+The images have a default pullspec [reference](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/9e2371748bfbe899f945e9a5655622483504e660/bundle.konflux.Dockerfile#L12) that points to the production registry. When deploying from the staging IIB catalog, the cluster will try to pull the images from the production registry as defined in the spec and fail. To fix this issue, the cluster has to be configured so that it is aware of registry mirrors for specific image pullspecs. Configure your cluster by deploying this [manifest](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/konflux/imagedigestmirrorset.yaml) that will instruct the cluster to fallback to the staging registry when the images are not in production.
 
 
 ## Command tips

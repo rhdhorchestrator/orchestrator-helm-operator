@@ -45,9 +45,9 @@ spec:
           workspace: ssh-creds
       params:
         - name: GIT_USER_NAME
-          value: Parodos Tekton Pipeline
+          value: The Orchestrator Tekton Pipeline
         - name: GIT_USER_EMAIL
-          value: parodos@redhat.com
+          value: rhdhorchestrator@redhat.com
         - name: USER_HOME
           value: /home/git
         - name: GIT_SCRIPT
@@ -66,9 +66,9 @@ spec:
           workspace: ssh-creds
       params:
         - name: GIT_USER_NAME
-          value: Parodos Tekton Pipeline
+          value: The Orchestrator Tekton Pipeline
         - name: GIT_USER_EMAIL
-          value: parodos@redhat.com
+          value: rhdhorchestrator@redhat.com
         - name: USER_HOME
           value: /home/git
         - name: GIT_SCRIPT
@@ -142,9 +142,9 @@ spec:
           workspace: ssh-creds
       params:
         - name: GIT_USER_NAME
-          value: Parodos Tekton Pipeline
+          value: The Orchestrator Tekton Pipeline
         - name: GIT_USER_EMAIL
-          value: parodos@redhat.com
+          value: rhdhorchestrator@redhat.com
         - name: USER_HOME
           value: /home/git
         - name: GIT_SCRIPT

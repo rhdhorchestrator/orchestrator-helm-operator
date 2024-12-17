@@ -2,7 +2,7 @@
 Meta Operator for deploying the Orchestrator helm charts
 
 # Installing the operator
-Please visit the [README.md](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/README.md) page and follow the guide to install the operator in your cluster.
+Please visit the [README.md](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/README.md) page and follow the guide to install the operator in your cluster.
 
 ## Releasing the operator
 
@@ -12,7 +12,7 @@ Follow these steps to release a new version of the operator:
 
 1. Pull a fresh copy of the repository. Alternatively pull the latest from main on your existing repository and ensure that the HEAD matches the upstream's HEAD commit hash.
 1. Create a new branch, example `release/1.2.0-rc7`.
-1. Update the Makefile to increment the z-stream value by 1 and commit the change to the Makefile as `Release 1.2.0-rc8"`. Example commit: https://github.com/parodos-dev/orchestrator-helm-operator/commit/0bcedf59d03dd0ace380c342ebdb0187d82ad8d6
+1. Update the Makefile to increment the z-stream value by 1 and commit the change to the Makefile as `Release 1.2.0-rc8"`. Example commit: https://github.com/rhdhorchestrator/orchestrator-helm-operator/commit/0bcedf59d03dd0ace380c342ebdb0187d82ad8d6
 1. Push the commit.
 1. Create a new PR against main, unless the changes are targeting a specific release.
 1. Get the PR reviewed by the owner of the changes to the chart or by another team member. Two more pair of eyes are always welcome for these kind of things.
