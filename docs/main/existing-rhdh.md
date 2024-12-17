@@ -115,7 +115,7 @@ By default it should point to `http://sonataflow-platform-data-index-service.son
         pluginConfig:
           dynamicPlugins:
             frontend:
-              red-hat-developer-hub.backstage-plugin-orchestrator:
+              janus-idp.backstage-plugin-orchestrator:
                 appIcons:
                   - importName: OrchestratorIcon
                     module: OrchestratorPlugin
