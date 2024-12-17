@@ -53,6 +53,15 @@ spec:
                       operator is deployed and is watching for argoapp CR instances
                     type: string
                 type: object
+              networkPolicy:
+                description: NetworkPolicy contains the namespace of an existing RHDH
+                  instance
+                properties:
+                  rhdhNamespace:
+                    default: ""
+                    description: Namespace of the existing RHDH instance.
+                    type: string
+                type: object
               orchestrator:
                 description: Orchestrator contains the fields for the orchestrator
                   configuration
@@ -151,6 +160,16 @@ spec:
                     description: The namespace of the Postgres DB service to be used
                       by platform services.
                     type: string
+                type: object
+              rhdh:
+                description: rhdh contains the configuration fields for the RHDH when
+                  using release candidate
+                properties:
+                  images:
+                    description: Indicates RC builds images that should be used by
+                      the chart to install RHDH
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
                 type: object
               rhdhOperator:
                 description: RHDH Operator contains the configuration fields for the
@@ -309,7 +328,7 @@ spec:
                       to use to deploy the operator.
                     properties:
                       channel:
-                        default: fast-1.3
+                        default: fast-1.2
                         description: Channel defines the channel of the operator package
                           to subscribe to
                         type: string
@@ -327,6 +346,10 @@ spec:
                         default: rhdh-operator
                         description: Namespace determines the namespace where the
                           operator should be deployed. Defaults to rhdh-operator
+                        type: string
+                      source:
+                        default: redhat-operators
+                        description: Source captures the name of the catalog source
                         type: string
                       sourceName:
                         default: redhat-operators
@@ -546,6 +569,16 @@ spec:
                         type: string
                     type: object
                 type: object
+              sonataflow:
+                description: SonatafFlow contains the configuration fields for the
+                  SonataFlow when using release candidate
+                properties:
+                  images:
+                    description: Indicates RC builds images that should be used by
+                      the chart to install Sonataflow
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
+                type: object
               tekton:
                 description: Contains the tekton configuration fields
                 properties:
@@ -554,14 +587,6 @@ spec:
                     description: Enabled determines whether to create the Tekton pipeline
                       resources. Defaults to false.
                     type: boolean
-                type: object
-              networkPolicy:
-                description: NetworkPolicy contains the namespace of an existing RHDH instance
-                properties:
-                  rhdhNamespace:
-                    description: Namespace of the existing RHDH instance.
-                    type: string
-                    default: ""
                 type: object
             type: object
           status:
