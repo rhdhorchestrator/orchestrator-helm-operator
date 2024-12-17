@@ -185,11 +185,11 @@ spec:
                         properties:
                           token:
                             description: Key in the secret with name defined in the 'name' field that contains the value of the authentication token as expected by Gitlab. Required for importing resource to the catalog, launching software templates and more. Defaults to 'GITLAB_TOKEN', empty for not available.
-                            default: GITLAB_TOKEN
+                            default: gitlab-host
                             type: string
                           host:
                             description: The name of the host for the gitlab instance used. Required for launching software templates. Defaults to 'GITLAB_HOST', empty for not available.
-                            default: GITLAB_HOST
+                            default: gitlab-host
                             type: string
                         type: object                        
                       k8s:
