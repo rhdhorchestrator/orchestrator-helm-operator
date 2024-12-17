@@ -13,7 +13,7 @@ The operator installs the following components onto the target OpenShift cluster
   - Knative Eventing
   - Knative Serving
 - (Optional) An ArgoCD project named `orchestrator`. Requires an pre-installed ArgoCD/OpenShift GitOps instance in the cluster. Disabled by default
-- (Optional) Tekton tasks and build pipeline. Requires an pre-installed Tekton/OpenShift Pipelines instance in the cluster. Disabled by default
+- (Optional) Tekton tasks and build pipeline. Requires an pre-installed Tekton/OpenShift Pipelines instance in the cluster with **version <= 1.16**. Disabled by default
 
 ## Important Note for ARM64 Architecture Users
 
