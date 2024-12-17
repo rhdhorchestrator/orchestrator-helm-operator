@@ -52,7 +52,7 @@ spec:
   channel: {{ .Values.rhdhOperator.subscription.channel }}
   installPlanApproval: Automatic
   name: {{ .Values.rhdhOperator.subscription.name }}
-  source: {{ .Values.rhdhOperator.subscription.sourceName }}
+  source: {{ .Values.rhdhOperator.subscription.source }}
   sourceNamespace: openshift-marketplace
   {{- if .Values.rhdhOperator.subscription.startingCSV }}
   startingCSV: {{ .Values.rhdhOperator.subscription.startingCSV }}

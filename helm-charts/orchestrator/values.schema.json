@@ -1293,7 +1293,7 @@
                 "channel": "fast-1.2",
                 "installPlanApproval": "Automatic",
                 "name": "rhdh",
-                "sourceName": "redhat-operators",
+                "source": "redhat-operators",
                 "startingCSV": "",
                 "targetNamespace": "rhdh-operator"
             }
