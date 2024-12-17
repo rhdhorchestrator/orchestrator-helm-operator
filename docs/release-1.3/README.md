@@ -94,12 +94,6 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
    oc new-project orchestrator
    ```
 
-1. Create a namespace for the Red Hat Developer Hub Operator (RHDH Operator):
-
-   ```console
-   oc new-project rhdh-operator
-   ```
-
 1.  Run the Setup Script
     1. Follow the steps in the [Running the Setup Script](#running-the-setup-script) section to download and execute the setup.sh script, which initializes the RHDH environment.
 
@@ -139,16 +133,23 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 ### Running The Setup Script
 The setup.sh script simplifies the initialization of the RHDH environment by creating the required authentication secret and labeling GitOps namespaces based on the cluster configuration.
 
-Download the setup script from the github repository and run it to create the RHDH secret and label the GitOps namespaces:
 
-```console
-wget https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/release-1.3/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
-```
+1. Create a namespace for the RHDH instance. This namespace is predefined as the default in both the setup.sh script and the Orchestrator CR but can be overridden if needed.
 
-Run the script:
-```console
-/tmp/setup.sh --use-default
-```
+   ```console
+   oc new-project rhdh-operator
+   ```
+
+1. Download the setup script from the github repository and run it to create the RHDH secret and label the GitOps namespaces:
+
+   ```console
+   wget https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/release-1.3/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
+   ```
+
+1. Run the script:
+   ```console
+   /tmp/setup.sh --use-default
+   ```
 **NOTE:** If you don't want to use the default values, omit the `--use-default` and the script will prompt you for input.
 
 The contents will vary depending on the configuration in the cluster. The following list details all the keys that can appear in the secret:
