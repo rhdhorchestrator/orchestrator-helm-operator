@@ -206,7 +206,7 @@ data:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              backstage.plugin-notifications:
+              redhat.plugin-notifications:
                 dynamicRoutes:
                   - importName: NotificationsPage
                     menuItem:
@@ -221,7 +221,7 @@ data:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              backstage.plugin-signals: {}
+              redhat.plugin-signals: {}
       - disabled: false
         package: ./dynamic-plugins/dist/backstage-plugin-notifications-backend-dynamic
       - disabled: false
