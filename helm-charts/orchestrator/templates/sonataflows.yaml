@@ -23,6 +23,8 @@ metadata:
   annotations:
     "meta.helm.sh/release-name": {{ .Release.Name}}
 spec:
+  monitoring:
+    enabled: {{ .Values.orchestrator.sonataflowPlatform.monitoring.enabled }}
   build:
     template:
       resources:
