@@ -69,6 +69,7 @@ spec:
       - args:
         - --leader-elect
         - --leader-election-id=orchestrator-operator
+        - --api-version=rhdh.redhat.com/v1alpha2
         image: controller:latest
         name: manager
         securityContext:
