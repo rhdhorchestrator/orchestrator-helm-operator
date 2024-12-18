@@ -15,6 +15,9 @@ metadata:
               "enabled": false,
               "namespace": ""
             },
+            "networkPolicy": {
+              "rhdhNamespace": "rhdh-operator"
+            },
             "orchestrator": {
               "namespace": "sonataflow-infra",
               "sonataflowPlatform": {
@@ -146,7 +149,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2024-09-12T17:54:38Z"
+    createdAt: "2024-12-17T01:09:35Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
@@ -161,7 +164,7 @@ metadata:
       managed resources (operands). To prevent data loss or disruption, you'll need
       to manually delete them.
     operators.openshift.io/valid-subscription: '["Red Hat Developer Hub"]'
-    operators.operatorframework.io/builder: operator-sdk-v1.35.0
+    operators.operatorframework.io/builder: operator-sdk-v1.37.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/rhdhorchestrator/orchestrator-helm-operator
   labels:
@@ -170,7 +173,7 @@ metadata:
     operatorframework.io/arch.ppc64le: unsupported
     operatorframework.io/arch.s390x: unsupported
     operatorframework.io/suggested-namespace: orchestrator
-  name: orchestrator-operator.v1.2.0-rc12
+  name: orchestrator-operator.v1.3.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -422,6 +425,23 @@ spec:
           - delete
           - watch
           - patch
+        - apiGroups:
+          - operator.openshift.io
+          resources:
+          - imagecontentsourcepolicies
+          verbs:
+          - get
+          - create
+          - watch
+          - list
+          - update
+          - delete
+        - apiGroups:
+          - config.openshift.io
+          resources:
+          - clusterversions
+          verbs:
+          - get
         serviceAccountName: orchestrator-operator
       deployments:
       - label:
@@ -475,7 +495,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=orchestrator-operator
-                image: quay.io/orchestrator/orchestrator-operator:1.2.0-rc12
+                image: quay.io/orchestrator/orchestrator-operator:1.3.0
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -564,4 +584,4 @@ spec:
   provider:
     name: Red Hat
     url: https://www.redhat.com
-  version: 1.2.0-rc12
+  version: 1.3.0

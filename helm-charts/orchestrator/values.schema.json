@@ -89,7 +89,7 @@
                         "sourceName": {
                             "type": "string",
                             "default": "",
-                            "title": "The sourceName Schema",
+                            "title": "The source Schema",
                             "examples": [
                                 "redhat-operators"
                             ]
@@ -493,7 +493,7 @@
                         "channel",
                         "installPlanApproval",
                         "name",
-                        "source",
+                        "sourceName",
                         "startingCSV",
                         "targetNamespace"
                     ],
@@ -530,7 +530,7 @@
                                 "rhdh"
                             ]
                         },
-                        "source": {
+                        "sourceName": {
                             "type": "string",
                             "default": "",
                             "title": "The source Schema",
@@ -560,7 +560,7 @@
                         "channel": "fast-1.2",
                         "installPlanApproval": "Automatic",
                         "name": "rhdh",
-                        "source": "redhat-operators",
+                        "sourceName": "redhat-operators",
                         "startingCSV": "",
                         "targetNamespace": "rhdh-operator"
                     }]
@@ -601,7 +601,7 @@
                     "channel": "fast-1.2",
                     "installPlanApproval": "Automatic",
                     "name": "rhdh",
-                    "source": "redhat-operators",
+                    "sourceName": "redhat-operators",
                     "startingCSV": "",
                     "targetNamespace": "rhdh-operator"
                 }
