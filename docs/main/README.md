@@ -61,6 +61,8 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 1. Install Orchestrator operator
    1. Go to OperatorHub in your OpenShift Console.
    1. Search for and install the Orchestrator Operator.
+1.  Run the Setup Script
+    1. Follow the steps in the [Running the Setup Script](#running-the-setup-script) section to download and execute the setup.sh script, which initializes the RHDH environment.
 1. Create an Orchestrator instance
    1. Once the Orchestrator Operator is installed, navigate to Installed Operators.
    1. Select Orchestrator Operator.
@@ -92,59 +94,9 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
    oc new-project orchestrator
    ```
 
-1. Create a namespace for the Red Hat Developer Hub Operator (RHDH Operator):
+1.  Run the Setup Script
+    1. Follow the steps in the [Running the Setup Script](#running-the-setup-script) section to download and execute the setup.sh script, which initializes the RHDH environment.
 
-   ```console
-   oc new-project rhdh-operator
-   ```
-
-1.  Download the setup script from the github repository and run it to create the RHDH secret and label the GitOps namespaces:
-
-    ```console
-    wget https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/main/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
-    ```
-
-    Run the script:
-    ```console
-    /tmp/setup.sh --use-default
-    ```
-    **NOTE:** If you don't want to use the default values, omit the `--use-default` and the script will prompt you for input.
-
-    The contents will vary depending on the configuration in the cluster. The following list details all the keys that can appear in the secret:
-
-    > - `BACKEND_SECRET`: Value is randomly generated at script execution. This is the only mandatory key required to be in the secret for the RHDH Operator to start.
-    > - `K8S_CLUSTER_URL`: The URL of the Kubernetes cluster is obtained dynamically using `oc whoami --show-server`.
-    > - `K8S_CLUSTER_TOKEN`: The value is obtained dynamically based on the provided namespace and service account.
-    > - `GITHUB_TOKEN`: This value is prompted from the user during script execution and is not predefined.
-    > - `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`: The value for both these fields are used to authenticate against GitHub. For more information open this [link](https://backstage.io/docs/auth/github/provider/).
-    > - `ARGOCD_URL`: This value is dynamically obtained based on the first ArgoCD instance available.
-    > - `ARGOCD_USERNAME`: Default value is set to `admin`.
-    > - `ARGOCD_PASSWORD`: This value is dynamically obtained based on the first ArgoCD instance available.
-
-    Keys will not be added to the secret if they have no values associated. So for instance, when deploying in a cluster without the GitOps operators, the `ARGOCD_URL`, `ARGOCD_USERNAME` and `ARGOCD_PASSWORD` keys will be omited in the secret.
-
-    Sample of a secret created in a GitOps environment:
-
-    ```console
-    $> oc get secret -n rhdh-operator -o yaml backstage-backend-auth-secret
-    apiVersion: v1
-    data:
-      ARGOCD_PASSWORD: ...
-      ARGOCD_URL: ...
-      ARGOCD_USERNAME: ...
-      BACKEND_SECRET: ...
-      GITHUB_TOKEN: ...
-      K8S_CLUSTER_TOKEN: ...
-      K8S_CLUSTER_URL: ...
-    kind: Secret
-    metadata:
-      creationTimestamp: "2024-05-07T22:22:59Z"
-      name: backstage-backend-auth-secret
-      namespace: rhdh-operator
-      resourceVersion: "4402773"
-      uid: 2042e741-346e-4f0e-9d15-1b5492bb9916
-    type: Opaque
-    ```
 1.  Use the following manifest to install the operator in an OCP cluster:
 
     ```yaml
@@ -177,6 +129,65 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
     ```console
     oc apply -n orchestrator -f https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/refs/heads/main/config/samples/_v1alpha1_orchestrator.yaml
     ```
+
+### Running The Setup Script
+The setup.sh script simplifies the initialization of the RHDH environment by creating the required authentication secret and labeling GitOps namespaces based on the cluster configuration.
+
+
+1. Create a namespace for the RHDH instance. This namespace is predefined as the default in both the setup.sh script and the Orchestrator CR but can be overridden if needed.
+
+   ```console
+   oc new-project rhdh-operator
+   ```
+
+1. Download the setup script from the github repository and run it to create the RHDH secret and label the GitOps namespaces:
+
+   ```console
+   wget https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/release-1.3/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
+   ```
+
+1. Run the script:
+   ```console
+   /tmp/setup.sh --use-default
+   ```
+
+**NOTE:** If you don't want to use the default values, omit the `--use-default` and the script will prompt you for input.
+
+The contents will vary depending on the configuration in the cluster. The following list details all the keys that can appear in the secret:
+
+> - `BACKEND_SECRET`: Value is randomly generated at script execution. This is the only mandatory key required to be in the secret for the RHDH Operator to start.
+> - `K8S_CLUSTER_URL`: The URL of the Kubernetes cluster is obtained dynamically using `oc whoami --show-server`.
+> - `K8S_CLUSTER_TOKEN`: The value is obtained dynamically based on the provided namespace and service account.
+> - `GITHUB_TOKEN`: This value is prompted from the user during script execution and is not predefined.
+> - `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`: The value for both these fields are used to authenticate against GitHub. For more information open this [link](https://backstage.io/docs/auth/github/provider/).
+> - `ARGOCD_URL`: This value is dynamically obtained based on the first ArgoCD instance available.
+> - `ARGOCD_USERNAME`: Default value is set to `admin`.
+> - `ARGOCD_PASSWORD`: This value is dynamically obtained based on the first ArgoCD instance available.
+
+Keys will not be added to the secret if they have no values associated. So for instance, when deploying in a cluster without the GitOps operators, the `ARGOCD_URL`, `ARGOCD_USERNAME` and `ARGOCD_PASSWORD` keys will be omited in the secret.
+
+Sample of a secret created in a GitOps environment:
+
+```console
+$> oc get secret -n rhdh-operator -o yaml backstage-backend-auth-secret
+apiVersion: v1
+data:
+  ARGOCD_PASSWORD: ...
+  ARGOCD_URL: ...
+  ARGOCD_USERNAME: ...
+  BACKEND_SECRET: ...
+  GITHUB_TOKEN: ...
+  K8S_CLUSTER_TOKEN: ...
+  K8S_CLUSTER_URL: ...
+kind: Secret
+metadata:
+  creationTimestamp: "2024-05-07T22:22:59Z"
+  name: backstage-backend-auth-secret
+  namespace: rhdh-operator
+  resourceVersion: "4402773"
+  uid: 2042e741-346e-4f0e-9d15-1b5492bb9916
+type: Opaque
+```
 
 ## Additional information
 
