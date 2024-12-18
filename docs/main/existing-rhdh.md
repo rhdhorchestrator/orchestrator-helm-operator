@@ -138,7 +138,7 @@ To include the Notification Plugin append this configuration to the ConfigMap:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              backstage.plugin-notifications:
+              redhat.plugin-notifications:
                 dynamicRoutes:
                   - importName: NotificationsPage
                     menuItem:
@@ -154,7 +154,7 @@ To include the Notification Plugin append this configuration to the ConfigMap:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              backstage.plugin-signals: {}
+              redhat.plugin-signals: {}
       - disabled: false
         package: "@redhat/plugin-notifications-backend-dynamic@1.3.0"
         integrity: sha512-Pw9Op/Q+1MctmLiVvQ3M+89tkbWkw8Lw0VfcwyGSMiHpK/Xql1TrSFtThtLlymRgeCSBgxHYhh3MUusNQX08VA==
