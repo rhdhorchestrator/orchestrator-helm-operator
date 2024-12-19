@@ -88,7 +88,7 @@ spec:
                         default: openshift-serverless-logic
                         description: Namespace determines the namespace where the operator should be deployed. Defaults to openshift-serverless-logic
                         type: string
-                      sourceName:
+                      source:
                         default: "redhat-operators"
                         description: SourceName captures the name of the catalog source
                         type: string
@@ -124,7 +124,7 @@ spec:
                         description: Namespace determines the namespace where the operator should be deployed. Defaults to openshift-serverless
                         default: openshift-serverless
                         type: string
-                      sourceName:
+                      source:
                         description: SourceName captures the name of the catalog source
                         default: "redhat-operators"
                         type: string
@@ -257,10 +257,6 @@ spec:
                       namespace:
                         default: rhdh-operator
                         description: Namespace determines the namespace where the operator should be deployed. Defaults to rhdh-operator
-                        type: string
-                      sourceName:
-                        default: "redhat-operators"
-                        description: SourceName captures the name of the catalog source
                         type: string
                       source:
                         default: "redhat-operators"
