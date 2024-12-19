@@ -131,7 +131,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2024-12-17T01:09:35Z"
+    createdAt: "2024-12-19T16:28:07Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
