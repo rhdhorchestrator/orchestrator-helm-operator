@@ -194,7 +194,7 @@ See more configuration options for the plugin [here](https://github.com/backstag
 Include ArgoCD and Tekton Plugins if using OpenShift Gitops (ArgoCD) and OpenShift Pipelines (Tekton) for Orchestrator Workflows
 ```yaml
       - disabled: false
-        package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-tekton
+        package: ./dynamic-plugins/dist/backstage-community-plugin-tekton
       - disabled: false
         package: ./dynamic-plugins/dist/backstage-community-plugin-redhat-argocd
       - disabled: false
