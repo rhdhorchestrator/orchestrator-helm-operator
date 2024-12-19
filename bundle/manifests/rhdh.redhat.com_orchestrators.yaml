@@ -19,7 +19,7 @@ spec:
     - jsonPath: .status.conditions[-1:].reason
       name: Reason
       type: string
-    name: v1alpha1
+    name: v1alpha2
     schema:
       openAPIV3Schema:
         description: Orchestrator is the Schema for the orchestrators API
@@ -369,30 +369,6 @@ spec:
               rhdhPlugins:
                 description: Backstage plugins
                 properties:
-                  notifications:
-                    description: Notification plugin information
-                    properties:
-                      integrity:
-                        default: sha512-iYLgIy0YdP/CdTLol07Fncmo9n0J8PdIZseiwAyUt9RFJzKIXmoi2CpQLPKMx36lEgPYUlT0rFO81Ie2CSis4Q==
-                        description: Package SHA integrity
-                        type: string
-                      package:
-                        default: plugin-notifications-dynamic@1.3.0
-                        description: Package name
-                        type: string
-                    type: object
-                  notificationsBackend:
-                    description: Notification backend plugin information
-                    properties:
-                      integrity:
-                        default: sha512-Pw9Op/Q+1MctmLiVvQ3M+89tkbWkw8Lw0VfcwyGSMiHpK/Xql1TrSFtThtLlymRgeCSBgxHYhh3MUusNQX08VA==
-                        description: Package SHA integrity
-                        type: string
-                      package:
-                        default: plugin-notifications-backend-dynamic@1.3.0
-                        description: Package name
-                        type: string
-                    type: object
                   notificationsEmail:
                     description: Notification email plugin information
                     properties:
@@ -403,14 +379,6 @@ spec:
                           secret to enable. See value backstage-backend-auth-secret.
                           See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts
                         type: boolean
-                      integrity:
-                        default: sha512-sm7yRoO6Nkk3B7+AWKb10maIrb2YBNSiqQaWmFDVg2G9cbDoWr9wigqqeQ32+b6o2FenfNWg8xKY6PPyZGh8BA==
-                        description: Package SHA integrity
-                        type: string
-                      package:
-                        default: plugin-notifications-backend-module-email-dynamic@1.3.0
-                        description: Package name
-                        type: string
                       port:
                         default: 587
                         description: SMTP server port
@@ -459,30 +427,6 @@ spec:
                     default: '@redhat'
                     description: Scope of the plugins
                     type: string
-                  signals:
-                    description: Signals plugin information
-                    properties:
-                      integrity:
-                        default: sha512-+E8XeTXcG5oy+aNImGj/MY0dvEkP7XAsu4xuZjmAqOHyVfiIi0jnP/QDz8XMbD1IjCimbr/DMUZdjmzQiD0hSQ==
-                        description: Package SHA integrity
-                        type: string
-                      package:
-                        default: plugin-signals-dynamic@1.3.0
-                        description: Package name
-                        type: string
-                    type: object
-                  signalsBackend:
-                    description: Signals backend plugin information
-                    properties:
-                      integrity:
-                        default: sha512-5Bl6C+idPXtquQxMZW+bjRMcOfFYcKxcGZZFv2ITkPVeY2zzxQnAz3vYHnbvKRSwlQxjIyRXY6YgITGHXWT0nw==
-                        description: Package SHA integrity
-                        type: string
-                      package:
-                        default: plugin-signals-backend-dynamic@1.3.0
-                        description: Package name
-                        type: string
-                    type: object
                 type: object
               serverlessOperator:
                 properties:

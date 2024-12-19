@@ -5,7 +5,7 @@ metadata:
     alm-examples: |-
       [
         {
-          "apiVersion": "rhdh.redhat.com/v1alpha1",
+          "apiVersion": "rhdh.redhat.com/v1alpha2",
           "kind": "Orchestrator",
           "metadata": {
             "name": "orchestrator-sample"
@@ -83,18 +83,8 @@ metadata:
               }
             },
             "rhdhPlugins": {
-              "notifications": {
-                "integrity": "sha512-iYLgIy0YdP/CdTLol07Fncmo9n0J8PdIZseiwAyUt9RFJzKIXmoi2CpQLPKMx36lEgPYUlT0rFO81Ie2CSis4Q==",
-                "package": "plugin-notifications-dynamic@1.3.0"
-              },
-              "notificationsBackend": {
-                "integrity": "sha512-Pw9Op/Q+1MctmLiVvQ3M+89tkbWkw8Lw0VfcwyGSMiHpK/Xql1TrSFtThtLlymRgeCSBgxHYhh3MUusNQX08VA==",
-                "package": "plugin-notifications-backend-dynamic@1.3.0"
-              },
               "notificationsEmail": {
                 "enabled": false,
-                "integrity": "sha512-sm7yRoO6Nkk3B7+AWKb10maIrb2YBNSiqQaWmFDVg2G9cbDoWr9wigqqeQ32+b6o2FenfNWg8xKY6PPyZGh8BA==",
-                "package": "plugin-notifications-backend-module-email-dynamic@1.3.0",
                 "port": 587,
                 "replyTo": "",
                 "sender": ""
@@ -108,15 +98,7 @@ metadata:
                 "integrity": "sha512-Th5vmwyhHyhURwQo28++PPHTvxGSFScSHPJyofIdE5gTAb87ncyfyBkipSDq7fwj4L8CQTXa4YP6A2EkHW1npg==",
                 "package": "backstage-plugin-orchestrator-backend-dynamic@1.3.0"
               },
-              "scope": "@redhat",
-              "signals": {
-                "integrity": "sha512-+E8XeTXcG5oy+aNImGj/MY0dvEkP7XAsu4xuZjmAqOHyVfiIi0jnP/QDz8XMbD1IjCimbr/DMUZdjmzQiD0hSQ==",
-                "package": "plugin-signals-dynamic@1.3.0"
-              },
-              "signalsBackend": {
-                "integrity": "sha512-5Bl6C+idPXtquQxMZW+bjRMcOfFYcKxcGZZFv2ITkPVeY2zzxQnAz3vYHnbvKRSwlQxjIyRXY6YgITGHXWT0nw==",
-                "package": "plugin-signals-backend-dynamic@1.3.0"
-              }
+              "scope": "@redhat"
             },
             "serverlessOperator": {
               "enabled": true,
@@ -186,7 +168,7 @@ spec:
       displayName: Orchestrator
       kind: Orchestrator
       name: orchestrators.rhdh.redhat.com
-      version: v1alpha1
+      version: v1alpha2
   description: |
     Red Hat Developer Hub Orchestrator is a plugin that enables serverless asynchronous workflows to Backstage.
 
