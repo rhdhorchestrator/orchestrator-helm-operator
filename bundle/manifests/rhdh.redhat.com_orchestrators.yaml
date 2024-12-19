@@ -399,10 +399,6 @@ spec:
                         default: redhat-operators
                         description: Source captures the name of the catalog source
                         type: string
-                      sourceName:
-                        default: redhat-operators
-                        description: SourceName captures the name of the catalog source
-                        type: string
                       startingCSV:
                         default: ""
                         description: The initial version of the operator
@@ -507,7 +503,7 @@ spec:
                         description: Namespace determines the namespace where the
                           operator should be deployed. Defaults to openshift-serverless
                         type: string
-                      sourceName:
+                      source:
                         default: redhat-operators
                         description: SourceName captures the name of the catalog source
                         type: string
@@ -551,7 +547,7 @@ spec:
                         description: Namespace determines the namespace where the
                           operator should be deployed. Defaults to openshift-serverless-logic
                         type: string
-                      sourceName:
+                      source:
                         default: redhat-operators
                         description: SourceName captures the name of the catalog source
                         type: string
