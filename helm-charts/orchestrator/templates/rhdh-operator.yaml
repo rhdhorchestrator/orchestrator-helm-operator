@@ -159,7 +159,7 @@ data:
       - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
         disabled: false
     {{- if .Values.tekton.enabled }}
-      - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-tekton
+      - package: ./dynamic-plugins/dist/backstage-community-plugin-tekton
         disabled: false
     {{- end }}
   {{- end }}
