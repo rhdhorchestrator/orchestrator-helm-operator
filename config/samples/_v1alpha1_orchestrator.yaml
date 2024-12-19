@@ -46,7 +46,7 @@ spec:
         password: NOTIFICATIONS_EMAIL_PASSWORD # Key in the secret with name defined in the 'name' field that contains the value of the password of the SMTP server for the notifications plugin. Defaults to 'NOTIFICATIONS_EMAIL_PASSWORD', empty for not available.
     subscription:
       namespace: rhdh-operator # namespace where the operator should be deployed
-      channel: fast-1.3 # channel of an operator package to subscribe to
+      channel: fast-1.4 # channel of an operator package to subscribe to
       installPlanApproval: Automatic # whether the update should be installed automatically
       name: rhdh # name of the operator package
       source: redhat-operators # name of the catalog source
