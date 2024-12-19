@@ -66,7 +66,7 @@ Retrieve the names of the components that match the controller and bundle based 
 controller_rhel9_operator=$(oc get components -ojsonpath='{range .items[?(@.spec.application=="'$applicationName'")]}{.metadata.name}{"\n"}{end}}'|grep controller-rhel9-operator)
 orchestrator_operator_bundle=$(oc get components -ojsonpath='{range .items[?(@.spec.application=="'$applicationName'")]}{.metadata.name}{"\n"}{end}}'|grep orchestrator-operator-bundle)
 echo "Controller compoment registered as $controller_rhel9_operator"
-echo "Bundle compoment registered as $controller_rhel9_operator"
+echo "Bundle compoment registered as $orchestrator_operator_bundle"
 ```
 
 ### Staging release
@@ -119,8 +119,8 @@ EOF" | awk '{print $1}')
 
 * Wait for the release to be validated:
 ```console
-while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Progressing" ];do sleep 5;done
-[[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].message}') || echo "Release successful"
+while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].reason}')" == "Progressing" ];do sleep 5;done
+[[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].message}') || echo "Release successful"
 ```
 
 If the release fails, follow the [troubleshooting](#release-pipeline-failed) guide to find out the root cause.
@@ -240,18 +240,15 @@ schema: olm.bundle
 
   * Wait for the release to be validated:
   ```console
-  while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Progressing" ];do sleep 5;done
-  [[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].message}') || echo "Release successful"
+  while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].reason}')" == "Progressing" ];do sleep 5;done
+  [[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].message}') || echo "Release successful"
   ```
   If the release fails, follow the [troubleshooting](#release-pipeline-failed) guide to find out the root cause.
 
-  * Extract the catalog IIB container image from the `extract-index-image` task. This task exposes the pullspec container image of the staging Red Hat IIB index with the additional FBC fragment of the operator.
+  * Extract the catalog IIB container image pullspec digest from the `status` of the release.
 
   ```console
-  pipelineRunName=$(oc get $releaseName -ojsonpath='{.status.processing.pipelineRun}{"\n"}' | awk -F'/' '{print $2}')
-  extractIndexTask=$(oc get taskrun -n rhtap-releng-tenant -l tekton.dev/pipelineRun=$pipelineRunName,tekton.dev/task=extract-index-image -oname)
-  extractIndexPod=$(oc get $extractIndexTask -n rhtap-releng-tenant -ojsonpath='{.status.podName}')
-  imagePullSpec=$(oc get pod -n rhtap-releng-tenant $extractIndexPod -ojsonpath='{.status.containerStatuses[?(@.name=="step-extract-index-image")].state.terminated.message}'| jq -r '.[] | select(.key == "indexImageResolved") | .value')
+  imagePullSpec=$(oc get $releaseName -ojsonpath={.status.artifacts.index_image.index_image_resolved})
   ```
 
   * With the retrieved container image pullspec stored in `$imagePullSpec`, run the following command to generate a new `catalogsource` that references the staging catalog and deploy it in your cluster:
@@ -335,8 +332,8 @@ EOF" | awk '{print $1}')
 You can also use the [UI](https://console.redhat.com/application-pipeline/workspaces/orchestrator-releng/applications/helm-operator/releases) to view the status of the release as it is being processed in the pipeline.
 
 ```console
-while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Progressing" ];do sleep 5;done
-[[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].message}') || echo "Release successful"
+while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].reason}')" == "Progressing" ];do sleep 5;done
+[[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].message}') || echo "Release successful"
 ```
 
 If the release fails, follow the [troubleshooting](#release-pipeline-failed) guide to find out the root cause.
@@ -446,8 +443,8 @@ schema: olm.bundle
 
   You can also use the [UI](https://console.redhat.com/application-pipeline/workspaces/orchestrator-releng/applications/helm-operator/releases) to view the status of the release as it is being processed in the pipeline.
   ```console
-  while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Progressing" ];do sleep 5;done
-  [[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Processed")].message}') || echo "Release successful"
+  while [ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].reason}')" == "Progressing" ];do sleep 5;done
+  [[ "$(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].reason}')" == "Failed" ]] && echo Release failed: $(oc get $releaseName -ojsonpath='{.status.conditions[?(@.type=="Released")].message}') || echo "Release successful"
   ```
 
   If the release fails, follow the [troubleshooting](#release-pipeline-failed) guide to find out the root cause.
