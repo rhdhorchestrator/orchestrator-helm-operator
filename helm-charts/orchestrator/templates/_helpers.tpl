@@ -138,3 +138,12 @@
   {{- end -}}
   {{- $versionString -}}
 {{- end -}}
+
+{{- define "get-tekton-version" -}}
+        {{- $pipelinesSubs := lookup "operators.coreos.com/v1alpha1" "Subscription" "openshift-operators" "openshift-pipelines-operator-rh" -}}
+        {{- $pipelineInstalledVersion := $pipelinesSubs.status.installedCSV}}
+        {{- $pipelineVersion := substr 33 ( len $pipelineInstalledVersion) $pipelineInstalledVersion}}
+        {{- $pipelineVersion = semver $pipelineVersion }}
+        {{- $pipelineVersionString := printf "%d.%d" $pipelineVersion.Major $pipelineVersion.Minor -}}
+        {{- $pipelineVersionString -}}
+{{- end -}}
