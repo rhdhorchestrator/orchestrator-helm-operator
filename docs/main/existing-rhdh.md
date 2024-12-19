@@ -103,19 +103,19 @@ By default it should point to `http://sonataflow-platform-data-index-service.son
   ```
 ```yaml
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.3.0"
-        integrity: sha512-Th5vmwyhHyhURwQo28++PPHTvxGSFScSHPJyofIdE5gTAb87ncyfyBkipSDq7fwj4L8CQTXa4YP6A2EkHW1npg==
+        package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3"
+        integrity: sha512-tS5cJGwjzP9esdTZvUFjw0O7+w9gGBI/+VvJrtqYJBDGXcEAq9iYixGk67ddQVW5eeUM7Tk1WqJlNj282aAWww==
         pluginConfig:
           orchestrator:
             dataIndexService:
               url: http://sonataflow-platform-data-index-service.sonataflow-infra
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator@1.3.0"
-        integrity: sha512-A/twx1SOOGDQjglLzOxQikKO0XOdPP1jh2lj9Y/92bLox8mT+eaZpub8YLwR2mb7LsUIUImg+U6VnKwoAV9ATA==
+        package: "@redhat/backstage-plugin-orchestrator@1.4.0-rc.3"
+        integrity: sha512-vGGd9hUmDriEMmP2TfzLVa3JSnfot2Blg+aftDnu/lEphsY1s2gdA4Z5lCxUk7aobcKE6JO/f0sIl2jyxZ7ktw==
         pluginConfig:
           dynamicPlugins:
             frontend:
-              janus-idp.backstage-plugin-orchestrator:
+              red-hat-developer-hub.backstage-plugin-orchestrator:
                 appIcons:
                   - importName: OrchestratorIcon
                     module: OrchestratorPlugin
@@ -138,7 +138,7 @@ To include the Notification Plugin append this configuration to the ConfigMap:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              redhat.plugin-notifications:
+              backstage.plugin-notifications:
                 dynamicRoutes:
                   - importName: NotificationsPage
                     menuItem:
@@ -154,7 +154,7 @@ To include the Notification Plugin append this configuration to the ConfigMap:
         pluginConfig:
           dynamicPlugins:
             frontend:
-              redhat.plugin-signals: {}
+              backstage.plugin-signals: {}
       - disabled: false
         package: "@redhat/plugin-notifications-backend-dynamic@1.3.0"
         integrity: sha512-Pw9Op/Q+1MctmLiVvQ3M+89tkbWkw8Lw0VfcwyGSMiHpK/Xql1TrSFtThtLlymRgeCSBgxHYhh3MUusNQX08VA==
@@ -303,12 +303,12 @@ In the example output below, `.properties.integrity.default` is the integrity va
     "description": "Orchestrator backend plugin information",
     "properties": {
       "integrity": {
-        "default": "sha512-Th5vmwyhHyhURwQo28++PPHTvxGSFScSHPJyofIdE5gTAb87ncyfyBkipSDq7fwj4L8CQTXa4YP6A2EkHW1npg==",
+        "default": "sha512-tS5cJGwjzP9esdTZvUFjw0O7+w9gGBI/+VvJrtqYJBDGXcEAq9iYixGk67ddQVW5eeUM7Tk1WqJlNj282aAWww==",
         "description": "Package SHA integrity",
         "type": "string"
       },
       "package": {
-        "default": "backstage-plugin-orchestrator-backend-dynamic@1.3.0",
+        "default": "backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3",
         "description": "Package name",
         "type": "string"
       }
@@ -316,7 +316,7 @@ In the example output below, `.properties.integrity.default` is the integrity va
     "type": "object"
   },
 ```
-> Note: The Orchestrator plugin package names in the `dynamic-plugins` ConfigMap must have `@redhat/` prepended to the package name (i.e., `@redhat/backstage-plugin-orchestrator-backend-dynamic@1.3.0`)
+> Note: The Orchestrator plugin package names in the `dynamic-plugins` ConfigMap must have `@redhat/` prepended to the package name (i.e., `@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3`)
 
 ### Upgrade plugin versions - WIP
 To perform an upgrade of the plugin versions, start by acquiring the new plugin version along with its associated integrity value.
@@ -348,12 +348,12 @@ done
 A sample output should look like:
 ```
 Retrieving latest version for plugin: @redhat/backstage-plugin-orchestrator\n
-package: "@redhat/backstage-plugin-orchestrator@1.3.0"
-integrity: sha512-A/twx1SOOGDQjglLzOxQikKO0XOdPP1jh2lj9Y/92bLox8mT+eaZpub8YLwR2mb7LsUIUImg+U6VnKwoAV9ATA==
+package: "@redhat/backstage-plugin-orchestrator@1.4.0-rc.3"
+integrity: sha512-vGGd9hUmDriEMmP2TfzLVa3JSnfot2Blg+aftDnu/lEphsY1s2gdA4Z5lCxUk7aobcKE6JO/f0sIl2jyxZ7ktw==
 ---
 Retrieving latest version for plugin: @redhat/backstage-plugin-orchestrator-backend-dynamic\n
-package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.3.0"
-integrity: sha512-Th5vmwyhHyhURwQo28++PPHTvxGSFScSHPJyofIdE5gTAb87ncyfyBkipSDq7fwj4L8CQTXa4YP6A2EkHW1npg==
+package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3"
+integrity: sha512-tS5cJGwjzP9esdTZvUFjw0O7+w9gGBI/+VvJrtqYJBDGXcEAq9iYixGk67ddQVW5eeUM7Tk1WqJlNj282aAWww==
 ---
 Retrieving latest version for plugin: @redhat/plugin-notifications-dynamic\n
 package: "@redhat/plugin-notifications-dynamic@1.3.0"
