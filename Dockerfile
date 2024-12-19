@@ -1,9 +1,9 @@
 # Build the manager binary
-FROM quay.io/orchestrator/helm-operator@sha256:2133941e5b0da5b1c616b48a48ae992c8dee6dd40bd03b8bb3a34255b0e0c684
-# quay.io/orchestrator/helm-operator:v1.35.0-cve-fixes-18DEC24
+FROM quay.io/orchestrator/helm-operator@sha256:ebc0bfc4ba9b4d8976659c854278c0dae5504eed48bd262b604b4b8e363b7c3e
+# quay.io/orchestrator/helm-operator:v1.35.0-cve-fixes-19DEC24
 
 
-LABEL base-image="quay.io/orchestrator/helm-operator:v1.35.0-cve-fixes-18DEC24"
+LABEL base-image="quay.io/orchestrator/helm-operator:v1.35.0-cve-fixes-19DEC24"
 LABEL com.redhat.component="RHDH Orchestrator Helm Operator"
 LABEL distribution-scope="public"
 LABEL name="rhdh-orchestrator-helm-operator-bundle"
