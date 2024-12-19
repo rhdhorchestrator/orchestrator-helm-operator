@@ -45,7 +45,7 @@ rhdhOperator:
 
   subscription:
     namespace: rhdh-operator # namespace where the operator should be deployed
-    channel: fast-1.3 # channel of an operator package to subscribe to
+    channel: fast-1.4 # channel of an operator package to subscribe to
     installPlanApproval: Automatic # whether the update should be installed automatically
     name: rhdh # name of the operator package
     source: redhat-operators # name of the catalog source
