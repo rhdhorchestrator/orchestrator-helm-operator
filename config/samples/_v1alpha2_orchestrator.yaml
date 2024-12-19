@@ -4,7 +4,6 @@ metadata:
   name: orchestrator-sample
 spec:
   sonataFlowOperator:
-    isReleaseCandidate: false # Indicates RC builds should be used by the chart to install Sonataflow
     enabled: true # whether the operator should be deployed by the chart
     subscription:
       namespace: openshift-serverless-logic # namespace where the operator should be deployed
@@ -22,7 +21,6 @@ spec:
       name: serverless-operator # name of the operator package
       source: redhat-operators # name of the catalog source
   rhdhOperator:
-    isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
     enabled: true # whether the operator should be deployed by the chart
     enableGuestProvider: false # whether to enable guest provider
     secretRef:

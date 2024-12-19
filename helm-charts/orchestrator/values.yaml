@@ -1,5 +1,4 @@
 sonataFlowOperator:
-  isReleaseCandidate: false # Indicates RC builds should be used by the chart to install Sonataflow
   enabled: true # whether the operator should be deployed by the chart
   subscription:
     namespace: openshift-serverless-logic # namespace where the operator should be deployed
@@ -19,7 +18,6 @@ serverlessOperator:
     source: redhat-operators # name of the catalog source
 
 rhdhOperator:
-  isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
   enabled: true # whether the operator should be deployed by the chart
   enableGuestProvider: false # whether to enable guest provider
   catalogBranch: v1.4.x # The branch for https://github.com/rhdhorchestrator/workflow-software-templates used to import software templates resources

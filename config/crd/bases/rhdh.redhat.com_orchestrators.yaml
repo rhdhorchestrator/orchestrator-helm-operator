@@ -61,10 +61,6 @@ spec:
               sonataFlowOperator:
                 description: SonatafFlowOperator contains the configuration fields for the SonataFlow Operator
                 properties:
-                  isReleaseCandidate:
-                    default: false
-                    description: Indicates RC builds should be used by the chart to install Sonataflow
-                    type: boolean
                   enabled:
                     default: true
                     description: Enabled determines whether to deploy the SonataFlow Operator operator or not. Defaults to true.
@@ -133,10 +129,6 @@ spec:
               rhdhOperator:
                 description: RHDH Operator contains the configuration fields for the Red Hat Developer Hub operator
                 properties:
-                  isReleaseCandidate:
-                    default: false
-                    description: Indicates RC builds should be used by the chart to install the Serverless Operator
-                    type: boolean
                   enabled:
                     default: true
                     description: Enabled determines whether the operator should be deployed by the chart. Defaults to true

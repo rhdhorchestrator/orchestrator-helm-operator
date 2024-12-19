@@ -20,19 +20,10 @@
             "default": {},
             "title": "The sonataFlowOperator Schema",
             "required": [
-                "isReleaseCandidate",
                 "enabled",
                 "subscription"
             ],
             "properties": {
-                "isReleaseCandidate": {
-                    "type": "boolean",
-                    "default": false,
-                    "title": "The isReleaseCandidate Schema",
-                    "examples": [
-                        false
-                    ]
-                },
                 "enabled": {
                     "type": "boolean",
                     "default": false,
@@ -114,7 +105,6 @@
                 }
             },
             "examples": [{
-                "isReleaseCandidate": false,
                 "enabled": true,
                 "subscription": {
                     "namespace": "openshift-serverless-logic",
@@ -221,7 +211,6 @@
             "default": {},
             "title": "The rhdhOperator Schema",
             "required": [
-                "isReleaseCandidate",
                 "enabled",
                 "enableGuestProvider",
                 "catalogBranch",
@@ -229,14 +218,6 @@
                 "subscription"
             ],
             "properties": {
-                "isReleaseCandidate": {
-                    "type": "boolean",
-                    "default": false,
-                    "title": "The isReleaseCandidate Schema",
-                    "examples": [
-                        false
-                    ]
-                },
                 "enabled": {
                     "type": "boolean",
                     "default": false,
@@ -603,7 +584,6 @@
                 }
             },
             "examples": [{
-                "isReleaseCandidate": false,
                 "enabled": true,
                 "enableGuestProvider": false,
                 "catalogBranch": "v1.4.x",
@@ -1179,7 +1159,6 @@
     },
     "examples": [{
         "sonataFlowOperator": {
-            "isReleaseCandidate": false,
             "enabled": true,
             "subscription": {
                 "namespace": "openshift-serverless-logic",
@@ -1201,7 +1180,6 @@
             }
         },
         "rhdhOperator": {
-            "isReleaseCandidate": false,
             "enabled": true,
             "enableGuestProvider": false,
             "catalogBranch": "v1.4.x",
