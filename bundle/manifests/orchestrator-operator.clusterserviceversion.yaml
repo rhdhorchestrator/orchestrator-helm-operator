@@ -84,9 +84,9 @@ metadata:
                 "name": "rhdh",
                 "namespace": "rhdh-operator",
                 "source": "redhat-operators",
-                "startingCSV": "",
-                "targetNamespace": "rhdh-operator"
-              }
+                "startingCSV": ""
+              },
+              "targetNamespace": "rhdh-operator"
             },
             "rhdhPlugins": {
               "notificationsEmail": {
@@ -136,7 +136,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2025-01-07T15:44:21Z"
+    createdAt: "2025-01-07T22:25:26Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"

@@ -15,8 +15,8 @@ spec:
             {{- $namespace:= "" }}
             {{- if (and (not .Values.rhdhOperator.enabled) .Values.networkPolicy.rhdhNamespace) }}
               {{- $namespace = .Values.networkPolicy.rhdhNamespace }} # use rhdhNamespace if defined
-            {{- else if (and (.Values.rhdhOperator.enabled) ( and .Values.rhdhOperator.subscription .Values.rhdhOperator.subscription.targetNamespace ) )}}
-              {{- $namespace = .Values.rhdhOperator.subscription.targetNamespace }} # otherwise, use targetNamespace if defined
+            {{- else if (and .Values.rhdhOperator.enabled .Values.rhdhOperator.targetNamespace )}}
+              {{- $namespace = .Values.rhdhOperator.targetNamespace }} # otherwise, use targetNamespace if defined
             {{- else }}
                {{- fail "No namespace for existing RHDH instance defined" }}
             {{- end }}

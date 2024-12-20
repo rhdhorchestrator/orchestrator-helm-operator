@@ -78,6 +78,15 @@ spec:
                     description: SonataflowPlatform contains the pod resource configuration
                       to be used for the data index and job services
                     properties:
+                      monitoring:
+                        description: Contains the monitoring configuration fields
+                        properties:
+                          enabled:
+                            default: true
+                            description: Enabled determines whether monitoring should
+                              be enabled. Defaults to true.
+                            type: boolean
+                        type: object
                       resources:
                         description: Resources contains the requests and limit of
                           CPU and memory resources for the pod instance
@@ -351,12 +360,12 @@ spec:
                         default: ""
                         description: The initial version of the operator
                         type: string
-                      targetNamespace:
-                        default: rhdh-operator
-                        description: The target namespace for the backstage CR in
-                          which RHDH instance is created
-                        type: string
                     type: object
+                  targetNamespace:
+                    default: orchestrator
+                    description: The target namespace for the backstage CR in which
+                      RHDH instance is created
+                    type: string
                 type: object
               rhdhPlugins:
                 description: Backstage plugins
@@ -416,7 +425,7 @@ spec:
                         type: string
                     type: object
                   scope:
-                    default: 'https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.4'
+                    default: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.4
                     description: Scope of the plugins
                     type: string
                 type: object

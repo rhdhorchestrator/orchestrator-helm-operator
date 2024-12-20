@@ -4,7 +4,7 @@ apiVersion: rhdh.redhat.com/v1alpha1
 kind: Backstage
 metadata:
   name: backstage
-  namespace: {{ .Values.rhdhOperator.subscription.targetNamespace }}
+  namespace: {{ .Values.rhdhOperator.targetNamespace }}
   annotations:
     "meta.helm.sh/release-name": {{ .Release.Name}}
 spec:
@@ -25,9 +25,9 @@ spec:
   {{- if not .Values.rhdhOperator.secretRef.name }}
     {{- fail "Backstage's secret name defined in 'rhdhOperator.secretRef.name' is required" }}
   {{- end }}
-  {{- $secret := lookup "v1" "Secret" .Values.rhdhOperator.subscription.targetNamespace .Values.rhdhOperator.secretRef.name }}
+  {{- $secret := lookup "v1" "Secret" .Values.rhdhOperator.targetNamespace .Values.rhdhOperator.secretRef.name }}
   {{- if not $secret }}
-    {{- fail (printf "Secret %s not found in namespace %s" .Values.rhdhOperator.secretRef.name .Values.rhdhOperator.subscription.targetNamespace ) }}
+    {{- fail (printf "Secret %s not found in namespace %s" .Values.rhdhOperator.secretRef.name .Values.rhdhOperator.targetNamespace ) }}
   {{- end }}
   {{ if not .Values.rhdhOperator.secretRef.backstage.backendSecret }}
     {{ fail printf "Backend secret key not defined in secret '%s' for Backstage. Please ensure that the value key 'rhdhOperator.secretRef.backstage.backendSecret' has been populated and the value matches the key in the secret" .Values.rhdhOperator.secretRef.name }}
@@ -63,7 +63,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: dynamic-plugins-npmrc
-  namespace: {{ .Values.rhdhOperator.subscription.targetNamespace }}
+  namespace: {{ .Values.rhdhOperator.targetNamespace }}
 type: Opaque
 stringData:
   .npmrc: |
@@ -74,12 +74,12 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: app-config-rhdh
-  namespace: {{ .Values.rhdhOperator.subscription.targetNamespace }}
+  namespace: {{ .Values.rhdhOperator.targetNamespace }}
 data:
   "app-config-rhdh.yaml": |
     app:
       title: Red Hat Developer Hub
-      baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.targetNamespace }}.{{ include "cluster.domain" . }}
+      baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.targetNamespace }}.{{ include "cluster.domain" . }}
     backend:
       auth:
         externalAccess:
@@ -87,13 +87,13 @@ data:
             options:
               token: {{ printf "${%s}" .Values.rhdhOperator.secretRef.backstage.backendSecret }}
               subject: orchestrator
-      baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.targetNamespace }}.{{ include "cluster.domain" . }}
+      baseUrl: https://backstage-backstage-{{ .Values.rhdhOperator.targetNamespace }}.{{ include "cluster.domain" . }}
       csp:
         script-src: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
         script-src-elem: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
         connect-src: ["'self'", 'http:', 'https:', 'data:']
       cors:
-        origin: https://backstage-backstage-{{ .Values.rhdhOperator.subscription.targetNamespace }}.{{ include "cluster.domain" . }}
+        origin: https://backstage-backstage-{{ .Values.rhdhOperator.targetNamespace }}.{{ include "cluster.domain" . }}
       database:
         client: pg
         connection:
@@ -121,7 +121,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: dynamic-plugins-rhdh
-  namespace: {{ .Values.rhdhOperator.subscription.targetNamespace }}
+  namespace: {{ .Values.rhdhOperator.targetNamespace }}
 data:
   "dynamic-plugins.yaml": |
     includes:
@@ -264,7 +264,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config-rhdh-auth
-  namespace: {{ .Values.rhdhOperator.subscription.targetNamespace }}
+  namespace: {{ .Values.rhdhOperator.targetNamespace }}
 data:
   app-config-auth.gh.yaml: |
   {{- if and .Values.rhdhOperator.secretRef.github.token (dig "data" .Values.rhdhOperator.secretRef.github.token "" $secret) }}
@@ -302,7 +302,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: app-config-rhdh-catalog
-  namespace: {{ .Values.rhdhOperator.subscription.targetNamespace }}
+  namespace: {{ .Values.rhdhOperator.targetNamespace }}
 data:
   "app-config-catalog.yaml": |
     catalog:
@@ -337,7 +337,7 @@ data:
         - type: url
           target: https://github.com/redhat-developer/rhdh-plugins/blob/main/workspaces/orchestrator/plugins/orchestrator-common/src/generated/docs/api-doc/orchestrator-api.yaml
 {{- end }}
-{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "rhdh.redhat.com/v1alpha1" "Backstage" .Values.rhdhOperator.subscription.targetNamespace "backstage" .Release.Name .Capabilities.APIVersions ) }}
+{{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "rhdh.redhat.com/v1alpha1" "Backstage" .Values.rhdhOperator.targetNamespace "backstage" .Release.Name .Capabilities.APIVersions ) }}
 {{- if eq $unmanagedNamespaceExists "false" }}
-  {{- include "manage-cr-lifecycle-on-action" (dict "release" .Release "apiGroup" "rhdh.redhat.com" "groupVersion" "v1alpha1" "kind" "Backstage" "kinds" "backstages" "targetNamespace" .Values.rhdhOperator.subscription.targetNamespace "resourceName" "backstage" "isEnabled" .Values.rhdhOperator.enabled "hasCRDInstalled" (.Capabilities.APIVersions.Has "rhdh.redhat.com/v1alpha1/Backstage") "manifest" (include "backstage-manifest" . | b64enc )) }}
+  {{- include "manage-cr-lifecycle-on-action" (dict "release" .Release "apiGroup" "rhdh.redhat.com" "groupVersion" "v1alpha1" "kind" "Backstage" "kinds" "backstages" "targetNamespace" .Values.rhdhOperator.targetNamespace "resourceName" "backstage" "isEnabled" .Values.rhdhOperator.enabled "hasCRDInstalled" (.Capabilities.APIVersions.Has "rhdh.redhat.com/v1alpha1/Backstage") "manifest" (include "backstage-manifest" . | b64enc )) }}
 {{- end }}

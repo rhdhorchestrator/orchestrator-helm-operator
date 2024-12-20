@@ -117,6 +117,10 @@ spec:
                     default: true
                     description: Enabled determines whether the operator should be deployed by the chart. Defaults to true
                     type: boolean
+                  targetNamespace:
+                    default: orchestrator
+                    description: The target namespace for the backstage CR in which RHDH instance is created
+                    type: string
                   enableGuestProvider:
                     default: false
                     description: EnableGuestProvider captures whether to enable the guest provider in RHDH. Defaults to false.
@@ -241,10 +245,6 @@ spec:
                       startingCSV:
                         default: ""
                         description: The initial version of the operator
-                        type: string
-                      targetNamespace:
-                        default: rhdh-operator
-                        description: The target namespace for the backstage CR in which RHDH instance is created
                         type: string
                     type: object
                 type: object
