@@ -167,7 +167,7 @@ spec:
                             description: The name of the host for the Gitlab instance used. Required for launching software templates. Defaults to 'GITLAB_HOST', empty for not available.
                             default: GITLAB_HOST
                             type: string
-                        type: object                        
+                        type: object
                       k8s:
                         description: Kubernetes specific configuration fields that are injected to the Backstage instance to allow the plugin to communicate with the Kubernetes API Server.
                         properties:
@@ -385,28 +385,6 @@ spec:
                                 default: 64Mi
                                 type: string
                             type: object
-                      dataIndexImage:
-                        description: This field contains the location of a custom DataIndex service container image to be used instead of the provided one by SonataFlow
-                        default:
-                        type: string
-                      jobServiceImage:
-                        description: This field contains the location of a custom Job Service container image to be used instead of the provided one by SonataFlow
-                        default:
-                        type: string
-                      eventing:
-                        description: SonataflowPlatform's eventing related properties 
-                        properties:
-                          broker:
-                            description: Broker contains the name and namespace of the broker to use if using Knative eventing for components communication 
-                            properties:
-                              name:
-                                description: Name describes the name of the broker to use
-                                type: string
-                              namespace:
-                                description: Namespace describes the namespace on which the broker to use is deployed
-                                type: string
-                            type: object
-                        type: object
                     type: object
                 type: object
               tekton:

@@ -78,43 +78,6 @@ spec:
                     description: SonataflowPlatform contains the pod resource configuration
                       to be used for the data index and job services
                     properties:
-                      dataIndexImage:
-                        description: This field contains the location of a custom
-                          DataIndex service container image to be used instead of
-                          the provided one by SonataFlow
-                        type: string
-                      eventing:
-                        description: SonataflowPlatform's eventing related properties
-                        properties:
-                          broker:
-                            description: Broker contains the name and namespace of
-                              the broker to use if using Knative eventing for components
-                              communication
-                            properties:
-                              name:
-                                description: Name describes the name of the broker
-                                  to use
-                                type: string
-                              namespace:
-                                description: Namespace describes the namespace on
-                                  which the broker to use is deployed
-                                type: string
-                            type: object
-                        type: object
-                      jobServiceImage:
-                        description: This field contains the location of a custom
-                          Job Service container image to be used instead of the provided
-                          one by SonataFlow
-                        type: string
-                      monitoring:
-                        description: Contains the monitoring configuration fields
-                        properties:
-                          enabled:
-                            default: true
-                            description: Enabled determines whether monitoring should
-                              be enabled. Defaults to true.
-                            type: boolean
-                        type: object
                       resources:
                         description: Resources contains the requests and limit of
                           CPU and memory resources for the pod instance
