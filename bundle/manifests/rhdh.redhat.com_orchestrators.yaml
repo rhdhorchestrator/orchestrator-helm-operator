@@ -188,16 +188,6 @@ spec:
                       by platform services.
                     type: string
                 type: object
-              rhdh:
-                description: rhdh contains the configuration fields for the RHDH when
-                  using release candidate
-                properties:
-                  images:
-                    description: Indicates RC builds images that should be used by
-                      the chart to install RHDH
-                    type: object
-                    x-kubernetes-preserve-unknown-fields: true
-                type: object
               rhdhOperator:
                 description: RHDH Operator contains the configuration fields for the
                   Red Hat Developer Hub operator
@@ -546,16 +536,6 @@ spec:
                         description: The initial version of the operator
                         type: string
                     type: object
-                type: object
-              sonataflow:
-                description: SonatafFlow contains the configuration fields for the
-                  SonataFlow when using release candidate
-                properties:
-                  images:
-                    description: Indicates RC builds images that should be used by
-                      the chart to install Sonataflow
-                    type: object
-                    x-kubernetes-preserve-unknown-fields: true
                 type: object
               tekton:
                 description: Contains the tekton configuration fields
