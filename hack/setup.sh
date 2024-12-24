@@ -371,6 +371,8 @@ function main {
     captureGitToken
     captureGitClientId
     captureGitClientSecret
+    captureGitlabHost
+    captureGitlabToken
     setupNotificationsEmailConfig
     if $SETUP_NOTIFICATIONS_EMAIL; then
       captureNotificationsEmailHostname
