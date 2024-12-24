@@ -134,7 +134,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2024-12-20T00:49:45Z"
+    createdAt: "2024-12-24T16:00:50Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
@@ -158,7 +158,7 @@ metadata:
     operatorframework.io/arch.ppc64le: unsupported
     operatorframework.io/arch.s390x: unsupported
     operatorframework.io/suggested-namespace: orchestrator
-  name: orchestrator-operator.v1.4.0-rc1
+  name: orchestrator-operator.v1.4.0-rc2
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -480,7 +480,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=orchestrator-operator
-                image: quay.io/orchestrator/orchestrator-operator:1.4.0-rc1
+                image: quay.io/orchestrator/orchestrator-operator:1.4.0-rc2
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -569,4 +569,4 @@ spec:
   provider:
     name: Red Hat
     url: https://www.redhat.com
-  version: 1.4.0-rc1
+  version: 1.4.0-rc2
