@@ -119,6 +119,16 @@ function captureGitlabToken {
   fi
 }
 
+function captureGitlabHost {
+   if [ -z "$GITLAB_HOST" ]; then
+    read -s -p "Enter Gitlab host name: " value
+    echo ""
+    GITLAB_HOST=$value
+  else
+    echo "Gitlab host already set."
+  fi
+}
+
 function captureGitClientId {
    if [ -z "$GITHUB_CLIENT_ID" ]; then
     read -s -p "Enter GitHub client ID (empty for disabling it): " value
@@ -268,6 +278,9 @@ function createBackstageSecret {
   fi
   if [ -n "$GITLAB_TOKEN" ]; then
     secretKeys[GITLAB_TOKEN]=$GITLAB_TOKEN
+  fi
+  if [ -n "$GITLAB_HOST" ]; then
+    secretKeys[GITLAB_HOST]=$GITLAB_HOST
   fi
   if [ -n "$GITHUB_CLIENT_ID" ]; then
     secretKeys[GITHUB_CLIENT_ID]=$GITHUB_CLIENT_ID

@@ -283,10 +283,10 @@ spec:
                               available.
                             type: string
                           host:
-                            default: gitlab-host
+                            default: GITLAB_HOST
                             description: The name of the host for the gitlab instance used.
                               Required for launching software templates. 
-                              Defaults to 'gitlab-host', empty for not available.
+                              Defaults to 'GITLAB_HOST', empty for not available.
                             type: string                                                                      
                       k8s:
                         description: Kubernetes specific configuration fields that
