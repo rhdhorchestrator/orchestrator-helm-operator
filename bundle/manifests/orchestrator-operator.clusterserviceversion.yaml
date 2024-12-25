@@ -64,6 +64,10 @@ metadata:
                   "clientSecret": "GITHUB_CLIENT_SECRET",
                   "token": "GITHUB_TOKEN"
                 },
+                "gitlab": {
+                  "host": "GITLAB_HOST",
+                  "token": "GITLAB_TOKEN"
+                },
                 "k8s": {
                   "clusterToken": "K8S_CLUSTER_TOKEN",
                   "clusterUrl": "K8S_CLUSTER_URL"
@@ -134,7 +138,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2024-12-24T16:00:50Z"
+    createdAt: "2024-12-25T07:40:07Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
@@ -149,7 +153,7 @@ metadata:
       managed resources (operands). To prevent data loss or disruption, you'll need
       to manually delete them.
     operators.openshift.io/valid-subscription: '["Red Hat Developer Hub"]'
-    operators.operatorframework.io/builder: operator-sdk-v1.37.0
+    operators.operatorframework.io/builder: operator-sdk-v1.33.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/rhdhorchestrator/orchestrator-helm-operator
   labels:

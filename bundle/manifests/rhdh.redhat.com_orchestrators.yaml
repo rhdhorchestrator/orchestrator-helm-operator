@@ -277,6 +277,27 @@ spec:
                               available.
                             type: string
                         type: object
+                      gitlab:
+                        description: Gitlab specific configuration fields that are
+                          injected to the backstage instance to allow the plugin to
+                          communicate with Gitlab.
+                        properties:
+                          host:
+                            default: GITLAB_HOST
+                            description: The name of the host for the gitlab instance
+                              used. Required for launching software templates. Defaults
+                              to 'GITLAB_HOST', empty for not available.
+                            type: string
+                          token:
+                            default: GITLAB_TOKEN
+                            description: Key in the secret with name defined in the
+                              'name' field that contains the value of the authentication
+                              token as expected by Gitlab. Required for importing
+                              resource to the catalog, launching software templates
+                              and more. Defaults to 'GITLAB_TOKEN', empty for not
+                              available.
+                            type: string
+                        type: object
                       k8s:
                         description: Kubernetes specific configuration fields that
                           are injected to the backstage instance to allow the plugin

@@ -269,6 +269,7 @@
                         "name",
                         "backstage",
                         "github",
+                        "gitlab",
                         "k8s",
                         "argocd",
                         "notificationsEmail"
@@ -342,6 +343,37 @@
                                 "token": "GITHUB_TOKEN",
                                 "clientId": "GITHUB_CLIENT_ID",
                                 "clientSecret": "GITHUB_CLIENT_SECRET"
+                            }]
+                        },
+                        "gitlab": {
+                            "type": "object",
+                            "default": {},
+                            "title": "The gitlab Schema",
+                            "required": [
+                                "token",
+                                "host"
+                            ],
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "default": "",
+                                    "title": "The token Schema",
+                                    "examples": [
+                                        "GITLAB_TOKEN"
+                                    ]
+                                },
+                                "host": {
+                                    "type": "string",
+                                    "default": "",
+                                    "title": "The gitlab host name Schema",
+                                    "examples": [
+                                        "GITLAB_HOST"
+                                    ]
+                                }
+                            },
+                            "examples": [{
+                                "token": "GITLAB_TOKEN",
+                                "clientId": "GITLAB_HOST"                                
                             }]
                         },
                         "k8s": {
@@ -468,6 +500,10 @@
                             "clientId": "GITHUB_CLIENT_ID",
                             "clientSecret": "GITHUB_CLIENT_SECRET"
                         },
+                        "gitlab": {
+                            "token": "GITLAB_TOKEN",
+                            "host": "GITLAB_HOST"                            
+                        },
                         "k8s": {
                             "clusterToken": "K8S_CLUSTER_TOKEN",
                             "clusterUrl": "K8S_CLUSTER_URL"
@@ -580,6 +616,10 @@
                         "token": "GITHUB_TOKEN",
                         "clientId": "GITHUB_CLIENT_ID",
                         "clientSecret": "GITHUB_CLIENT_SECRET"
+                    },
+                    "gitlab": {
+                        "token": "GITLAB_TOKEN",
+                        "host": "GITLAB_HOST"                        
                     },
                     "k8s": {
                         "clusterToken": "K8S_CLUSTER_TOKEN",
@@ -1146,6 +1186,10 @@
                     "token": "GITHUB_TOKEN",
                     "clientId": "GITHUB_CLIENT_ID",
                     "clientSecret": "GITHUB_CLIENT_SECRET"
+                },
+                "gitlab": {
+                    "token": "GITLAB_TOKEN",
+                    "host": "GITLAB_HOST"
                 },
                 "k8s": {
                     "clusterToken": "K8S_CLUSTER_TOKEN",

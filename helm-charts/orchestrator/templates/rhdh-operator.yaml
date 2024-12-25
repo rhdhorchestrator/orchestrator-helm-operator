@@ -272,6 +272,15 @@ data:
       github:
         - host: github.com
           token: {{ printf "${%s}" .Values.rhdhOperator.secretRef.github.token }}
+  {{- end }}
+   {{- if and (and .Values.rhdhOperator.secretRef.gitlab.token (dig "data" .Values.rhdhOperator.secretRef.gitlab.token "" $secret) )
+             (and .Values.rhdhOperator.secretRef.gitlab.host (dig "data" .Values.rhdhOperator.secretRef.gitlab.host "" $secret  ) ) }}
+      gitlab:
+        - host: {{ printf "${%s}" .Values.rhdhOperator.secretRef.gitlab.host }}
+          token: {{ printf "${%s}" .Values.rhdhOperator.secretRef.gitlab.token }}
+          apiBaseUrl: https://{{ printf "${%s}" .Values.rhdhOperator.secretRef.gitlab.host }}/api/v4
+  {{- end }}
+  {{- if and .Values.rhdhOperator.secretRef.github.token (dig "data" .Values.rhdhOperator.secretRef.github.token "" $secret) }}
     auth:
       environment: development
   {{- end }}
