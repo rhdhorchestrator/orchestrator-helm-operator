@@ -284,7 +284,7 @@ spec:
                         properties:
                           host:
                             default: GITLAB_HOST
-                            description: The name of the host for the gitlab instance
+                            description: The name of the host for the Gitlab instance
                               used. Required for launching software templates. Defaults
                               to 'GITLAB_HOST', empty for not available.
                             type: string
