@@ -153,7 +153,7 @@ metadata:
       managed resources (operands). To prevent data loss or disruption, you'll need
       to manually delete them.
     operators.openshift.io/valid-subscription: '["Red Hat Developer Hub"]'
-    operators.operatorframework.io/builder: operator-sdk-v1.33.0
+    operators.operatorframework.io/builder: operator-sdk-v1.37.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/rhdhorchestrator/orchestrator-helm-operator
   labels:

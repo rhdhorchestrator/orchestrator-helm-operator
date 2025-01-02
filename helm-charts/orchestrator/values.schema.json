@@ -373,7 +373,7 @@
                             },
                             "examples": [{
                                 "token": "GITLAB_TOKEN",
-                                "clientId": "GITLAB_HOST"                                
+                                "host": "GITLAB_HOST"                                
                             }]
                         },
                         "k8s": {
