@@ -180,8 +180,20 @@ spec:
                             default: GITHUB_CLIENT_SECRET
                             type: string
                         type: object
+                      gitlab:
+                        description: Gitlab specific configuration fields that are injected to the Backstage instance to allow the plugin to communicate with Gitlab.
+                        properties:
+                          token:
+                            description: Key in the secret with name defined in the 'name' field that contains the value of the authentication token as expected by Gitlab. Required for importing resource to the catalog, launching software templates and more. Defaults to 'GITLAB_TOKEN', empty for not available.
+                            default: GITLAB_TOKEN
+                            type: string
+                          host:
+                            description: The name of the host for the Gitlab instance used. Required for launching software templates. Defaults to 'GITLAB_HOST', empty for not available.
+                            default: GITLAB_HOST
+                            type: string
+                        type: object                        
                       k8s:
-                        description: Kubernetes specific configuration fields that are injected to the backstage instance to allow the plugin to communicate with the Kubernetes API Server.
+                        description: Kubernetes specific configuration fields that are injected to the Backstage instance to allow the plugin to communicate with the Kubernetes API Server.
                         properties:
                           clusterToken:
                             description: Key in the secret with name defined in the 'name' field that contains the value of the API URL of the kubernetes cluster. Defaults to 'K8S_CLUSTER_TOKEN', empty for not available.
@@ -193,7 +205,7 @@ spec:
                             default: K8S_CLUSTER_URL
                         type: object
                       argocd:
-                        description: ArgoCD specific configuration fields that are injected to the backstage instance to allow the plugin to communicate with ArgoCD. Note that ArgoCD must be deployed beforehand and the argocd.enabled field must be set to true as well.
+                        description: ArgoCD specific configuration fields that are injected to the Backstage instance to allow the plugin to communicate with ArgoCD. Note that ArgoCD must be deployed beforehand and the argocd.enabled field must be set to true as well.
                         type: object
                         properties:
                           url:
