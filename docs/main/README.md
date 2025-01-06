@@ -221,7 +221,7 @@ When deploying a workflow in a namespace different from where Sonataflow service
    Configure a network policy to allow traffic only between RHDH, Sonataflow services, and the workflows. The policy can be derived from [here](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/helm-charts/orchestrator/templates/network-policies.yaml)
 
    ```console
-   oc create -f <<EOF
+   oc create -f - <<EOF
    apiVersion: networking.k8s.io/v1
    kind: NetworkPolicy
    metadata:
