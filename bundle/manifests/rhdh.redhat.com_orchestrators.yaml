@@ -209,7 +209,7 @@ spec:
                     properties:
                       argocd:
                         description: ArgoCD specific configuration fields that are
-                          injected to the backstage instance to allow the plugin to
+                          injected to the Backstage instance to allow the plugin to
                           communicate with ArgoCD. Note that ArgoCD must be deployed
                           beforehand and the argocd.enabled field must be set to true
                           as well.
@@ -279,7 +279,7 @@ spec:
                         type: object
                       gitlab:
                         description: Gitlab specific configuration fields that are
-                          injected to the backstage instance to allow the plugin to
+                          injected to the Backstage instance to allow the plugin to
                           communicate with Gitlab.
                         properties:
                           host:
@@ -300,7 +300,7 @@ spec:
                         type: object
                       k8s:
                         description: Kubernetes specific configuration fields that
-                          are injected to the backstage instance to allow the plugin
+                          are injected to the Backstage instance to allow the plugin
                           to communicate with the Kubernetes API Server.
                         properties:
                           clusterToken:
