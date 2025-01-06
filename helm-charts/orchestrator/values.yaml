@@ -57,13 +57,13 @@ rhdhOperator:
 
 rhdhPlugins: # RHDH plugins required for the Orchestrator
   npmRegistry: "https://npm.stage.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
-  scope: "@redhat"
+  scope: "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.4"
   orchestrator:
-    package: "backstage-plugin-orchestrator@1.4.0-rc.3"
-    integrity: sha512-vGGd9hUmDriEMmP2TfzLVa3JSnfot2Blg+aftDnu/lEphsY1s2gdA4Z5lCxUk7aobcKE6JO/f0sIl2jyxZ7ktw==
+    package: "backstage-plugin-orchestrator-1.4.0-rc.4.tgz"
+    integrity: sha512-2Dp6E1i5bAfUnbUctmYnJGE9su5PgHWhFsOXvDYHYzccIy4fMlSrEkvIjrX8KXu+9PSM+FnYAZZ/13zNcsM+Og==
   orchestratorBackend:
-    package: "backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3"
-    integrity: sha512-tS5cJGwjzP9esdTZvUFjw0O7+w9gGBI/+VvJrtqYJBDGXcEAq9iYixGk67ddQVW5eeUM7Tk1WqJlNj282aAWww==
+    package: "backstage-plugin-orchestrator-backend-dynamic-1.4.0-rc.4.tgz"
+    integrity: sha512-h3RNs965QFn/ldoBIKGKNP3Mb4i25uWn4bFUXLZ5f+XVxFmZ/9yf7Ue8sGQOXC5GyxRb8W9cA0zae48E9YCcyQ==
   notificationsEmail:
     enabled: false # whether to install the notifications email plugin. requires setting of hostname and credentials in backstage secret to enable. See value backstage-backend-auth-secret. See plugin configuration at https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts
     port: 587 # SMTP server port

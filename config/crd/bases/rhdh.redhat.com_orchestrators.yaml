@@ -285,18 +285,18 @@ spec:
                     type: string
                   scope:
                     description: Scope of the plugins
-                    default: "@redhat"
+                    default: "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.4"
                     type: string
                   orchestrator:
                     description: Orchestrator plugin information
                     properties:
                       package:
                         description: Package name
-                        default: backstage-plugin-orchestrator@1.4.0-rc.3
+                        default: backstage-plugin-orchestrator-1.4.0-rc.4.tgz
                         type: string
                       integrity:
                         description: Package SHA integrity
-                        default: sha512-vGGd9hUmDriEMmP2TfzLVa3JSnfot2Blg+aftDnu/lEphsY1s2gdA4Z5lCxUk7aobcKE6JO/f0sIl2jyxZ7ktw==
+                        default: sha512-2Dp6E1i5bAfUnbUctmYnJGE9su5PgHWhFsOXvDYHYzccIy4fMlSrEkvIjrX8KXu+9PSM+FnYAZZ/13zNcsM+Og==
                         type: string
                     type: object
                   orchestratorBackend:
@@ -305,11 +305,11 @@ spec:
                       package:
                         description: Package name
                         type: string
-                        default: backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3
+                        default: backstage-plugin-orchestrator-backend-dynamic-1.4.0-rc.4.tgz
                       integrity:
                         description: Package SHA integrity
                         type: string
-                        default: sha512-tS5cJGwjzP9esdTZvUFjw0O7+w9gGBI/+VvJrtqYJBDGXcEAq9iYixGk67ddQVW5eeUM7Tk1WqJlNj282aAWww==
+                        default: sha512-h3RNs965QFn/ldoBIKGKNP3Mb4i25uWn4bFUXLZ5f+XVxFmZ/9yf7Ue8sGQOXC5GyxRb8W9cA0zae48E9YCcyQ==
                     type: object
                   notificationsEmail:
                     description: Notification email plugin information
