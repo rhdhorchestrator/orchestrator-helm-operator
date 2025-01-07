@@ -97,6 +97,20 @@ spec:
                               be enabled. Defaults to true.
                             type: boolean
                         type: object
+                      eventing:
+                        description: SonataflowPlatform's eventing related properties
+                        properties:
+                          broker:
+                            description: Broker contains the name and namespace of the broker to use if using Knative eventing for components communication
+                            properties:
+                              name:
+                                description: Name describes the name of the broker to use
+                                type: string
+                              namespace:
+                                description: Namespace describes the namespace on which the broker to use is deployed
+                                type: string
+                            type: object
+                        type: object
                       resources:
                         description: Resources contains the requests and limit of
                           CPU and memory resources for the pod instance
