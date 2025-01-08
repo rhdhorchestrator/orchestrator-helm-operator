@@ -20,19 +20,10 @@
             "default": {},
             "title": "The sonataFlowOperator Schema",
             "required": [
-                "isReleaseCandidate",
                 "enabled",
                 "subscription"
             ],
             "properties": {
-                "isReleaseCandidate": {
-                    "type": "boolean",
-                    "default": false,
-                    "title": "The isReleaseCandidate Schema",
-                    "examples": [
-                        false
-                    ]
-                },
                 "enabled": {
                     "type": "boolean",
                     "default": false,
@@ -50,7 +41,7 @@
                         "channel",
                         "installPlanApproval",
                         "name",
-                        "sourceName",
+                        "source",
                         "startingCSV"
                     ],
                     "properties": {
@@ -86,7 +77,7 @@
                                 "logic-operator-rhel8"
                             ]
                         },
-                        "sourceName": {
+                        "source": {
                             "type": "string",
                             "default": "",
                             "title": "The source Schema",
@@ -108,20 +99,19 @@
                         "channel": "alpha",
                         "installPlanApproval": "Automatic",
                         "name": "logic-operator-rhel8",
-                        "sourceName": "redhat-operators",
+                        "source": "redhat-operators",
                         "startingCSV": "logic-operator-rhel8.v1.34.0"
                     }]
                 }
             },
             "examples": [{
-                "isReleaseCandidate": false,
                 "enabled": true,
                 "subscription": {
                     "namespace": "openshift-serverless-logic",
                     "channel": "alpha",
                     "installPlanApproval": "Automatic",
                     "name": "logic-operator-rhel8",
-                    "sourceName": "redhat-operators",
+                    "source": "redhat-operators",
                     "startingCSV": "logic-operator-rhel8.v1.34.0"
                 }
             }]
@@ -152,7 +142,7 @@
                         "channel",
                         "installPlanApproval",
                         "name",
-                        "sourceName"
+                        "source"
                     ],
                     "properties": {
                         "namespace": {
@@ -187,7 +177,7 @@
                                 "serverless-operator"
                             ]
                         },
-                        "sourceName": {
+                        "source": {
                             "type": "string",
                             "default": "",
                             "title": "The sourceName Schema",
@@ -201,7 +191,7 @@
                         "channel": "stable",
                         "installPlanApproval": "Automatic",
                         "name": "serverless-operator",
-                        "sourceName": "redhat-operators"
+                        "source": "redhat-operators"
                     }]
                 }
             },
@@ -212,7 +202,7 @@
                     "channel": "stable",
                     "installPlanApproval": "Automatic",
                     "name": "serverless-operator",
-                    "sourceName": "redhat-operators"
+                    "source": "redhat-operators"
                 }
             }]
         },
@@ -221,28 +211,28 @@
             "default": {},
             "title": "The rhdhOperator Schema",
             "required": [
-                "isReleaseCandidate",
                 "enabled",
+                "targetNamespace",
                 "enableGuestProvider",
                 "catalogBranch",
                 "secretRef",
                 "subscription"
             ],
             "properties": {
-                "isReleaseCandidate": {
-                    "type": "boolean",
-                    "default": false,
-                    "title": "The isReleaseCandidate Schema",
-                    "examples": [
-                        false
-                    ]
-                },
                 "enabled": {
                     "type": "boolean",
                     "default": false,
                     "title": "The enabled Schema",
                     "examples": [
                         true
+                    ]
+                },
+                "targetNamespace": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The targetNamespace Schema",
+                    "examples": [
+                        "orchestrator"
                     ]
                 },
                 "enableGuestProvider": {
@@ -373,7 +363,7 @@
                             },
                             "examples": [{
                                 "token": "GITLAB_TOKEN",
-                                "host": "GITLAB_HOST"                                
+                                "host": "GITLAB_HOST"
                             }]
                         },
                         "k8s": {
@@ -502,7 +492,7 @@
                         },
                         "gitlab": {
                             "token": "GITLAB_TOKEN",
-                            "host": "GITLAB_HOST"                            
+                            "host": "GITLAB_HOST"
                         },
                         "k8s": {
                             "clusterToken": "K8S_CLUSTER_TOKEN",
@@ -529,9 +519,8 @@
                         "channel",
                         "installPlanApproval",
                         "name",
-                        "sourceName",
-                        "startingCSV",
-                        "targetNamespace"
+                        "source",
+                        "startingCSV"
                     ],
                     "properties": {
                         "namespace": {
@@ -566,7 +555,7 @@
                                 "rhdh"
                             ]
                         },
-                        "sourceName": {
+                        "source": {
                             "type": "string",
                             "default": "",
                             "title": "The source Schema",
@@ -581,14 +570,6 @@
                             "examples": [
                                 ""
                             ]
-                        },
-                        "targetNamespace": {
-                            "type": "string",
-                            "default": "",
-                            "title": "The targetNamespace Schema",
-                            "examples": [
-                                "rhdh-operator"
-                            ]
                         }
                     },
                     "examples": [{
@@ -596,15 +577,14 @@
                         "channel": "fast-1.2",
                         "installPlanApproval": "Automatic",
                         "name": "rhdh",
-                        "sourceName": "redhat-operators",
-                        "startingCSV": "",
-                        "targetNamespace": "rhdh-operator"
+                        "source": "redhat-operators",
+                        "startingCSV": ""
                     }]
                 }
             },
             "examples": [{
-                "isReleaseCandidate": false,
                 "enabled": true,
+                "targetNamespace": "orchestrator",
                 "enableGuestProvider": false,
                 "catalogBranch": "v1.4.x",
                 "secretRef": {
@@ -619,7 +599,7 @@
                     },
                     "gitlab": {
                         "token": "GITLAB_TOKEN",
-                        "host": "GITLAB_HOST"                        
+                        "host": "GITLAB_HOST"
                     },
                     "k8s": {
                         "clusterToken": "K8S_CLUSTER_TOKEN",
@@ -641,9 +621,8 @@
                     "channel": "fast-1.2",
                     "installPlanApproval": "Automatic",
                     "name": "rhdh",
-                    "sourceName": "redhat-operators",
-                    "startingCSV": "",
-                    "targetNamespace": "rhdh-operator"
+                    "source": "redhat-operators",
+                    "startingCSV": ""
                 }
             }]
         },
@@ -1179,14 +1158,13 @@
     },
     "examples": [{
         "sonataFlowOperator": {
-            "isReleaseCandidate": false,
             "enabled": true,
             "subscription": {
                 "namespace": "openshift-serverless-logic",
                 "channel": "alpha",
                 "installPlanApproval": "Automatic",
                 "name": "logic-operator-rhel8",
-                "sourceName": "redhat-operators",
+                "source": "redhat-operators",
                 "startingCSV": "logic-operator-rhel8.v1.34.0"
             }
         },
@@ -1197,12 +1175,12 @@
                 "channel": "stable",
                 "installPlanApproval": "Automatic",
                 "name": "serverless-operator",
-                "sourceName": "redhat-operators"
+                "source": "redhat-operators"
             }
         },
         "rhdhOperator": {
-            "isReleaseCandidate": false,
             "enabled": true,
+            "targetNamespace": "orchestrator",
             "enableGuestProvider": false,
             "catalogBranch": "v1.4.x",
             "secretRef": {
@@ -1240,8 +1218,7 @@
                 "installPlanApproval": "Automatic",
                 "name": "rhdh",
                 "source": "redhat-operators",
-                "startingCSV": "",
-                "targetNamespace": "rhdh-operator"
+                "startingCSV": ""
             }
         },
         "rhdhPlugins": {

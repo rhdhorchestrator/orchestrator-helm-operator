@@ -49,7 +49,6 @@ metadata:
             "rhdhOperator": {
               "enableGuestProvider": false,
               "enabled": true,
-              "isReleaseCandidate": false,
               "secretRef": {
                 "argocd": {
                   "password": "ARGOCD_PASSWORD",
@@ -85,9 +84,9 @@ metadata:
                 "name": "rhdh",
                 "namespace": "rhdh-operator",
                 "source": "redhat-operators",
-                "startingCSV": "",
-                "targetNamespace": "rhdh-operator"
-              }
+                "startingCSV": ""
+              },
+              "targetNamespace": "rhdh-operator"
             },
             "rhdhPlugins": {
               "notificationsEmail": {
@@ -114,18 +113,17 @@ metadata:
                 "installPlanApproval": "Automatic",
                 "name": "serverless-operator",
                 "namespace": "openshift-serverless",
-                "sourceName": "redhat-operators"
+                "source": "redhat-operators"
               }
             },
             "sonataFlowOperator": {
               "enabled": true,
-              "isReleaseCandidate": false,
               "subscription": {
                 "channel": "alpha",
                 "installPlanApproval": "Automatic",
                 "name": "logic-operator-rhel8",
                 "namespace": "openshift-serverless-logic",
-                "sourceName": "redhat-operators",
+                "source": "redhat-operators",
                 "startingCSV": "logic-operator-rhel8.v1.34.0"
               }
             },
@@ -138,7 +136,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2025-01-07T15:44:21Z"
+    createdAt: "2025-01-07T22:25:26Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"

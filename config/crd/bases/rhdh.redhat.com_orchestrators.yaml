@@ -42,29 +42,9 @@ spec:
             description: Spec defines the desired state of Orchestrator
             type: object
             properties:
-              rhdh:
-                description: rhdh contains the configuration fields for the RHDH when using release candidate
-                properties:
-                  images:
-                    description: Indicates RC builds images that should be used by the chart to install RHDH
-                    type: object
-                    x-kubernetes-preserve-unknown-fields: true
-                type: object
-              sonataflow:
-                description: SonatafFlow contains the configuration fields for the SonataFlow when using release candidate
-                properties:
-                  images:
-                    description: Indicates RC builds images that should be used by the chart to install Sonataflow
-                    type: object
-                    x-kubernetes-preserve-unknown-fields: true
-                type: object
               sonataFlowOperator:
                 description: SonatafFlowOperator contains the configuration fields for the SonataFlow Operator
                 properties:
-                  isReleaseCandidate:
-                    default: false
-                    description: Indicates RC builds should be used by the chart to install Sonataflow
-                    type: boolean
                   enabled:
                     default: true
                     description: Enabled determines whether to deploy the SonataFlow Operator operator or not. Defaults to true.
@@ -88,7 +68,7 @@ spec:
                         default: openshift-serverless-logic
                         description: Namespace determines the namespace where the operator should be deployed. Defaults to openshift-serverless-logic
                         type: string
-                      sourceName:
+                      source:
                         default: "redhat-operators"
                         description: SourceName captures the name of the catalog source
                         type: string
@@ -124,7 +104,7 @@ spec:
                         description: Namespace determines the namespace where the operator should be deployed. Defaults to openshift-serverless
                         default: openshift-serverless
                         type: string
-                      sourceName:
+                      source:
                         description: SourceName captures the name of the catalog source
                         default: "redhat-operators"
                         type: string
@@ -133,14 +113,14 @@ spec:
               rhdhOperator:
                 description: RHDH Operator contains the configuration fields for the Red Hat Developer Hub operator
                 properties:
-                  isReleaseCandidate:
-                    default: false
-                    description: Indicates RC builds should be used by the chart to install the Serverless Operator
-                    type: boolean
                   enabled:
                     default: true
                     description: Enabled determines whether the operator should be deployed by the chart. Defaults to true
                     type: boolean
+                  targetNamespace:
+                    default: orchestrator
+                    description: The target namespace for the backstage CR in which RHDH instance is created
+                    type: string
                   enableGuestProvider:
                     default: false
                     description: EnableGuestProvider captures whether to enable the guest provider in RHDH. Defaults to false.
@@ -191,7 +171,7 @@ spec:
                             description: The name of the host for the Gitlab instance used. Required for launching software templates. Defaults to 'GITLAB_HOST', empty for not available.
                             default: GITLAB_HOST
                             type: string
-                        type: object                        
+                        type: object
                       k8s:
                         description: Kubernetes specific configuration fields that are injected to the Backstage instance to allow the plugin to communicate with the Kubernetes API Server.
                         properties:
@@ -258,10 +238,6 @@ spec:
                         default: rhdh-operator
                         description: Namespace determines the namespace where the operator should be deployed. Defaults to rhdh-operator
                         type: string
-                      sourceName:
-                        default: "redhat-operators"
-                        description: SourceName captures the name of the catalog source
-                        type: string
                       source:
                         default: "redhat-operators"
                         description: Source captures the name of the catalog source
@@ -269,10 +245,6 @@ spec:
                       startingCSV:
                         default: ""
                         description: The initial version of the operator
-                        type: string
-                      targetNamespace:
-                        default: rhdh-operator
-                        description: The target namespace for the backstage CR in which RHDH instance is created
                         type: string
                     type: object
                 type: object
@@ -413,28 +385,6 @@ spec:
                                 default: 64Mi
                                 type: string
                             type: object
-                      dataIndexImage:
-                        description: This field contains the location of a custom DataIndex service container image to be used instead of the provided one by SonataFlow
-                        default:
-                        type: string
-                      jobServiceImage:
-                        description: This field contains the location of a custom Job Service container image to be used instead of the provided one by SonataFlow
-                        default:
-                        type: string
-                      eventing:
-                        description: SonataflowPlatform's eventing related properties 
-                        properties:
-                          broker:
-                            description: Broker contains the name and namespace of the broker to use if using Knative eventing for components communication 
-                            properties:
-                              name:
-                                description: Name describes the name of the broker to use
-                                type: string
-                              namespace:
-                                description: Namespace describes the namespace on which the broker to use is deployed
-                                type: string
-                            type: object
-                        type: object
                     type: object
                 type: object
               tekton:

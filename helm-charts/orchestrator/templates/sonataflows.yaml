@@ -55,11 +55,6 @@ spec:
           serviceRef:
             name: {{ .Values.postgres.serviceName }}
             namespace: {{ .Values.postgres.serviceNamespace }}
-      {{- if .Values.orchestrator.sonataflowPlatform.dataIndexImage }}
-      podTemplate:
-        container:
-          image: {{ .Values.orchestrator.sonataflowPlatform.dataIndexImage }}
-      {{- end }}
     jobService:
       enabled: true
       persistence:
@@ -71,11 +66,6 @@ spec:
           serviceRef:
             name: {{ .Values.postgres.serviceName }}
             namespace: {{ .Values.postgres.serviceNamespace }}
-      {{- if .Values.orchestrator.sonataflowPlatform.jobServiceImage }}
-      podTemplate:
-        container:
-          image: {{ .Values.orchestrator.sonataflowPlatform.jobServiceImage }}
-      {{- end }}
 {{- end }}
 {{- $workflowNamespace := include "get-workflow-namespace" . }}
 ## Manifests

@@ -121,29 +121,3 @@
         {{- .argoCDNamespace -}}
     {{- end -}}
 {{- end -}}
-
-{{- define "get-cluster-version" -}}
-  {{- $v := "" }}
-  {{- $version :=(lookup "config.openshift.io/v1" "ClusterVersion" "" "version") }}
-  {{- range $version.status.history }}
-    {{- if eq .state "Completed" }}
-      {{- $v = (semver .version) }}
-    {{- end }}
-  {{- end }}
-
-  {{- $validMinors := list "4.13" "4.14" "4.15" "4.16" -}}
-  {{- $versionString := printf "%d.%d" $v.Major $v.Minor -}}
-  {{- if not (semverCompare ">=4.13 <=4.16" $versionString) -}}
-    {{- fail (printf "Unsupported OCP version: %s. Supported versions: %s." $versionString $validMinors) -}}
-  {{- end -}}
-  {{- $versionString -}}
-{{- end -}}
-
-{{- define "get-tekton-version" -}}
-        {{- $pipelinesSubs := lookup "operators.coreos.com/v1alpha1" "Subscription" "openshift-operators" "openshift-pipelines-operator-rh" -}}
-        {{- $pipelineInstalledVersion := $pipelinesSubs.status.installedCSV}}
-        {{- $pipelineVersion := substr 33 ( len $pipelineInstalledVersion) $pipelineInstalledVersion}}
-        {{- $pipelineVersion = semver $pipelineVersion }}
-        {{- $pipelineVersionString := printf "%d.%d" $pipelineVersion.Major $pipelineVersion.Minor -}}
-        {{- $pipelineVersionString -}}
-{{- end -}}

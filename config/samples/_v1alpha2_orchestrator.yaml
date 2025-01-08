@@ -4,14 +4,13 @@ metadata:
   name: orchestrator-sample
 spec:
   sonataFlowOperator:
-    isReleaseCandidate: false # Indicates RC builds should be used by the chart to install Sonataflow
     enabled: true # whether the operator should be deployed by the chart
     subscription:
       namespace: openshift-serverless-logic # namespace where the operator should be deployed
       channel: alpha # channel of an operator package to subscribe to
       installPlanApproval: Automatic # whether the update should be installed automatically
       name: logic-operator-rhel8 # name of the operator package
-      sourceName: redhat-operators # name of the catalog source
+      source: redhat-operators # name of the catalog source
       startingCSV: logic-operator-rhel8.v1.34.0 # The initial version of the operator
   serverlessOperator:
     enabled: true # whether the operator should be deployed by the chart
@@ -20,10 +19,10 @@ spec:
       channel: stable # channel of an operator package to subscribe to
       installPlanApproval: Automatic # whether the update should be installed automatically
       name: serverless-operator # name of the operator package
-      sourceName: redhat-operators # name of the catalog source
+      source: redhat-operators # name of the catalog source
   rhdhOperator:
-    isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
     enabled: true # whether the operator should be deployed by the chart
+    targetNamespace: rhdh-operator # the target namespace for the backstage CR in which RHDH instance is created
     enableGuestProvider: false # whether to enable guest provider
     secretRef:
       name: backstage-backend-auth-secret # name of the secret that contains the credentials for the plugin to establish a communication channel with the Kubernetes API, ArgoCD, GitHub servers and SMTP mail server.
@@ -54,7 +53,6 @@ spec:
       name: rhdh # name of the operator package
       source: redhat-operators # name of the catalog source
       startingCSV: "" # The initial version of the operator
-      targetNamespace: rhdh-operator # the target namespace for the backstage CR in which RHDH instance is created
   rhdhPlugins: # RHDH plugins required for the Orchestrator
     npmRegistry: "https://npm.registry.redhat.com" # NPM registry is defined already in the container, but sometimes the registry need to be modified to use different versions of the plugin, for example: staging(https://npm.stage.registry.redhat.com) or development repositories
     scope: "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.4"

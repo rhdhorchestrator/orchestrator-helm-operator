@@ -25,7 +25,7 @@ Helm Release {{ .Release.Name }} installed in namespace {{ .Release.Namespace }}
   {{- $backstageInstalled = $no}}
 {{- end }}
 
-{{- if and $backstageInstalled (lookup "apps/v1" "StatefulSet" .Values.rhdhOperator.subscription.targetNamespace "backstage-psql-backstage" ) }}
+{{- if and $backstageInstalled (lookup "apps/v1" "StatefulSet" .Values.rhdhOperator.targetNamespace "backstage-psql-backstage" ) }}
   {{- $postgresBackstageInstalled = $yes }}
 {{- end }}
 
@@ -62,8 +62,8 @@ Helm Release {{ .Release.Name }} installed in namespace {{ .Release.Namespace }}
 
 Components                   Installed   Namespace
 ====================================================================
-Backstage                    {{ $backstageInstalled }}        {{ .Values.rhdhOperator.subscription.targetNamespace }}
-Postgres DB - Backstage      {{ $postgresBackstageInstalled }}        {{ .Values.rhdhOperator.subscription.targetNamespace }}
+Backstage                    {{ $backstageInstalled }}        {{ .Values.rhdhOperator.targetNamespace }}
+Postgres DB - Backstage      {{ $postgresBackstageInstalled }}        {{ .Values.rhdhOperator.targetNamespace }}
 Red Hat Serverless Operator  {{ $serverlessOperatorInstalled }}        {{ .Values.serverlessOperator.subscription.namespace }}
 KnativeServing               {{ $knativeServingInstalled }}        knative-serving
 KnativeEventing              {{ $knativeEventingInstalled }}        knative-eventing
@@ -118,11 +118,11 @@ Run the following commands to wait until the services are ready:
   oc wait -n {{ $workflowNamespace }} deploy/sonataflow-platform-jobs-service --for=condition=Available {{ $timeout }}
 {{- end }}
 {{- if eq $postgresBackstageInstalled $yes }}
-  oc wait -n {{ .Values.rhdhOperator.subscription.targetNamespace }} pod/backstage-psql-backstage-0 --for=condition=Ready {{ $timeout }}
+  oc wait -n {{ .Values.rhdhOperator.targetNamespace }} pod/backstage-psql-backstage-0 --for=condition=Ready {{ $timeout }}
 {{- end }}
 {{- if eq $backstageInstalled $yes }}
-  oc wait -n {{ .Values.rhdhOperator.subscription.targetNamespace }} backstage backstage --for=condition=Deployed=True
-  oc wait -n {{ .Values.rhdhOperator.subscription.targetNamespace }} deploy/backstage-backstage --for=condition=Available {{ $timeout }}
+  oc wait -n {{ .Values.rhdhOperator.targetNamespace }} backstage backstage --for=condition=Deployed=True
+  oc wait -n {{ .Values.rhdhOperator.targetNamespace }} deploy/backstage-backstage --for=condition=Available {{ $timeout }}
 {{- end }}
 {{- if eq $sonataFlowPlatformInstalled $yes }}
   oc get networkpolicy -n {{ $workflowNamespace }}
