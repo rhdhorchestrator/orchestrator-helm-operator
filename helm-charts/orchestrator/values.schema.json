@@ -50,7 +50,7 @@
                         "channel",
                         "installPlanApproval",
                         "name",
-                        "sourceName",
+                        "source",
                         "startingCSV"
                     ],
                     "properties": {
@@ -86,7 +86,7 @@
                                 "logic-operator-rhel8"
                             ]
                         },
-                        "sourceName": {
+                        "source": {
                             "type": "string",
                             "default": "",
                             "title": "The source Schema",
@@ -108,7 +108,7 @@
                         "channel": "alpha",
                         "installPlanApproval": "Automatic",
                         "name": "logic-operator-rhel8",
-                        "sourceName": "redhat-operators",
+                        "source": "redhat-operators",
                         "startingCSV": "logic-operator-rhel8.v1.34.0"
                     }]
                 }
@@ -121,7 +121,7 @@
                     "channel": "alpha",
                     "installPlanApproval": "Automatic",
                     "name": "logic-operator-rhel8",
-                    "sourceName": "redhat-operators",
+                    "source": "redhat-operators",
                     "startingCSV": "logic-operator-rhel8.v1.34.0"
                 }
             }]
@@ -152,7 +152,7 @@
                         "channel",
                         "installPlanApproval",
                         "name",
-                        "sourceName"
+                        "source"
                     ],
                     "properties": {
                         "namespace": {
@@ -187,7 +187,7 @@
                                 "serverless-operator"
                             ]
                         },
-                        "sourceName": {
+                        "source": {
                             "type": "string",
                             "default": "",
                             "title": "The sourceName Schema",
@@ -201,7 +201,7 @@
                         "channel": "stable",
                         "installPlanApproval": "Automatic",
                         "name": "serverless-operator",
-                        "sourceName": "redhat-operators"
+                        "source": "redhat-operators"
                     }]
                 }
             },
@@ -212,7 +212,7 @@
                     "channel": "stable",
                     "installPlanApproval": "Automatic",
                     "name": "serverless-operator",
-                    "sourceName": "redhat-operators"
+                    "source": "redhat-operators"
                 }
             }]
         },
@@ -529,7 +529,7 @@
                         "channel",
                         "installPlanApproval",
                         "name",
-                        "sourceName",
+                        "source",
                         "startingCSV",
                         "targetNamespace"
                     ],
@@ -566,7 +566,7 @@
                                 "rhdh"
                             ]
                         },
-                        "sourceName": {
+                        "source": {
                             "type": "string",
                             "default": "",
                             "title": "The source Schema",
@@ -596,7 +596,7 @@
                         "channel": "fast-1.2",
                         "installPlanApproval": "Automatic",
                         "name": "rhdh",
-                        "sourceName": "redhat-operators",
+                        "source": "redhat-operators",
                         "startingCSV": "",
                         "targetNamespace": "rhdh-operator"
                     }]
@@ -641,7 +641,7 @@
                     "channel": "fast-1.2",
                     "installPlanApproval": "Automatic",
                     "name": "rhdh",
-                    "sourceName": "redhat-operators",
+                    "source": "redhat-operators",
                     "startingCSV": "",
                     "targetNamespace": "rhdh-operator"
                 }
@@ -1186,7 +1186,7 @@
                 "channel": "alpha",
                 "installPlanApproval": "Automatic",
                 "name": "logic-operator-rhel8",
-                "sourceName": "redhat-operators",
+                "source": "redhat-operators",
                 "startingCSV": "logic-operator-rhel8.v1.34.0"
             }
         },
@@ -1197,7 +1197,7 @@
                 "channel": "stable",
                 "installPlanApproval": "Automatic",
                 "name": "serverless-operator",
-                "sourceName": "redhat-operators"
+                "source": "redhat-operators"
             }
         },
         "rhdhOperator": {

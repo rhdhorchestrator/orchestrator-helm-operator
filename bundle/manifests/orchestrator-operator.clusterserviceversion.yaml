@@ -114,7 +114,7 @@ metadata:
                 "installPlanApproval": "Automatic",
                 "name": "serverless-operator",
                 "namespace": "openshift-serverless",
-                "sourceName": "redhat-operators"
+                "source": "redhat-operators"
               }
             },
             "sonataFlowOperator": {
@@ -125,7 +125,7 @@ metadata:
                 "installPlanApproval": "Automatic",
                 "name": "logic-operator-rhel8",
                 "namespace": "openshift-serverless-logic",
-                "sourceName": "redhat-operators",
+                "source": "redhat-operators",
                 "startingCSV": "logic-operator-rhel8.v1.34.0"
               }
             },
