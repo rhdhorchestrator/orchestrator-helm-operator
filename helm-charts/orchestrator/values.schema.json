@@ -190,7 +190,7 @@
                         "source": {
                             "type": "string",
                             "default": "",
-                            "title": "The sourceName Schema",
+                            "title": "The source Schema",
                             "examples": [
                                 "redhat-operators"
                             ]

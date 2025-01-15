@@ -505,7 +505,7 @@ spec:
                         type: string
                       source:
                         default: redhat-operators
-                        description: SourceName captures the name of the catalog source
+                        description: Source captures the name of the catalog source
                         type: string
                     type: object
                 type: object
@@ -549,7 +549,7 @@ spec:
                         type: string
                       source:
                         default: redhat-operators
-                        description: SourceName captures the name of the catalog source
+                        description: Source captures the name of the catalog source
                         type: string
                       startingCSV:
                         default: logic-operator-rhel8.v1.34.0
