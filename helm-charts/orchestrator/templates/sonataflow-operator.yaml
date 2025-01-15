@@ -24,7 +24,7 @@ spec:
   channel: {{ .Values.sonataFlowOperator.subscription.channel }}
   installPlanApproval: {{ .Values.sonataFlowOperator.subscription.installPlanApproval }}
   name: {{ .Values.sonataFlowOperator.subscription.name }}
-  source: {{ .Values.sonataFlowOperator.subscription.sourceName }}
+  source: {{ .Values.sonataFlowOperator.subscription.source }}
   sourceNamespace: openshift-marketplace
   {{- if ne .Values.sonataFlowOperator.subscription.startingCSV "" }}
   startingCSV: {{ .Values.sonataFlowOperator.subscription.startingCSV }}
