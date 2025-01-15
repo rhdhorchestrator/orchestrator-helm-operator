@@ -116,7 +116,7 @@ spec:
     - name: build-and-push-image
       runAfter: ["flatten-workflow"]
       taskRef:
-{{- if (semverCompare ">=1.17" $version) -}}
+{{- if (semverCompare ">=1.17" $version) }}
         resolver: cluster
         params:
         - name: kind
