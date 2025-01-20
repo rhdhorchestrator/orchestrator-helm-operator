@@ -125,9 +125,9 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
     > **Note:** that every minute on the clock a job is triggered to reconcile the CRs with the orchestrator resource values. These cronjobs are deleted when their respective features (e.g. `rhdhOperator.enabled=false`) are removed or when the orchestrator resource is removed. This is required because the CRs are not managed by helm due to the CRD dependency pre availability to the deployment of the CR.
 
 1. Apply the Orchestrator custom resource (CR) on the cluster to create an instance of RHDH and resources of OpenShift Serverless Operator and OpenShift Serverless Operator Logic.
-   Make any changes to the [CR](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/config/samples/_v1alpha1_orchestrator.yaml) before applying it, or test the default Orchestrator CR:
+   Make any changes to the [CR](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/config/samples/_v1alpha2_orchestrator.yaml) before applying it, or test the default Orchestrator CR:
     ```console
-    oc apply -n orchestrator -f https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/refs/heads/main/config/samples/_v1alpha1_orchestrator.yaml
+    oc apply -n orchestrator -f https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/refs/heads/main/config/samples/_v1alpha2_orchestrator.yaml
     ```
 
 ### Running The Setup Script
@@ -189,12 +189,32 @@ metadata:
 type: Opaque
 ```
 
+### Enabling Monitoring for Workflows
+If you want to enable monitoring for workflows, you shall enable it in the `Orchestrator` CR as follows:
+
+```yaml
+apiVersion: rhdh.redhat.com/v1alpha2
+kind: Orchestrator
+metadata:
+  name: ...
+spec:
+  ...
+  orchestrator:
+    ...
+    sonataflowPlatform:
+      monitoring:
+        enabled: true
+      ...
+```
+
+After the CR is deployed, follow the [instructions](https://sonataflow.org/serverlessworkflow/main/cloud/operator/monitoring-workflows.html) to deploy Prometheus, Grafana and the sample Grafana dashboard. 
+
 ### Using Knative kafka broker
 If you want to use a Knative broker for communication between the different componenets (Data Index, Job Service and Workflows), you should use a reliable broker, i.e: not in-memory.
 
 Kafka perfectly fullfills this reliability need. You can find the list of availables brokers for Knative is here: https://knative.dev/docs/eventing/brokers/broker-types/
 
-Follow these [instructions](https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/refs/heads/main/docs/main/kafka-knative-broker/README.md) to setup the a kafka broker.
+Follow these [instructions](https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/refs/heads/main/docs/main/kafka-knative-broker/README.md) to setup the kafka broker.
 
 ## Additional information
 
