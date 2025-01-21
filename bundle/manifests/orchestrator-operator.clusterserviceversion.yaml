@@ -114,7 +114,8 @@ metadata:
                 "installPlanApproval": "Automatic",
                 "name": "serverless-operator",
                 "namespace": "openshift-serverless",
-                "source": "redhat-operators"
+                "source": "redhat-operators",
+                "startingCSV": "serverless-operator.v1.34.0"
               }
             },
             "sonataFlowOperator": {
@@ -138,7 +139,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2025-01-15T14:34:32Z"
+    createdAt: "2025-01-21T20:30:36Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
