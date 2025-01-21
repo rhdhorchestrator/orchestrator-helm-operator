@@ -128,6 +128,10 @@ spec:
                         description: Source captures the name of the catalog source
                         default: "redhat-operators"
                         type: string
+                      startingCSV:
+                        default: "serverless-operator.v1.34.0"
+                        description: The initial version of the operator
+                        type: string
                     type: object
                 type: object
               rhdhOperator:

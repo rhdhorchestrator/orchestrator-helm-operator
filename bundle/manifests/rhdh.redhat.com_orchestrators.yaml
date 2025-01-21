@@ -507,6 +507,10 @@ spec:
                         default: redhat-operators
                         description: Source captures the name of the catalog source
                         type: string
+                      startingCSV:
+                        default: serverless-operator.v1.34.0
+                        description: The initial version of the operator
+                        type: string
                     type: object
                 type: object
               sonataFlowOperator:
