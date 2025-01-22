@@ -58,6 +58,9 @@ spec:
   name: {{ .Values.serverlessOperator.subscription.name }}
   source: {{ .Values.serverlessOperator.subscription.source }}
   sourceNamespace: openshift-marketplace
+  {{- if ne .Values.serverlessOperator.subscription.startingCSV "" }}
+  startingCSV: {{ .Values.serverlessOperator.subscription.startingCSV }}
+  {{- end }}
   {{- end }}
   {{- $unmanagedNamespaceExists := include "unmanaged-resource-exists" (list "v1" "Namespace" "" "knative-serving" .Release.Name .Capabilities.APIVersions) }}
   {{- if eq $unmanagedNamespaceExists "false" }}

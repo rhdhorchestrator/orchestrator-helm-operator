@@ -152,7 +152,8 @@
                         "channel",
                         "installPlanApproval",
                         "name",
-                        "source"
+                        "source",
+                        "startingCSV"
                     ],
                     "properties": {
                         "namespace": {
@@ -194,6 +195,14 @@
                             "examples": [
                                 "redhat-operators"
                             ]
+                        },
+                        "startingCSV": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The startingCSV Schema",
+                            "examples": [
+                                "serverless-operator.v1.34.0"
+                            ]
                         }
                     },
                     "examples": [{
@@ -201,7 +210,8 @@
                         "channel": "stable",
                         "installPlanApproval": "Automatic",
                         "name": "serverless-operator",
-                        "source": "redhat-operators"
+                        "source": "redhat-operators",
+                        "startingCSV": "serverless-operator.v1.34.0"
                     }]
                 }
             },
@@ -212,7 +222,8 @@
                     "channel": "stable",
                     "installPlanApproval": "Automatic",
                     "name": "serverless-operator",
-                    "source": "redhat-operators"
+                    "source": "redhat-operators",
+                    "startingCSV": "serverless-operator.v1.34.0"
                 }
             }]
         },
@@ -1197,7 +1208,8 @@
                 "channel": "stable",
                 "installPlanApproval": "Automatic",
                 "name": "serverless-operator",
-                "source": "redhat-operators"
+                "source": "redhat-operators",
+                "startingCSV": "serverless-operator.v1.34.0"
             }
         },
         "rhdhOperator": {
