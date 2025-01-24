@@ -105,6 +105,13 @@ controllerSHAInSnapshot=$(awk -F'@' '{print $2}' <<< "$controllerInSnapshot")
 if [ -n "$controllerInBundle" ] && [ "$controllerSHAInBundle" = "$controllerSHAInSnapshot" ]; then echo "controller image pullspec matches";else echo "controller image pullspec does not match. This snapshot is not a good candidate for release";fi
 ```
 
+* Verify that the bundle and controller release label also matches. Run the following command to extract and compare the release label for the bundle and controller images.
+```console
+releaseLabelInBundle=$(skopeo inspect docker://$bundle --format "{{.Labels.release}}")
+releaseLabelInController=$(skopeo inspect docker://$controllerInSnapshot --format "{{.Labels.release}}")
+if [ -n "$controllerInBundle" ] && [ "$releaseLabelInBundle" = "$releaseLabelInController" ]; then echo "bundle and controller release label matches";else echo "bundle and controller release label does not match. This snapshot is not a good candidate for release";fi
+```
+
 * Create a new Release manifest for staging
 ```console
 releaseName=$(bash -c "oc create -f - <<EOF
