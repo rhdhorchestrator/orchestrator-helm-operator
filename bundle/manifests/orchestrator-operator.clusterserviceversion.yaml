@@ -115,7 +115,7 @@ metadata:
                 "name": "serverless-operator",
                 "namespace": "openshift-serverless",
                 "source": "redhat-operators",
-                "startingCSV": "serverless-operator.v1.34.0"
+                "startingCSV": "serverless-operator.v1.35.0"
               }
             },
             "sonataFlowOperator": {

@@ -201,7 +201,7 @@
                             "default": "",
                             "title": "The startingCSV Schema",
                             "examples": [
-                                "serverless-operator.v1.34.0"
+                                "serverless-operator.v1.35.0"
                             ]
                         }
                     },
@@ -211,7 +211,7 @@
                         "installPlanApproval": "Automatic",
                         "name": "serverless-operator",
                         "source": "redhat-operators",
-                        "startingCSV": "serverless-operator.v1.34.0"
+                        "startingCSV": "serverless-operator.v1.35.0"
                     }]
                 }
             },
@@ -223,7 +223,7 @@
                     "installPlanApproval": "Automatic",
                     "name": "serverless-operator",
                     "source": "redhat-operators",
-                    "startingCSV": "serverless-operator.v1.34.0"
+                    "startingCSV": "serverless-operator.v1.35.0"
                 }
             }]
         },
@@ -1209,7 +1209,7 @@
                 "installPlanApproval": "Automatic",
                 "name": "serverless-operator",
                 "source": "redhat-operators",
-                "startingCSV": "serverless-operator.v1.34.0"
+                "startingCSV": "serverless-operator.v1.35.0"
             }
         },
         "rhdhOperator": {
