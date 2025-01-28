@@ -209,12 +209,14 @@ spec:
 
 After the CR is deployed, follow the [instructions](https://sonataflow.org/serverlessworkflow/main/cloud/operator/monitoring-workflows.html) to deploy Prometheus, Grafana and the sample Grafana dashboard. 
 
-### Using Knative kafka broker
-If you want to use a Knative broker for communication between the different componenets (Data Index, Job Service and Workflows), you should use a reliable broker, i.e: not in-memory.
+### Using Knative eventing communication
+If you want to use a Knative broker for communication between the different componenets (Data Index, Job Service and Workflows), you should use a broker.
 
-Kafka perfectly fullfills this reliability need. You can find the list of availables brokers for Knative is here: https://knative.dev/docs/eventing/brokers/broker-types/
+Kafka is a good candiate as it fullfills the reliability need. You can find the list of availables brokers for Knative is here: https://knative.dev/docs/eventing/brokers/broker-types/
 
-Follow these [instructions](https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/refs/heads/main/docs/main/kafka-knative-broker/README.md) to setup the kafka broker.
+You could also use an in-memory broker but you should not use it for production purposes.
+
+Follow these [instructions](https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/refs/heads/main/docs/main/eventing-communication/README.md) to setup the Knative broker communication.
 
 ## Additional information
 
