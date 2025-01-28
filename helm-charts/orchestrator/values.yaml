@@ -71,6 +71,9 @@ rhdhPlugins: # RHDH plugins required for the Orchestrator
     sender: "" # the email sender address
     replyTo: "" # reply-to address
 
+dummy:
+  foo: bar
+
 postgres:
   serviceName: "sonataflow-psql-postgresql" # The name of the Postgres DB service to be used by platform services. Cannot be empty.
   serviceNamespace: "sonataflow-infra" # The namespace of the Postgres DB service to be used by platform services.
