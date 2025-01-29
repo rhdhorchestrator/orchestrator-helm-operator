@@ -7,7 +7,7 @@ sonataFlowOperator:
     installPlanApproval: Automatic # whether the update should be installed automatically
     name: logic-operator-rhel8 # name of the operator package
     source: redhat-operators # name of the catalog source
-    startingCSV: logic-operator-rhel8.v1.34.0 # The initial version of the operator
+    startingCSV: logic-operator-rhel8.v1.35.0 # The initial version of the operator
 
 serverlessOperator:
   enabled: true # whether the operator should be deployed by the chart
@@ -17,7 +17,7 @@ serverlessOperator:
     installPlanApproval: Automatic # whether the update should be installed automatically
     name: serverless-operator # name of the operator package
     source: redhat-operators # name of the catalog source
-    startingCSV: serverless-operator.v1.34.0 # The initial version of the operator
+    startingCSV: serverless-operator.v1.35.0 # The initial version of the operator
 
 rhdhOperator:
   isReleaseCandidate: false # Indicates RC builds should be used by the chart to install RHDH
