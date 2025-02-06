@@ -220,6 +220,10 @@ Follow these [instructions](https://raw.githubusercontent.com/rhdhorchestrator/o
 
 ## Additional information
 
+### Proxy configuration
+
+Your Backstage instance might be configured to work with a proxy. In that case you need to tell Backstage to bypass the workflow for requests to workflow namespaces and sonataflow namespace (`sonataflow-infra`). You need to add the namespaces to the environment variable `NO_PROXY`. E.g. NO_PROXY=current-value-of-no-proxy, `.sonataflow-infra`,`.my-workflow-namespace`. Note the `.` before the namespace name.
+
 ### Additional Workflow Namespaces
 
 When deploying a workflow in a namespace different from where Sonataflow services are running (e.g., sonataflow-infra), several essential steps must be followed:
