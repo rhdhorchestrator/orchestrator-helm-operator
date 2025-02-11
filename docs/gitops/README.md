@@ -11,7 +11,7 @@ You can use the Janus IDP Demo repository to install the `Red Hat OpenShift Pipe
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/parodos-dev/janus-idp-bootstrap.git
+    git clone https://github.com/rhdhorchestrator/janus-idp-bootstrap.git
     ```
 
 2. Navigate to the charts directory:
@@ -61,7 +61,7 @@ To install the OpenShift GitOps Operator with custom configuration:
 
     ```bash
     oc new-project orchestrator-gitops
-    oc apply -f https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/main/docs/gitops/resources/argocd-example.yaml
+    oc apply -f https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/main/docs/gitops/resources/argocd-example.yaml
     ```
 
     Alternatively, if creating a default ArgoCD instance, ensure to exclude Tekton resources from its specification:
@@ -92,11 +92,11 @@ There is a need to create a single K8s secret combined with the following secret
 1. A secret for Quay.io organization to push the images built by the pipeline:
    - Create or edit a [Robot account](https://access.redhat.com/documentation/en-us/red_hat_quay/3.3/html/use_red_hat_quay/use-quay-manage-repo) and grant it `Write` permissions to the newly created repository
    - Download the credentials as Kubernetes secret.
-2. A secret for _registry.redhat.io_. To build workflow images, the pipeline uses the [builder image](https://github.com/parodos-dev/serverless-workflows/blob/main/pipeline/workflow-builder.Dockerfile) from [registry.redhat.io](https://registry.redhat.io).
+2. A secret for _registry.redhat.io_. To build workflow images, the pipeline uses the [builder image](https://github.com/rhdhorchestrator/serverless-workflows/blob/main/pipeline/workflow-builder.Dockerfile) from [registry.redhat.io](https://registry.redhat.io).
    - Generate a token [here](https://access.redhat.com/terms-based-registry/create), and download it as OCP secret.
 
 Those two K8s secrets should be merged into a single secret named `docker-credentials` in `orchestrator-gitops` namespace in the cluster that runs the pipelines.
-You may use this [helper script](https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/hack/merge_secrets.sh) to merge the secrets or choose another method of downloading the credentials and merging them.
+You may use this [helper script](https://github.com/rhdhorchestrator/orchestrator-helm-chart/blob/main/hack/merge_secrets.sh) to merge the secrets or choose another method of downloading the credentials and merging them.
 
 ## Define the SSH credentials
 

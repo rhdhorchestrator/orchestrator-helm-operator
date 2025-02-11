@@ -1,6 +1,6 @@
 # Prerequisites
 - RHDH 1.3 instance deployed with IDP configured (github, gitlab, ...)
-- For using the Orchestrator's [software templates](https://github.com/parodos-dev/workflow-software-templates/tree/v1.3.x), OpenShift GitOps (ArgoCD) and OpenShift Pipelines (Tekton) should be installed and configured in RHDH (to enhance the CI/CD plugins) - [Follow these steps](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/gitops/README.md)
+- For using the Orchestrator's [software templates](https://github.com/rhdhorchestrator/workflow-software-templates/tree/v1.3.x), OpenShift GitOps (ArgoCD) and OpenShift Pipelines (Tekton) should be installed and configured in RHDH (to enhance the CI/CD plugins) - [Follow these steps](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/gitops/README.md)
 - A secret in RHDH's namespace named `dynamic-plugins-npmrc` that points to the plugins npm registry (details will be provided below)
 
 # Installation steps
@@ -45,7 +45,7 @@ In 1.3, the Orchestrator infrastructure is installed using the Orchestrator Oper
    1. From the console run the following command in order to get the necessary wait commands: \
       `oc describe orchestrator orchestrator-sample -n ${TARGET_NAMESPACE} | grep -A 10 "Run the following commands to wait until the services are ready:"`
 
-      The command will return an output similar to the one below, which lists several oc wait commands. This depends on your specific cluster. 
+      The command will return an output similar to the one below, which lists several oc wait commands. This depends on your specific cluster.
       ```bash
         oc wait -n openshift-serverless deploy/knative-openshift --for=condition=Available --timeout=5m
         oc wait -n knative-eventing knativeeventing/knative-eventing --for=condition=Ready --timeout=5m
@@ -57,7 +57,7 @@ In 1.3, the Orchestrator infrastructure is installed using the Orchestrator Oper
         oc get networkpolicy -n sonataflow-infra
         ```
    1. Copy and execute each command from the output in your terminal. These commands ensure that all necessary services and resources in your OpenShift environment are available and running correctly.
-   1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.parodos.dev/main/docs/serverless-workflows/troubleshooting/).
+   1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.rhdhorchestrator.io/main/docs/serverless-workflows/troubleshooting/).
 
 ## Edit RHDH configuration
 As part of RHDH deployed resources, there are two primary ConfigMaps that require modification, typically found under the *rhdh-operator* namespace, or located in the same namespace as the Backstage CR.
@@ -72,7 +72,7 @@ metadata:
   name: dynamic-plugins-npmrc
 EOF
 ```
-The value of `.data.npmrc` in the above example points to https://npm.registry.redhat.com. It should be included to consume plugins referenced in this document. If including plugins 
+The value of `.data.npmrc` in the above example points to https://npm.registry.redhat.com. It should be included to consume plugins referenced in this document. If including plugins
 from a different NPM registry, the `.data.npmrc` value should be updated with the base64 encoded NPM registry. Example: https://registry.npmjs.org would be `aHR0cHM6Ly9yZWdpc3RyeS5ucG1qcy5vcmcK`.
 
 If there is a need to point to multiple registries, modify the content of the secret's data from:
@@ -91,11 +91,11 @@ to
 ```
 
 ### dynamic-plugins ConfigMap
-This ConfigMap houses the configuration for enabling and configuring dynamic plugins in RHDH. 
+This ConfigMap houses the configuration for enabling and configuring dynamic plugins in RHDH.
 
 To incorporate the Orchestrator plugins, append the following configuration to the **dynamic-plugins** ConfigMap:
 
-- Be sure to review [this section](#identify-latest-supported-plugin-versions) to determine the latest supported Orchestrator plugin `package:` and `integrity:` values, and update the dynamic-plugin ConfigMap entries accordingly. The samples in this document may not reflect the latest. 
+- Be sure to review [this section](#identify-latest-supported-plugin-versions) to determine the latest supported Orchestrator plugin `package:` and `integrity:` values, and update the dynamic-plugin ConfigMap entries accordingly. The samples in this document may not reflect the latest.
 - Additionally, ensure that the `dataIndexService.url` in the below configuration points to the service of the Data Index installed by the Orchestrator Operator.
 By default it should point to `http://sonataflow-platform-data-index-service.sonataflow-infra`. Confirm the service by running this command:
   ```bash
@@ -130,7 +130,7 @@ By default it should point to `http://sonataflow-platform-data-index-service.son
 ```
 
 To include the Notification Plugin append this configuration to the ConfigMap:
-- Be sure to review [this section](#identify-latest-supported-plugin-versions) to determine the latest supported Orchestrator plugin `package:` and `integrity:` values, and update the dynamic-plugin ConfigMap entries accordingly. The samples in this document may not reflect the latest. 
+- Be sure to review [this section](#identify-latest-supported-plugin-versions) to determine the latest supported Orchestrator plugin `package:` and `integrity:` values, and update the dynamic-plugin ConfigMap entries accordingly. The samples in this document may not reflect the latest.
 ```yaml
       - disabled: false
         package: "@redhat/plugin-notifications-dynamic@1.3.0"
@@ -258,7 +258,7 @@ This ConfigMap is used for configuring backstage. Please add/modify to include t
             options:
               subject: legacy-default-config
               secret: "pl4s3Ch4ng3M3"
-      baseUrl: https://${RHDH_ROUTE} # Use value or make variable accessible to Backstage              
+      baseUrl: https://${RHDH_ROUTE} # Use value or make variable accessible to Backstage
       csp:
         script-src: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
         script-src-elem: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
@@ -274,7 +274,7 @@ This ConfigMap is used for configuring backstage. Please add/modify to include t
           host: ${POSTGRES_HOST}
           port: ${POSTGRES_PORT}
 ```
-> Note: `${BACKEND_SECRET}` and `${RHDH_ROUTE}` variables are not by default accessible by Backstage, so the values should be used directly in the ConfigMap or made accessible to Backstage. 
+> Note: `${BACKEND_SECRET}` and `${RHDH_ROUTE}` variables are not by default accessible by Backstage, so the values should be used directly in the ConfigMap or made accessible to Backstage.
 The `${POSTGRES_*}` variables *are* accessible by default, so they can be left in variable form.
 
 ### Import Orchestrator's software templates
@@ -285,9 +285,9 @@ Orchestrator software templates rely on the following tools:
 
 To import the Orchestrator software templates into the catalog via the Backstage UI, follow the instructions outlined in this [document](https://backstage.io/docs/features/software-templates/adding-templates).
 Register new templates into the catalog from the
-- [Workflow resources (group and system)](https://github.com/parodos-dev/workflow-software-templates/blob/v1.3.x/entities/workflow-resources.yaml) (optional)
-- [Basic template](https://github.com/parodos-dev/workflow-software-templates/blob/v1.3.x/scaffolder-templates/basic-workflow/template.yaml)
-- [Complex template - workflow with custom Java code](https://github.com/parodos-dev/workflow-software-templates/blob/v1.3.x/scaffolder-templates/complex-assessment-workflow/template.yaml)
+- [Workflow resources (group and system)](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.3.x/entities/workflow-resources.yaml) (optional)
+- [Basic template](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.3.x/scaffolder-templates/basic-workflow/template.yaml)
+- [Complex template - workflow with custom Java code](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.3.x/scaffolder-templates/complex-assessment-workflow/template.yaml)
 
 ## Plugin Versions
 
