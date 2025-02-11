@@ -1,6 +1,6 @@
 # Orchestrator Documentation
 
-For comprehensive documentation on the Orchestrator, please visit [https://www.parodos.dev](https://www.parodos.dev).
+For comprehensive documentation on the Orchestrator, please visit [https://www.rhdhorchestrator.io](https://www.rhdhorchestrator.io).
 
 ## Installing the Orchestrator Helm Operator
 
@@ -35,29 +35,29 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
       - Repository permissions: **Read** access to metadata, **Read** and **Write** access to actions, actions variables, administration, code, codespaces, commit statuses, environments, issues, pull requests, repository hooks, secrets, security events, and workflows.
       - Organization permissions: **Read** access to members, **Read** and **Write** access to organization administration, organization hooks, organization projects, and organization secrets.
 
-><font color="red">⚠️**Warning**:</font> Skipping these steps will prevent the Orchestrator from functioning properly. 
+><font color="red">⚠️**Warning**:</font> Skipping these steps will prevent the Orchestrator from functioning properly.
 
 ### Deployment with GitOps
 
-  If you plan to deploy in a GitOps environment, make sure you have installed the `ArgoCD/Red Hat OpenShift GitOps` and the `Tekton/Red Hat Openshift Pipelines Install` operators following these [instructions](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/gitops/README.md).
+  If you plan to deploy in a GitOps environment, make sure you have installed the `ArgoCD/Red Hat OpenShift GitOps` and the `Tekton/Red Hat Openshift Pipelines Install` operators following these [instructions](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/gitops/README.md).
   The Orchestrator installs RHDH and imports software templates designed for bootstrapping workflow development. These templates are crafted to ease the development lifecycle, including a Tekton pipeline to build workflow images and generate workflow K8s custom resources. Furthermore, ArgoCD is utilized to monitor any changes made to the workflow repository and to automatically trigger the Tekton pipelines as needed.
 
 - `ArgoCD/OpenShift GitOps` operator
-  - Ensure at least one instance of `ArgoCD` exists in the designated namespace (referenced by `ARGOCD_NAMESPACE` environment variable). Example [here](https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/main/docs/gitops/resources/argocd-example.yaml)
+  - Ensure at least one instance of `ArgoCD` exists in the designated namespace (referenced by `ARGOCD_NAMESPACE` environment variable). Example [here](https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/main/docs/gitops/resources/argocd-example.yaml)
   - Validated API is `argoproj.io/v1alpha1/AppProject`
 - `Tekton/OpenShift Pipelines` operator
   - Validated APIs are `tekton.dev/v1beta1/Task` and `tekton.dev/v1/Pipeline`
   - Requires ArgoCD installed since the manifests are deployed in the same namespace as the ArgoCD instance.
 
-  Remember to enable [argocd](https://github.com/parodos-dev/orchestrator-helm-operator/blob/c577e95e063e2bf8119b2b23890df04792f9424c/config/crd/bases/rhdh.redhat.com_orchestrators.yaml#L451) and [tekton](https://github.com/parodos-dev/orchestrator-helm-operator/blob/c577e95e063e2bf8119b2b23890df04792f9424c/config/crd/bases/rhdh.redhat.com_orchestrators.yaml#L443) in your CR instance.
+  Remember to enable [argocd](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/c577e95e063e2bf8119b2b23890df04792f9424c/config/crd/bases/rhdh.redhat.com_orchestrators.yaml#L451) and [tekton](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/c577e95e063e2bf8119b2b23890df04792f9424c/config/crd/bases/rhdh.redhat.com_orchestrators.yaml#L443) in your CR instance.
 
 ## Detailed Installation Guide
 ### From OperatorHub
 1. Deploying PostgreSQL reference implementation
    - **If you do not have a PostgreSQL instance in your cluster** \
-   you can deploy the PostgreSQL reference implementation by following the steps [here](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/postgresql/README.md).
+   you can deploy the PostgreSQL reference implementation by following the steps [here](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/postgresql/README.md).
    - **If you already have PostgreSQL running in your cluster** \
-   ensure that the default settings in the [PostgreSQL values](https://github.com/parodos-dev/orchestrator-helm-chart/blob/main/postgresql/values.yaml) file match those provided in the [Orchestrator values](https://github.com/parodos-dev/orchestrator-helm-operator/blob/release-1.3/helm-charts/orchestrator/values.yaml) file.
+   ensure that the default settings in the [PostgreSQL values](https://github.com/rhdhorchestrator/orchestrator-helm-chart/blob/main/postgresql/values.yaml) file match those provided in the [Orchestrator values](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/release-1.3/helm-charts/orchestrator/values.yaml) file.
 1. Install Orchestrator operator
    1. Go to OperatorHub in your OpenShift Console.
    1. Search for and install the Orchestrator Operator.
@@ -69,7 +69,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
    1. From console run the following command get the necessary wait commands: \
       `oc describe orchestrator orchestrator-sample -n openshift-operators | grep -A 10 "Run the following commands to wait until the services are ready:"`\
 
-      The command will return an output similar to the one below, which lists several oc wait commands. This depends on your specific cluster. 
+      The command will return an output similar to the one below, which lists several oc wait commands. This depends on your specific cluster.
       ```bash
         oc wait -n openshift-serverless deploy/knative-openshift --for=condition=Available --timeout=5m
         oc wait -n knative-eventing knativeeventing/knative-eventing --for=condition=Ready --timeout=5m
@@ -81,10 +81,10 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
         oc get networkpolicy -n sonataflow-infra
         ```
    1. Copy and execute each command from the output in your terminal. These commands ensure that all necessary services and resources in your OpenShift environment are available and running correctly.
-   1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.parodos.dev/1.3/docs/serverless-workflows/troubleshooting/).
+   1. If any service does not become available, verify the logs for that service or consult [troubleshooting steps](https://www.rhdhorchestrator.io/1.3/docs/serverless-workflows/troubleshooting/).
 
 ### Manual Install
-1. Deploy the PostgreSQL reference implementation for persistence support in SonataFlow following these [instructions](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/postgresql/README.md)
+1. Deploy the PostgreSQL reference implementation for persistence support in SonataFlow following these [instructions](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/postgresql/README.md)
 
 1. Create a namespace for the Orchestrator solution:
 
@@ -101,7 +101,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 1.  Download the setup script from the github repository and run it to create the RHDH secret and label the GitOps namespaces:
 
     ```console
-    wget https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/release-1.3/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
+    wget https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/release-1.3/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
     ```
 
     Run the script:
@@ -164,7 +164,7 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
 1.  Run the following commands to determine when the installation is completed:
 
     ```console
-    wget https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/release-1.3/hack/wait_for_operator_installed.sh -O /tmp/wait_for_operator_installed.sh && chmod u+x /tmp/wait_for_operator_installed.sh && /tmp/wait_for_operator_installed.sh
+    wget https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/release-1.3/hack/wait_for_operator_installed.sh -O /tmp/wait_for_operator_installed.sh && chmod u+x /tmp/wait_for_operator_installed.sh && /tmp/wait_for_operator_installed.sh
     ```
 
     During the installation process, Kubernetes cronjobs are created by the operator to monitor the lifecycle of the CRs managed by the operator: RHDH operator, OpenShift Serverless operator and OpenShift Serverless Logic operator. When deleting one of the previously mentioned CRs, a job is triggered that ensures the CR is removed before the operator is.
@@ -173,9 +173,9 @@ Note that as of November 6, 2023, OpenShift Serverless Operator is based on RHEL
     > **Note:** that every minute on the clock a job is triggered to reconcile the CRs with the orchestrator resource values. These cronjobs are deleted when their respective features (e.g. `rhdhOperator.enabled=false`) are removed or when the orchestrator resource is removed. This is required because the CRs are not managed by helm due to the CRD dependency pre availability to the deployment of the CR.
 
 1. Apply the Orchestrator custom resource (CR) on the cluster to create an instance of RHDH and resources of OpenShift Serverless Operator and OpenShift Serverless Operator Logic.
-   Make any changes to the [CR](https://github.com/parodos-dev/orchestrator-helm-operator/blob/release-1.3/config/samples/_v1alpha1_orchestrator.yaml) before applying it, or test the default Orchestrator CR:
+   Make any changes to the [CR](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/release-1.3/config/samples/_v1alpha1_orchestrator.yaml) before applying it, or test the default Orchestrator CR:
     ```console
-    oc apply -n orchestrator -f https://raw.githubusercontent.com/parodos-dev/orchestrator-helm-operator/refs/heads/release-1.3/config/samples/_v1alpha1_orchestrator.yaml
+    oc apply -n orchestrator -f https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/refs/heads/release-1.3/config/samples/_v1alpha1_orchestrator.yaml
     ```
 
 ## Additional information
@@ -207,7 +207,7 @@ When deploying a workflow in a namespace different from where Sonataflow service
    Store the namespace value in SONATAFLOW_PLATFORM_NAMESPACE.
 
 4. **Set Up a Network Policy:**
-   Configure a network policy to allow traffic only between RHDH, Sonataflow services, and the workflows. The policy can be derived from [here](https://github.com/parodos-dev/orchestrator-helm-operator/blob/release-1.3/helm-charts/orchestrator/templates/network-policies.yaml)
+   Configure a network policy to allow traffic only between RHDH, Sonataflow services, and the workflows. The policy can be derived from [here](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/release-1.3/helm-charts/orchestrator/templates/network-policies.yaml)
 
    ```console
    oc create -f <<EOF
@@ -267,11 +267,11 @@ By following these steps, the workflow will have the necessary credentials to ac
 
 ### GitOps environment
 
-See the dedicated [document](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/gitops/README.md)
+See the dedicated [document](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/gitops/README.md)
 
 ### Deploying PostgreSQL reference implementation
 
-See [here](https://github.com/parodos-dev/orchestrator-helm-operator/blob/main/docs/postgresql/README.md)
+See [here](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/postgresql/README.md)
 
 ### ArgoCD and workflow namespace
 
@@ -283,7 +283,7 @@ oc label ns $WORKFLOW_NAMESPACE argocd.argoproj.io/managed-by=$ARGOCD_NAMESPACE
 
 ### Workflow installation
 
-Follow [Workflows Installation](https://www.parodos.dev/serverless-workflows-config/)
+Follow [Workflows Installation](https://www.rhdhorchestrator.io/serverless-workflows-config/)
 
 ## Cleanup
 

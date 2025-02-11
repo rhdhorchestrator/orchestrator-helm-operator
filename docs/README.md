@@ -1,6 +1,6 @@
 # Orchestrator Operator Documentation
 
-Welcome to the **Orchestrator Operator Documentation**. This folder contains supplemental information and resources related to the Orchestrator operator project. For the complete and official documentation, please visit the [Orchestrator Documentation](https://www.parodos.dev/).
+Welcome to the **Orchestrator Operator Documentation**. This folder contains supplemental information and resources related to the Orchestrator operator project. For the complete and official documentation, please visit the [Orchestrator Documentation](https://www.rhdhorchestrator.io/).
 
 ## Overview
 
@@ -20,5 +20,5 @@ The **Orchestrator** project facilitates the automation of complex workflows acr
 
 ## Additional Resources
 
-- For the official and comprehensive documentation, please refer to the [Orchestrator Official Documentation](https://www.parodos.dev/).
-- If you encounter any issues or need further assistance, please open an issue on our [GitHub Issues](https://github.com/parodos-dev/orchestrator-helm-operator/issues) page.
+- For the official and comprehensive documentation, please refer to the [Orchestrator Official Documentation](https://www.rhdhorchestrator.io/).
+- If you encounter any issues or need further assistance, please open an issue on our [GitHub Issues](https://github.com/rhdhorchestrator/orchestrator-helm-operator/issues) page.
