@@ -176,7 +176,7 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - description: Parodos introduces serverless asynchronous workflows to Backstage,
+    - description: RHDH Orchestrator introduces serverless asynchronous workflows to Backstage,
         with a focus on facilitating the transition of applications to the cloud,
         onboarding developers, and enabling users to create workflows for backstage
         actions or external systems.
