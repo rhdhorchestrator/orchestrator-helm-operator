@@ -55,7 +55,7 @@ spec:
 {{- end }}
 ---
 {{- if .Values.orchestrator.sonataflowPlatform.monitoring.enabled }}
-# NetworkPolicy to allow openshift-monitoring pods to access all pods within the workflow's namespace
+# NetworkPolicy to allow openshift-user-workload-monitoring pods to access all pods within the workflow's namespace
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -71,6 +71,6 @@ spec:
     - from:
       - namespaceSelector:
           matchLabels:
-            # Allow openshift-monitoring to access the workflow.
+            # Allow openshift-user-workload-monitoring pods to access the workflow.
             kubernetes.io/metadata.name: openshift-user-workload-monitoring
 {{- end }}
