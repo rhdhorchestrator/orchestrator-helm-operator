@@ -113,25 +113,28 @@ You may use this [helper script](https://github.com/rhdhorchestrator/orchestrato
 
 The pipeline uses SSH to push the deployment configuration to the `gitops` repository containing the `kustomize` deployment configuration.
 
+The GitOps repository can be configured on GitHub or GitLab.  
+
+### Configuring on GitHub 
 Follow these steps to properly configure the credentials in the namespace:
 
-- Generate default SSH keys under the `ssh` folder
+- Generate default SSH keys under the `github_ssh` folder
 
 ```console
-mkdir -p ssh
-ssh-keygen -t rsa -b 4096 -f ssh/id_rsa -N "" -C git@github.com -q
+mkdir -p github_ssh
+ssh-keygen -t rsa -b 4096 -f github_ssh/id_rsa -N "" -C git@github.com -q
 ```
 
 - Add the SSH key to your GitHub account using the gh CLI or using the [SSH keys](https://github.com/settings/keys) setting:
 
 ```console
-gh ssh-key add ssh/id_rsa.pub --title "Tekton pipeline"
+gh ssh-key add github_ssh/id_rsa.pub --title "Tekton pipeline"
 ```
 
 - Create a `known_hosts` file by scanning the GitHub's SSH public key:
 
 ```console
-ssh-keyscan github.com > ssh/known_hosts
+ssh-keyscan github.com > github_ssh/known_hosts
 ```
 
 - Create the default `config` file:
@@ -139,16 +142,61 @@ ssh-keyscan github.com > ssh/known_hosts
 ```console
 echo "Host github.com
   HostName github.com
-  IdentityFile ~/.ssh/id_rsa" > ssh/config
+  IdentityFile github_ssh/id_rsa" > github_ssh/config
 ```
 
 - Create the secret that the Pipeline uses to store the SSH credentials:
 
 ```console
-oc create secret -n orchestrator-gitops generic git-ssh-credentials \
-  --from-file=ssh/id_rsa \
-  --from-file=ssh/config \
-  --from-file=ssh/known_hosts
+oc create secret -n orchestrator-gitops generic github-ssh-credentials \
+  --from-file=github_ssh/id_rsa \
+  --from-file=github_ssh/config \
+  --from-file=github_ssh/known_hosts
+```
+
+Note: if you change the SSH key type from the default value `rsa`, you need to update the `config` file accordingly
+
+### Configuring on GitLab 
+Follow these steps to properly configure the credentials in the namespace:
+
+- Generate default SSH keys under the `gitlab_ssh` folder
+
+Replace <GitLabHost> with the GitLab instance URL where your GitOps project will be hosted. 
+
+```console
+mkdir -p gitlab_ssh
+ssh-keygen -t rsa -b 4096 -f gitlab_ssh/id_rsa -N "" -C git@<GitLabHost> -q
+```
+
+- Add the SSH key to your GitLab account using the glab CLI or using the SSH keys setting:
+You can find those setting in https://<GitLabHost>/-/user_settings/ssh_keys
+- Make sure to authenticate to your GitLab instance using your personal access token / Web authentication prior to using glab CLI. 
+
+```console
+glab ssh-key add gitlab_ssh/id_rsa.pub --title "Tekton pipeline"
+```
+
+- Create a `known_hosts` file by scanning the GitLab host's SSH public key:
+
+```console
+ssh-keyscan <GitLabHost> > gitlab_ssh/known_hosts
+```
+
+- Create the default `config` file:
+
+```console
+echo "Host <GitLabHost>
+HostName <GitLabHost>
+IdentityFile gitlab_ssh/id_rsa" > gitlab_ssh/config
+```
+
+- Create the secret that the Pipeline uses to store the SSH credentials:
+
+```console
+oc create secret -n orchestrator-gitops generic gitlab-ssh-credentials \
+  --from-file=gitlab_ssh/id_rsa \
+  --from-file=gitlab_ssh/config \
+  --from-file=gitlab_ssh/known_hosts
 ```
 
 Note: if you change the SSH key type from the default value `rsa`, you need to update the `config` file accordingly
@@ -161,3 +209,18 @@ To begin serverless workflow development using the "Basic workflow bootstrap pro
 2. Locate the section for managing organization settings related to GitHub Actions.
 3. Enable read and write permissions for workflows by adjusting the settings accordingly.
 4. For detailed instructions and exact steps, refer to the GitHub guide available [here](https://docs.github.com/en/enterprise-server@3.9/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization#configuring-the-default-github_token-permissions).
+
+## Setting up GitLab Integration
+
+To begin serverless workflow development using the "Basic workflow bootstrap project" software template with GitLab as the target source control, you'll need to configure project settings to allow read and write permissions for GitLab CI/CD pipelines. Follow these steps to enable the necessary permissions:
+
+1. Navigate to your project settings on GitLab
+    - Go to your GitLab instance (e.g., gitlab.cee.redhat.com).
+    - Open the Project where you want to enable workflows.
+    - On the left sidebar, click Settings → CI/CD.
+2. Locate the section for managing CI/CD permissions
+    - Scroll down to the Runners section and ensure a runner is configured. 
+    - Check the Pipeline permissions settings under the "General pipelines" section.
+    - Enable read and write permissions for workflows by customizing your pipeline configuration, variables, and artifacts according to your needs.
+
+3. For detailed instructions and exact steps, refer to the GitLab guide available [here](https://docs.gitlab.com/ci/)
