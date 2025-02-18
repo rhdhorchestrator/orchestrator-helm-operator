@@ -447,11 +447,11 @@ spec:
                     description: Orchestrator plugin information
                     properties:
                       integrity:
-                        default: sha512-Vclb+TIL8cEtf9G2nx0UJ+kMJnCGZuYG/Xcw0Otdo/fZGuynnoCaAZ6rHnt4PR6LerekHYWNUbzM3X+AVj5cwg==
+                        default: sha512-KKFCu1J+G5TOk/2yQ6B5Z17bxq2lAUeaFukWS60UTth7LYFXwFbOi0/rp1kUUZ7aLxDmrBI/gM6G5eg3Tehg0A==
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: backstage-plugin-orchestrator-1.4.0-rc.7.tgz
+                        default: backstage-plugin-orchestrator-1.4.0-rc.8.tgz
                         description: Package name
                         type: string
                     type: object
@@ -459,16 +459,16 @@ spec:
                     description: Orchestrator backend plugin information
                     properties:
                       integrity:
-                        default: sha512-bxD0Au2V9BeUMcZBfNYrPSQ161vmZyKwm6Yik5keZZ09tenkc8fNjipwJsWVFQCDcAOOxdBAE0ibgHtddl3NKw==
+                        default: sha512-mCV5Nx5KkXbzd2d5BCX5ARgaoWWn1e8uDaBIOegiTUcDy0NxyVk//MIpp0KKpBe/DbSBVHKcTFgx41KetLUewA==
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: backstage-plugin-orchestrator-backend-dynamic-1.4.0-rc.7.tgz
+                        default: backstage-plugin-orchestrator-backend-dynamic-1.4.0-rc.8.tgz
                         description: Package name
                         type: string
                     type: object
                   scope:
-                    default: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.7
+                    default: https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.8
                     description: Scope of the plugins
                     type: string
                 type: object
