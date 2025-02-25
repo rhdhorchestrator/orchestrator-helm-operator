@@ -285,18 +285,18 @@ spec:
                     type: string
                   scope:
                     description: Scope of the plugins
-                    default: "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.8"
+                    default: "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.9"
                     type: string
                   orchestrator:
                     description: Orchestrator plugin information
                     properties:
                       package:
                         description: Package name
-                        default: backstage-plugin-orchestrator-1.4.0-rc.8.tgz
+                        default: backstage-plugin-orchestrator-1.4.0-rc.9.tgz
                         type: string
                       integrity:
                         description: Package SHA integrity
-                        default: sha512-mCV5Nx5KkXbzd2d5BCX5ARgaoWWn1e8uDaBIOegiTUcDy0NxyVk//MIpp0KKpBe/DbSBVHKcTFgx41KetLUewA==
+                        default: sha512-YXfXCoBZT0nIoseF5pyRng8GAHea46slp1vk++Va1ap/hqb8paM+uz/T8/WcJRUbodFkf/x0sBwO3s+RDI3GXQ==
                         type: string
                     type: object
                   orchestratorBackend:
@@ -305,11 +305,11 @@ spec:
                       package:
                         description: Package name
                         type: string
-                        default: backstage-plugin-orchestrator-backend-dynamic-1.4.0-rc.8.tgz
+                        default: backstage-plugin-orchestrator-backend-dynamic-1.4.0-rc.9.tgz
                       integrity:
                         description: Package SHA integrity
                         type: string
-                        default: sha512-KKFCu1J+G5TOk/2yQ6B5Z17bxq2lAUeaFukWS60UTth7LYFXwFbOi0/rp1kUUZ7aLxDmrBI/gM6G5eg3Tehg0A==
+                        default: sha512-v8VzVpWFSjC8GI6jPEeCNVXFiFIHf+hHCXUH72RXxHOEYhWSwxwo4PLtdlH7Z46p+QNtmNWJzSExD0i23VKwjA==
                     type: object
                   notificationsEmail:
                     description: Notification email plugin information

@@ -98,14 +98,14 @@ metadata:
               },
               "npmRegistry": "https://npm.registry.redhat.com",
               "orchestrator": {
-                "integrity": "sha512-mCV5Nx5KkXbzd2d5BCX5ARgaoWWn1e8uDaBIOegiTUcDy0NxyVk//MIpp0KKpBe/DbSBVHKcTFgx41KetLUewA==",
-                "package": "backstage-plugin-orchestrator-1.4.0-rc.8.tgz"
+                "integrity": "sha512-YXfXCoBZT0nIoseF5pyRng8GAHea46slp1vk++Va1ap/hqb8paM+uz/T8/WcJRUbodFkf/x0sBwO3s+RDI3GXQ==",
+                "package": "backstage-plugin-orchestrator-1.4.0-rc.9.tgz"
               },
               "orchestratorBackend": {
-                "integrity": "sha512-KKFCu1J+G5TOk/2yQ6B5Z17bxq2lAUeaFukWS60UTth7LYFXwFbOi0/rp1kUUZ7aLxDmrBI/gM6G5eg3Tehg0A==",
-                "package": "backstage-plugin-orchestrator-backend-dynamic-1.4.0-rc.8.tgz"
+                "integrity": "sha512-v8VzVpWFSjC8GI6jPEeCNVXFiFIHf+hHCXUH72RXxHOEYhWSwxwo4PLtdlH7Z46p+QNtmNWJzSExD0i23VKwjA==",
+                "package": "backstage-plugin-orchestrator-backend-dynamic-1.4.0-rc.9.tgz"
               },
-              "scope": "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.8"
+              "scope": "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0-rc.9"
             },
             "serverlessOperator": {
               "enabled": true,
@@ -139,7 +139,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     console.openshift.io/disable-operand-delete: "true"
-    createdAt: "2025-02-25T16:03:54Z"
+    createdAt: "2025-02-25T19:09:54Z"
     features.operators.openshift.io/cnf: "false"
     features.operators.openshift.io/cni: "false"
     features.operators.openshift.io/csi: "false"
