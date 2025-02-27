@@ -7,7 +7,7 @@ metadata:
     build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch == "main" && ( "bundle/***".pathChanged() || ".tekton/orchestrator-operator-bundle-on-pull-request-1-4.yaml".pathChanged() || "bundle.konflux.Dockerfile".pathChanged() )
+    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch == "release-1.4" && ( "bundle/***".pathChanged() || ".tekton/orchestrator-operator-bundle-on-pull-request-1-4.yaml".pathChanged() || "bundle.konflux.Dockerfile".pathChanged() )
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: helm-operator-1-4
