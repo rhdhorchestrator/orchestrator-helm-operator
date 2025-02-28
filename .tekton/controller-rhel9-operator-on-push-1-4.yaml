@@ -6,7 +6,7 @@ metadata:
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch == "main" && ("Makefile".pathChanged() || "Dockerfile".pathChanged() || "config/***".pathChanged() || "helm-charts/***".pathChanged() || ".tekton/controller-rhel9-operator-on-push-1-4.yaml".pathChanged())
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch == "release-1.4" && ("Makefile".pathChanged() || "Dockerfile".pathChanged() || "config/***".pathChanged() || "helm-charts/***".pathChanged() || ".tekton/controller-rhel9-operator-on-push-1-4.yaml".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: helm-operator-1-4
