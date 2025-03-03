@@ -330,11 +330,11 @@ done
 A sample output should look like:
 ```
 Retrieving latest version for plugin: @redhat/backstage-plugin-orchestrator\n
-package: "@redhat/backstage-plugin-orchestrator@1.4.0-rc.3"
+package: "@redhat/backstage-plugin-orchestrator@1.4.0"
 integrity: sha512-vGGd9hUmDriEMmP2TfzLVa3JSnfot2Blg+aftDnu/lEphsY1s2gdA4Z5lCxUk7aobcKE6JO/f0sIl2jyxZ7ktw==
 ---
 Retrieving latest version for plugin: @redhat/backstage-plugin-orchestrator-backend-dynamic\n
-package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3"
+package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0"
 integrity: sha512-tS5cJGwjzP9esdTZvUFjw0O7+w9gGBI/+VvJrtqYJBDGXcEAq9iYixGk67ddQVW5eeUM7Tk1WqJlNj282aAWww==
 ---
 ```
