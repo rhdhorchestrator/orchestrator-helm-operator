@@ -5,7 +5,7 @@ Usage:
 ```
 Usage: ORCHESTRATOR_NAME=ORCHESTRATOR_NAME BROKER_NAME=BROKER_NAME BROKER_NAMESPACE=BROKER_NAMESPACE [KAFKA_REPLICATION_FACTOR=KAFKA_REPLICATION_FACTOR] [ORCHESTRATOR_NAMESPACE=openshift-operators] [BROKER_TYPE=Kafka] [INSTALL_KAFKA_CLUSTER=true] ./eventing-automate-install.sh
   ORCHESTRATOR_NAME                   Name of the installed orchestrator CR
-  ORCHESTRATOR_NAMESPACE              Optional, namespace in which the orchestrator operator is depoyed. Default is openshift-operators
+  ORCHESTRATOR_NAMESPACE              Optional, namespace in which the orchestrator operator is deployed. Default is openshift-operators
   BROKER_NAME                         Name of the broker to install
   BROKER_NAMESPACE                    Namespace in which the broker must be installed
   BROKER_TYPE                         Optional , type of the broker. Either 'Kafka' or 'in-memory'. Default is: 'Kafka'
@@ -137,7 +137,7 @@ oc -n openshift-operators patch orchestrators.rhdh.redhat.com orchestrator-sampl
 }'
 ```
 
-The `sinkbinding` and `trigger` resources should be automatically created by the OSL operator:
+The `sinkbinding` and `trigger` resources should be automatically created by the OpenShift Serverless Logic operator:
 ```
 $ oc -n sonataflow-infra get sinkbindings.sources.knative.dev 
 NAME                                  SINK                                                                                        READY   REASON
@@ -156,6 +156,6 @@ jobs-service-create-job-2ac1baab-d856-40bc-bcec-c6dd50951419      kafka-broker  
 jobs-service-delete-job-2ac1baab-d856-40bc-bcec-c6dd50951419      kafka-broker   http://sonataflow-platform-jobs-service.orchestrator.svc.cluster.local/v2/jobs/events      True    
 ```
 
-For each workflows deployed:
+For each workflow deployed:
   * A `sinkbinding` resource will be created: it will inject the `K_SINK` environment variable into the  `deployment` resource. See https://knative.dev/docs/eventing/custom-event-source/sinkbinding/ for more information about`sinkbinding`.
   * A `trigger` resource will be created for each event consumed by the workflow. See https://knative.dev/docs/eventing/triggers/ for more information about `trigger` and their usage.

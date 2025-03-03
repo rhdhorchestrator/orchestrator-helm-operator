@@ -1,13 +1,13 @@
 # Prerequisites
-- RHDH 1.3 instance deployed with IDP configured (github, gitlab, ...)
+- RHDH 1.4 instance deployed with IDP configured (github, gitlab, ...)
 - For using the Orchestrator's [software templates](https://github.com/rhdhorchestrator/workflow-software-templates/tree/v1.4.x), OpenShift GitOps (ArgoCD) and OpenShift Pipelines (Tekton) should be installed and configured in RHDH (to enhance the CI/CD plugins) - [Follow these steps](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/gitops/README.md)
 - A secret in RHDH's namespace named `dynamic-plugins-npmrc` that points to the plugins npm registry (details will be provided below)
 
 # Installation steps
 
 ## Install the Orchestrator Operator
-In 1.3, the Orchestrator infrastructure is installed using the Orchestrator Operator.
-1. Install the Orchestrator Operator 1.3 from OperatorHub.
+In 1.4, the Orchestrator infrastructure is installed using the Orchestrator Operator.
+1. Install the Orchestrator Operator 1.4 from OperatorHub.
 1. Create orchestrator resource (operand) instance - ensure `rhdhOperator: enabled: False` is set, e.g.
     > Note: `${TARGET_NAMESPACE}` should be set to the desired namespace
 
@@ -108,14 +108,14 @@ By default it should point to `http://sonataflow-platform-data-index-service.son
   ```
 ```yaml
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0"
+        package: "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0/backstage-plugin-orchestrator-backend-dynamic-1.4.0.tgz"
         integrity: sha512-2aOHDLFrGMAtyHFiyGZwVBZ9Op+TmKYUwfZxwoaGJ1s6JSy/0qgqineEEE0K3dn/f17XBUj+H1dwa5Al598Ugw==
         pluginConfig:
           orchestrator:
             dataIndexService:
               url: http://sonataflow-platform-data-index-service.sonataflow-infra
       - disabled: false
-        package: "@redhat/backstage-plugin-orchestrator@1.4.0"
+        package: "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0/backstage-plugin-orchestrator-1.4.0.tgz"
         integrity: sha512-2yasbfBZ3iKntArIfK+hk9tvv4b/dy9+WKXOcWIotqkI1gv+Nhvy+m55KAUWi2vmfM0rj3EoG6YP+3Zajn1KyA==
         pluginConfig:
           dynamicPlugins:
@@ -138,34 +138,13 @@ To include the Notification Plugin append this configuration to the ConfigMap:
 - Be sure to review [this section](#identify-latest-supported-plugin-versions) to determine the latest supported Orchestrator plugin `package:` and `integrity:` values, and update the dynamic-plugin ConfigMap entries accordingly. The samples in this document may not reflect the latest.
 ```yaml
       - disabled: false
-        package: "@redhat/plugin-notifications-dynamic@1.3.0"
-        integrity: sha512-iYLgIy0YdP/CdTLol07Fncmo9n0J8PdIZseiwAyUt9RFJzKIXmoi2CpQLPKMx36lEgPYUlT0rFO81Ie2CSis4Q==
-        pluginConfig:
-          dynamicPlugins:
-            frontend:
-              backstage.plugin-notifications:
-                dynamicRoutes:
-                  - importName: NotificationsPage
-                    menuItem:
-                      config:
-                        props:
-                          titleCounterEnabled: true
-                          webNotificationsEnabled: false
-                      importName: NotificationsSidebarItem
-                    path: /notifications
+        package: "./dynamic-plugins/dist/backstage-plugin-notifications"
       - disabled: false
-        package: "@redhat/plugin-signals-dynamic@1.3.0"
-        integrity: sha512-+E8XeTXcG5oy+aNImGj/MY0dvEkP7XAsu4xuZjmAqOHyVfiIi0jnP/QDz8XMbD1IjCimbr/DMUZdjmzQiD0hSQ==
-        pluginConfig:
-          dynamicPlugins:
-            frontend:
-              backstage.plugin-signals: {}
+        package: "./dynamic-plugins/dist/backstage-plugin-signals"
       - disabled: false
-        package: "@redhat/plugin-notifications-backend-dynamic@1.3.0"
-        integrity: sha512-Pw9Op/Q+1MctmLiVvQ3M+89tkbWkw8Lw0VfcwyGSMiHpK/Xql1TrSFtThtLlymRgeCSBgxHYhh3MUusNQX08VA==
+        package: "./dynamic-plugins/dist/backstage-plugin-notifications-backend-dynamic"
       - disabled: false
-        package: "@redhat/plugin-signals-backend-dynamic@1.3.0"
-        integrity: sha512-5Bl6C+idPXtquQxMZW+bjRMcOfFYcKxcGZZFv2ITkPVeY2zzxQnAz3vYHnbvKRSwlQxjIyRXY6YgITGHXWT0nw==
+        package: "./dynamic-plugins/dist/backstage-plugin-signals-backend-dynamic"
 ```
 
 Optionally, include the `plugin-notifications-backend-module-email-dynamic` to fan-out notifications as emails.
@@ -173,8 +152,7 @@ The environment variables below need to be provided to the RHDH instance (Or set
 See more configuration options for the plugin [here](https://github.com/backstage/backstage/blob/master/plugins/notifications-backend-module-email/config.d.ts).
 ```yaml
       - disabled: false
-        package: "@redhat/plugin-notifications-backend-module-email-dynamic@1.3.0"
-        integrity: sha512-sm7yRoO6Nkk3B7+AWKb10maIrb2YBNSiqQaWmFDVg2G9cbDoWr9wigqqeQ32+b6o2FenfNWg8xKY6PPyZGh8BA==
+        package: "./dynamic-plugins/dist/backstage-plugin-notifications-backend-module-email-dynamic"
         pluginConfig:
           notifications:
             processors:
@@ -284,15 +262,19 @@ The `${POSTGRES_*}` variables *are* accessible by default, so they can be left i
 
 ### Import Orchestrator's software templates
 Orchestrator software templates rely on the following tools:
-- Github is the git repository system
+- Github or GitLab as the git repository system
 - Quay is the image registry
 - GitOps tools are OpenShift GitOps (ArgoCD) and OpenShift Pipelines (Tekton)
 
 To import the Orchestrator software templates into the catalog via the Backstage UI, follow the instructions outlined in this [document](https://backstage.io/docs/features/software-templates/adding-templates).
 Register new templates into the catalog from the
+- Software templates for GitHub:
+  - [Basic template](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.4.x/scaffolder-templates/github-workflows/basic-workflow/template.yaml)
+  - [Advanced template - workflow with custom Java code](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.4.x/scaffolder-templates/github-workflows/advanced-workflow/template.yaml)
+- Software templates for GitLab:
+  - [Basic template](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.4.x/scaffolder-templates/gitlab-workflows/basic-workflow/template.yaml)
+  - [Advanced template - workflow with custom Java code](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.4.x/scaffolder-templates/gitlab-workflows/advanced-workflow/template.yaml)
 - [Workflow resources (group and system)](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.4.x/entities/workflow-resources.yaml) (optional)
-- [Basic template](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.4.x/scaffolder-templates/basic-workflow/template.yaml)
-- [Complex template - workflow with custom Java code](https://github.com/rhdhorchestrator/workflow-software-templates/blob/v1.4.x/scaffolder-templates/complex-assessment-workflow/template.yaml)
 
 ## Plugin Versions
 
@@ -308,12 +290,12 @@ In the example output below, `.properties.integrity.default` is the integrity va
     "description": "Orchestrator backend plugin information",
     "properties": {
       "integrity": {
-        "default": "sha512-tS5cJGwjzP9esdTZvUFjw0O7+w9gGBI/+VvJrtqYJBDGXcEAq9iYixGk67ddQVW5eeUM7Tk1WqJlNj282aAWww==",
+        "default": "sha512-2aOHDLFrGMAtyHFiyGZwVBZ9Op+TmKYUwfZxwoaGJ1s6JSy/0qgqineEEE0K3dn/f17XBUj+H1dwa5Al598Ugw==",
         "description": "Package SHA integrity",
         "type": "string"
       },
       "package": {
-        "default": "backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3",
+        "default": "backstage-plugin-orchestrator-backend-dynamic@1.4.0",
         "description": "Package name",
         "type": "string"
       }
@@ -321,7 +303,7 @@ In the example output below, `.properties.integrity.default` is the integrity va
     "type": "object"
   },
 ```
-> Note: The Orchestrator plugin package names in the `dynamic-plugins` ConfigMap must have `@redhat/` prepended to the package name (i.e., `@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3`)
+> Note: The Orchestrator plugin package names in the `dynamic-plugins` ConfigMap must have `@redhat/` prepended to the package name (i.e., `@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0`)
 
 ### Upgrade plugin versions - WIP
 To perform an upgrade of the plugin versions, start by acquiring the new plugin version along with its associated integrity value.
@@ -335,11 +317,6 @@ The following script is useful to obtain the required information for updating t
 PLUGINS=(
   "@redhat/backstage-plugin-orchestrator"
   "@redhat/backstage-plugin-orchestrator-backend-dynamic"
-  "@redhat/plugin-notifications-dynamic"
-  "@redhat/plugin-notifications-backend-dynamic"
-  "@redhat/plugin-signals-dynamic"
-  "@redhat/plugin-signals-backend-dynamic"
-  "@redhat/plugin-notifications-backend-module-email-dynamic"
 )
 
 for PLUGIN_NAME in "${PLUGINS[@]}"
@@ -359,26 +336,6 @@ integrity: sha512-vGGd9hUmDriEMmP2TfzLVa3JSnfot2Blg+aftDnu/lEphsY1s2gdA4Z5lCxUk7
 Retrieving latest version for plugin: @redhat/backstage-plugin-orchestrator-backend-dynamic\n
 package: "@redhat/backstage-plugin-orchestrator-backend-dynamic@1.4.0-rc.3"
 integrity: sha512-tS5cJGwjzP9esdTZvUFjw0O7+w9gGBI/+VvJrtqYJBDGXcEAq9iYixGk67ddQVW5eeUM7Tk1WqJlNj282aAWww==
----
-Retrieving latest version for plugin: @redhat/plugin-notifications-dynamic\n
-package: "@redhat/plugin-notifications-dynamic@1.3.0"
-integrity: sha512-iYLgIy0YdP/CdTLol07Fncmo9n0J8PdIZseiwAyUt9RFJzKIXmoi2CpQLPKMx36lEgPYUlT0rFO81Ie2CSis4Q==
----
-Retrieving latest version for plugin: @redhat/plugin-notifications-backend-dynamic\n
-package: "@redhat/plugin-notifications-backend-dynamic@1.3.0"
-integrity: sha512-Pw9Op/Q+1MctmLiVvQ3M+89tkbWkw8Lw0VfcwyGSMiHpK/Xql1TrSFtThtLlymRgeCSBgxHYhh3MUusNQX08VA==
----
-Retrieving latest version for plugin: @redhat/plugin-signals-dynamic\n
-package: "@redhat/plugin-signals-dynamic@1.3.0"
-integrity: sha512-+E8XeTXcG5oy+aNImGj/MY0dvEkP7XAsu4xuZjmAqOHyVfiIi0jnP/QDz8XMbD1IjCimbr/DMUZdjmzQiD0hSQ==
----
-Retrieving latest version for plugin: @redhat/plugin-signals-backend-dynamic\n
-package: "@redhat/plugin-signals-backend-dynamic@1.3.0"
-integrity: sha512-5Bl6C+idPXtquQxMZW+bjRMcOfFYcKxcGZZFv2ITkPVeY2zzxQnAz3vYHnbvKRSwlQxjIyRXY6YgITGHXWT0nw==
----
-Retrieving latest version for plugin: @redhat/plugin-notifications-backend-module-email-dynamic\n
-package: "@redhat/plugin-notifications-backend-module-email-dynamic@1.3.0"
-integrity: sha512-sm7yRoO6Nkk3B7+AWKb10maIrb2YBNSiqQaWmFDVg2G9cbDoWr9wigqqeQ32+b6o2FenfNWg8xKY6PPyZGh8BA==
 ---
 ```
 

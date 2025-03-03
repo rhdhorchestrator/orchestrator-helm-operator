@@ -4,7 +4,7 @@ For comprehensive documentation on the Orchestrator, please visit [https://www.r
 
 ## Installing the Orchestrator Helm Operator
 
-Deploy the Orchestrator solution suite in an OCP cluster using the Orchestrator operator.\
+Deploy the Orchestrator solution suite in an OCP cluster using the Orchestrator operator.
 The operator installs the following components onto the target OpenShift cluster:
 
 - RHDH (Red Hat Developer Hub) Backstage
@@ -210,7 +210,7 @@ spec:
 After the CR is deployed, follow the [instructions](https://sonataflow.org/serverlessworkflow/main/cloud/operator/monitoring-workflows.html) to deploy Prometheus, Grafana and the sample Grafana dashboard. 
 
 ### Using Knative eventing communication
-If you want to use a Knative broker for communication between the different components (Data Index, Job Service and Workflows), you should use a broker.
+To enable communication between different components (such as Data Index, Job Service, and Workflows), you can use various approaches. However, using a Knative broker provides enhanced reliability and event-driven capabilities.
 
 Kafka is a good candidate as it fulfills the reliability need. You can find the list of available brokers for Knative is here: https://knative.dev/docs/eventing/brokers/broker-types/
 
