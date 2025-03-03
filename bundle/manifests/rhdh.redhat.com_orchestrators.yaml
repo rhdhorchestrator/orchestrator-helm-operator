@@ -451,7 +451,7 @@ spec:
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: backstage-plugin-orchestrator-1.4.0
+                        default: backstage-plugin-orchestrator@1.4.0
                         description: Package name
                         type: string
                     type: object
@@ -463,7 +463,7 @@ spec:
                         description: Package SHA integrity
                         type: string
                       package:
-                        default: backstage-plugin-orchestrator-backend-dynamic-1.4.0
+                        default: backstage-plugin-orchestrator-backend-dynamic@1.4.0
                         description: Package name
                         type: string
                     type: object
