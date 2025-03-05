@@ -138,8 +138,8 @@ If the release fails, follow the [troubleshooting](#release-pipeline-failed) gui
 
 ```console
 advisoryURL=$(oc get $releaseName -ojsonpath='{.status.artifacts.advisory.url}' | sed  's/blob/raw/')
-controllerPullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("controller-rhel9-operator$") ))| .[].containerImage')
-bundlePullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("orchestrator-operator-bundle$") ))| .[].containerImage')
+controllerPullSpec=$(curl $advisoryURL | yq -r  '.spec.content.images[] | select(.component=="'$controller_rhel9_operator'") | .containerImage')
+bundlePullSpec=$(curl $advisoryURL | yq -r  '.spec.content.images[] | select(.component=="'$orchestrator_operator_bundle'") | .containerImage')
 skopeo inspect docker://$controllerPullSpec >/dev/null && echo "Controller image found in $controllerPullSpec" || echo "Controller image not found in $controllerPullSpec"
 skopeo inspect docker://$bundlePullSpec >/dev/null && echo "Bundle image found in $bundlePullSpec" || echo "Controller image not found in $bundlePullSpec"
 ```
@@ -351,8 +351,8 @@ If the release fails, follow the [troubleshooting](#release-pipeline-failed) gui
 
 ```console
 advisoryURL=$(oc get $releaseName -ojsonpath='{.status.artifacts.advisory.url}' | sed  's/blob/raw/')
-controllerPullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("controller-rhel9-operator$") ))| .[].containerImage')
-bundlePullSpec=$(curl $advisoryURL | yq '.spec.content[] | with_entries(select(.value.repository | test("orchestrator-operator-bundle$") ))| .[].containerImage')
+controllerPullSpec=$(curl $advisoryURL | yq -r  '.spec.content.images[] | select(.component=="'$controller_rhel9_operator'") | .containerImage')
+bundlePullSpec=$(curl $advisoryURL | yq -r  '.spec.content.images[] | select(.component=="'$orchestrator_operator_bundle'") | .containerImage')
 skopeo inspect docker://$controllerPullSpec >/dev/null && echo "Controller image found in $controllerPullSpec" || echo "Controller image not found in $controllerPullSpec"
 skopeo inspect docker://$bundlePullSpec >/dev/null && echo "Bundle image found in $bundlePullSpec" || echo "Controller image not found in $bundlePullSpec"
 ```
