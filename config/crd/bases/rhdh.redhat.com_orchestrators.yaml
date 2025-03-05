@@ -285,14 +285,14 @@ spec:
                     type: string
                   scope:
                     description: Scope of the plugins
-                    default: "https://github.com/rhdhorchestrator/orchestrator-plugins-internal-release/releases/download/1.4.0"
+                    default: "@redhat"
                     type: string
                   orchestrator:
                     description: Orchestrator plugin information
                     properties:
                       package:
                         description: Package name
-                        default: backstage-plugin-orchestrator-1.4.0.tgz
+                        default: backstage-plugin-orchestrator@1.4.0
                         type: string
                       integrity:
                         description: Package SHA integrity
@@ -305,7 +305,7 @@ spec:
                       package:
                         description: Package name
                         type: string
-                        default: backstage-plugin-orchestrator-backend-dynamic-1.4.0.tgz
+                        default: backstage-plugin-orchestrator-backend-dynamic@1.4.0
                       integrity:
                         description: Package SHA integrity
                         type: string

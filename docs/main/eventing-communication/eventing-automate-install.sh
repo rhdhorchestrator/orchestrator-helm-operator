@@ -9,7 +9,7 @@ KNATIVE_VERSION=1.16.1
 function usage {
     echo -e "Usage: ORCHESTRATOR_NAME=ORCHESTRATOR_NAME BROKER_NAME=BROKER_NAME BROKER_NAMESPACE=BROKER_NAMESPACE [KAFKA_REPLICATION_FACTOR=KAFKA_REPLICATION_FACTOR] [ORCHESTRATOR_NAMESPACE=openshift-operators] [BROKER_TYPE=Kafka] [INSTALL_KAFKA_CLUSTER=true] $program_name"
     echo "  ORCHESTRATOR_NAME                   Name of the installed orchestrator CR"
-    echo "  ORCHESTRATOR_NAMESPACE              Optional, namespace in which the orchestrator operator is depoyed. Default is openshift-operators"
+    echo "  ORCHESTRATOR_NAMESPACE              Optional, namespace in which the orchestrator operator is deployed. Default is openshift-operators"
     echo "  BROKER_NAME                         Name of the broker to install"
     echo "  BROKER_NAMESPACE                    Namespace in which the broker must be installed"
     echo "  BROKER_TYPE                         Optional , type of the broker. Either 'Kafka' or 'in-memory'. Default is: 'Kafka'"
