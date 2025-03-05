@@ -269,7 +269,7 @@
                     "default": "",
                     "title": "The catalogBranch Schema",
                     "examples": [
-                        "v1.4.x"
+                        "main"
                     ]
                 },
                 "secretRef": {
@@ -617,7 +617,7 @@
                 "isReleaseCandidate": false,
                 "enabled": true,
                 "enableGuestProvider": false,
-                "catalogBranch": "v1.4.x",
+                "catalogBranch": "main",
                 "secretRef": {
                     "name": "backstage-backend-auth-secret",
                     "backstage": {
@@ -1216,7 +1216,7 @@
             "isReleaseCandidate": false,
             "enabled": true,
             "enableGuestProvider": false,
-            "catalogBranch": "v1.4.x",
+            "catalogBranch": "main",
             "secretRef": {
                 "name": "backstage-backend-auth-secret",
                 "backstage": {
