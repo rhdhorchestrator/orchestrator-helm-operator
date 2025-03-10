@@ -150,8 +150,8 @@ spec:
                     description: EnableGuestProvider captures whether to enable the guest provider in RHDH. Defaults to false.
                     type: boolean
                   catalogBranch:
-                    default: "v1.4.x"
-                    description: CatalogBranch captures the catalog branch value. Defaults to "v1.4.x".
+                    default: "main"
+                    description: CatalogBranch captures the catalog branch value. Defaults to "main".
                     type: string
                   secretRef:
                     description: Backstage secret reference information
