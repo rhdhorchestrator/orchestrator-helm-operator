@@ -44,15 +44,16 @@ A Kafka broker will bring resiliency and reliability to event losses to the sont
 #### Pre-requisites
 
 1. A Kafka cluster running, see https://strimzi.io/quickstarts/ for a quickstart setup
+2. OpenShift version 4.15 and up, as older versions are not supported 
 
 #### Installation steps
-1. Configure and enable Kafka broker feature in Knative: https://knative.dev/v1.16-docs/eventing/brokers/broker-types/kafka-broker/
+1. Configure and enable Kafka broker feature in Knative: https://knative.dev/v1.15-docs/eventing/brokers/broker-types/kafka-broker/
 ```console
-oc apply --filename https://github.com/knative-extensions/eventing-kafka-broker/releases/download/knative-v1.16.1/eventing-kafka-controller.yaml
-oc apply --filename https://github.com/knative-extensions/eventing-kafka-broker/releases/download/knative-v1.16.1/eventing-kafka-broker.yaml
+oc apply --filename https://github.com/knative-extensions/eventing-kafka-broker/releases/download/knative-v1.15.8/eventing-kafka-controller.yaml
+oc apply --filename https://github.com/knative-extensions/eventing-kafka-broker/releases/download/knative-v1.15.8/eventing-kafka-broker.yaml
 ```
 > [!NOTE]
-> At the time this document was written, the latest `knative` version was `v1.16.1`. Please refer to [the official documentation](https://knative.dev/v1.16-docs/eventing/brokers/broker-types/kafka-broker/) for more up-to-date instructions for the Kafka broker setup.
+> At the time this document was written, the compatible `knative` version was `v1.15.8`. Please refer to [the official documentation](https://knative.dev/v1.15-docs/eventing/brokers/broker-types/kafka-broker/) for more up-to-date instructions for the Kafka broker setup. Knative 1.16.x cannot be used due to incompatibillity with k8s and OCP versions. For more information, please advise the release-compatibillity tables [here](https://github.com/knative/community/blob/main/mechanics/RELEASE-SCHEDULE.md#releases-supported-by-community) and [here](https://access.redhat.com/solutions/4870701).
  * Review the `Security Context Constraints` (`scc`) to be granted to the `knative-kafka-broker-data-plane` service account used by the `kafka-broker-receiver`  deployment:
 ```console
 oc get deployments.apps -n knative-eventing kafka-broker-receiver -oyaml | oc adm policy scc-subject-review --filename -
