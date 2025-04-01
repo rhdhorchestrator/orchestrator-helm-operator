@@ -20,7 +20,7 @@ This document captures the steps required to release a new version of the Orches
 ## Audience
 This document is aimed for those who need to release a new version of the Orchestrator operator using Konflux pipelines. This guide assumes that the user has some knowledge on Konflux and its types of resources and that the release process has already been introduced by someone else with understanding, otherwise the document might seem confusing and not clear on the goals.
 
-For further reading on Konflux, visit their [documentation website](https://konflux-ci.dev/docs/advanced-how-tos/releasing/) to get acquainted with it and understand the release process as described in it.
+For further reading on Konflux, visit their [documentation website](https://konflux-ci.dev/docs/releasing/) to get acquainted with it and understand the release process as described in it.
 
 ## Prerequisites:
 To be able to release the operator, you will need first to have access to the orchestrator-releng workspace in konflux via the [Red Hat Console](https://console.redhat.com/application-pipeline/workspaces/orchestrator-releng/applications). If you don't, please reach out to @jordigilh, @masayag, @rgolangh or @pkliczewski to request access. You'll also need to be able to create PRs to the [orchestrator-helm-operator](https://github.com/rhdhorchestrator/orchestrator-helm-operator) and [orchestrator-fbc](https://github.com/rhdhorchestrator/orchestrator-fbc) repositories.
