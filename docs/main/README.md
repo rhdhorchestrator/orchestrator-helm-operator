@@ -143,7 +143,7 @@ The setup.sh script simplifies the initialization of the RHDH environment by cre
 1. Download the setup script from the github repository and run it to create the RHDH secret and label the GitOps namespaces:
 
    ```console
-   wget https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/release-1.3/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
+   wget https://raw.githubusercontent.com/rhdhorchestrator/orchestrator-helm-operator/main/hack/setup.sh -O /tmp/setup.sh && chmod u+x /tmp/setup.sh
    ```
 
 1. Run the script:
