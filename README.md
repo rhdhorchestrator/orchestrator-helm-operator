@@ -1,6 +1,15 @@
 # orchestrator-helm-operator
 Meta Operator for deploying the Orchestrator helm charts
 
+## 📢 Notice: Operator Version Transition
+
+Version `1.4` was the **final release** of the Orchestrator Operator distributed as a Helm chart.
+
+Starting from version `1.5`, the Orchestrator Operator will no longer be supported as a Helm-based operator due to limitations in the Helm Operator SDK. All future releases will be implemented as a **Go-based operator**, available at the following repository:
+
+➡️ [https://github.com/rhdhorchestrator/orchestrator-go-operator](https://github.com/rhdhorchestrator/orchestrator-go-operator)
+
+
 # Installing the operator
 Please visit the [README.md](https://github.com/rhdhorchestrator/orchestrator-helm-operator/blob/main/docs/README.md) page and follow the guide to install the operator in your cluster.
 
