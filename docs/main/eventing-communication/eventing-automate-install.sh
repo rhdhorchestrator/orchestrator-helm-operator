@@ -69,7 +69,7 @@ if [ "$INSTALL_KAFKA_CLUSTER" == true ]; then
     echo "Installing a kafka cluster using Strimzi default quickstart: https://strimzi.io/quickstarts/"
     oc create namespace kafka
     oc create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
-    oc apply -f https://strimzi.io/examples/latest/kafka/kraft/kafka-single-node.yaml -n kafka 
+    oc apply -f https://strimzi.io/examples/latest/kafka/kafka-single-node.yaml -n kafka 
     oc wait kafka/my-cluster --for=condition=Ready --timeout=300s -n kafka 
     KAFKA_REPLICATION_FACTOR=1
 fi
